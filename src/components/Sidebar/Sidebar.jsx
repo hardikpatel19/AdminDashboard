@@ -33,22 +33,22 @@ const Sidebar = ({ toggle }) => {
       </button>
       <ul className="list flex-column">
         <li className="nav-item mb-2">
-          <a className="nav-link" href="#">Analytics</a>
+          <a className="nav-link" href="https://example.com">Analytics</a>
       </li>
       <li className="nav-item mb-2">
-        <a className="nav-link" href="#">Project</a>
+        <a className="nav-link" href="https://example.com">Project</a>
     </li>
     <li className="nav-item mb-2">
-        <a className="nav-link" href="#">Ecommerce</a>
+        <a className="nav-link" href="https://example.com">Ecommerce</a>
     </li>
     <li className="nav-item mb-2">
-        <a className="nav-link" href="#">CRM</a>
+        <a className="nav-link" href="https://example.com">CRM</a>
     </li>
     <li className="nav-item mb-2">
-        <a className="nav-link" href="#">Finance</a>
+        <a className="nav-link" href="https://example.com">Finance</a>
     </li>
     <li className="nav-item mb-2">
-        <a className="nav-link" href="#">Blog</a>
+        <a className="nav-link" href="https://example.com">Blog</a>
     </li>
       </ul>
       <p className="dash-text">Apps</p>

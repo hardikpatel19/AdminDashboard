@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import reducer, { initialState } from './reducer';
 import { StateProvider } from './StateProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
+// const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient(
   {
