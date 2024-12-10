@@ -1,0 +1,77 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.notification-count {
+  position: relative;
+  .notification-count {
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    height: 18px;
+    width: 18px;
+    font-size: 9px;
+    background: #dc3545;
+    color: white;
+    padding: 3px;
+    border-radius: 50%;
+    font-weight: 700;
+  }
+}
+
+.error {
+  color: #ff3333;
+  font-size: 12px;
+  margin: 5px 5px 10px;
+}
+.btn-primary {
+  min-width: 80.63px;
+}
+.dropdown {
+  width: fit-content;
+}
+.dropdown-toggle:after {
+  display: none;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #a599f552  !important; /* Light red color */
+}
+.table{
+  --dashui-table-hover-bg: transparent !important;
+}
