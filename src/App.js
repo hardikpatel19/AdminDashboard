@@ -1,10 +1,10 @@
 import "./App.scss";
 import {
   BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
+  // Navigate,
+  // Outlet,
+  // Route,
+  // Routes,
 } from "react-router-dom";
 // import Home from "./pages/Home/Home";
 import { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 // import { ProtectRoute } from "./utils/ProtectRoutes";
 // import { LoadingSpinner } from "./components/LoadingSpinner/LoadingSpinner";
 // import toast, { Toaster } from "react-hot-toast";
-import { useStateValue } from "./StateProvider";
+// import { useStateValue } from "./StateProvider";
 
 // import DisableBackButton from "./utils/DisableBackButton";
 import useDisableScroll from "./utils/useDisableScroll ";
@@ -25,7 +25,7 @@ import Home from "./pages/Home/Home";
 // import AddUpdatePatientDetail from "./pages/Patient/components/AddUpdatePatientDetail/AddUpdatePatientDetail";
 
 function App() {
-  const [{ userLoggedIn, isLoading }, dispatch] = useStateValue();
+  // const [{ userLoggedIn, isLoading }, dispatch] = useStateValue();
   const [isToggled, setIsToggle] = useState(true);
   useDisableScroll();
   // DisableBackButton()

@@ -3,16 +3,16 @@ import "./Sidebar.scss";
 // import { IoHomeOutline } from "react-icons/io5";
 // import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 // import { IoPeopleOutline } from "react-icons/io5";
-import { Link, useLocation } from "react-router-dom";
+// import { Link, useLocation } from "react-router-dom";
 // import { BiTask } from "react-icons/bi";
 // import { AiOutlineFundProjectionScreen } from "react-icons/ai";
 // import { GoTasklist } from "react-icons/go";
-import { useStateValue } from "../../StateProvider";
+// import { useStateValue } from "../../StateProvider";
 // import { isAdmin } from "../../utils/adminAccess";
 // import { BsPersonVcard } from "react-icons/bs";
 const Sidebar = ({ toggle }) => {
-  const { pathname } = useLocation();
-  const [{ userInfo }, dispatch] = useStateValue();
+  // const { pathname } = useLocation();
+  // const [{ userInfo }, dispatch] = useStateValue();
 
   return (
     <div className="app-menu">

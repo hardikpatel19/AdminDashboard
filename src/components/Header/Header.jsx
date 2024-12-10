@@ -1,22 +1,22 @@
-import React, { useState,useRef } from "react";
+import React, {useRef } from "react";
 import "./Header.scss";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { Link, useNavigate } from "react-router-dom";
-import { RiLockPasswordLine } from "react-icons/ri";
+// import {  useNavigate } from "react-router-dom";
+// import { RiLockPasswordLine } from "react-icons/ri";
 import { useStateValue } from "../../StateProvider";
-import { MdLogout } from "react-icons/md";
-import { IoSettingsOutline } from "react-icons/io5";
+// import { MdLogout } from "react-icons/md";
+// import { IoSettingsOutline } from "react-icons/io5";
 
 const Header = ({ toggle }) => {
   const searchInput = useRef(null);
-  const [{ userInfo }, dispatch] = useStateValue();
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    sessionStorage.clear();
-    dispatch({ type: "SET_USER_INFO", data: {} });
-    dispatch({ type: "SET_LOGIN_STATUS", status: false });
-    navigate("/sign-in");
-  };
+  const [{ userInfo }] = useStateValue();
+  // const navigate = useNavigate();
+  // const handleLogout = () => {
+  //   sessionStorage.clear();
+  //   dispatch({ type: "SET_USER_INFO", data: {} });
+  //   dispatch({ type: "SET_LOGIN_STATUS", status: false });
+  //   navigate("/sign-in");
+  // };
   return (
     <div className="header">
       {/* navbar */}

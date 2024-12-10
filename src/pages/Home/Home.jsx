@@ -3,7 +3,7 @@ import { BsListTask } from "react-icons/bs";
 import { MdOutlineReviews } from "react-icons/md";
 import { MdOutlineUpcoming } from "react-icons/md";
 import { TbCalendarDue } from "react-icons/tb";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 const Home = () => {
   // const useToggle = () => {
   //   const [state, setState] = useState(true);
@@ -13,7 +13,7 @@ const Home = () => {
   //   return [state, toggle];
   // };
 
-  const fetchDashboardCount = async () => {
+  // const fetchDashboardCount = async () => {
     // Perform the API call to fetch company info
     // try {
     //   const response = await getDashboardCounts();
@@ -26,29 +26,29 @@ const Home = () => {
     //   console.error("Error fetching data:", error); // Log any errors that occur
     //   throw error;
     // }
-  };
-  const {
-    isLoading,
-    isFetching,
-    data: staffListData,
-    refetch,
-  } = useQuery({
-    queryKey: ["dashboard-count"],
-    queryFn: () => fetchDashboardCount(),
-    onSuccess: (Re) => {
-      console.log(Re);
-    },
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-  const [dashboardCount, setDashboardCount] = useState([]);
+  // };
+  // const {
+    // isLoading,
+    // isFetching,
+    // data: staffListData,
+    // refetch,
+  // } = useQuery({
+  //   queryKey: ["dashboard-count"],
+  //   queryFn: () => fetchDashboardCount(),
+  //   onSuccess: (Re) => {
+  //     console.log(Re);
+  //   },
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
+  const [dashboardCount] = useState([]);
 
-  const [isToggled, setIsToggle] = useState();
-  const toggle = () => {
-    setIsToggle(!isToggled);
-  };
-  console.log(isToggled);
+  // const [isToggled, setIsToggle] = useState();
+  // const toggle = () => {
+  //   setIsToggle(!isToggled);
+  // };
+  // console.log(isToggled);
   return (
     <div id="app-content">
       {/* Container fluid */}
