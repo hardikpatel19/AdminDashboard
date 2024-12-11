@@ -58,10 +58,10 @@ const Home = () => {
         <div className="container-fluid component p-0">
         <div className="row p-5 mb-0 ">
             <div className="col-12 col-md-6">
-                <h2 className="text h3 mb-md-0 mt-2">Projects</h2>
+                <h2 className="text h3 mb-md-0 project">Projects</h2>
             </div>
             <div className="col-12 col-md-6 mb-4 text-md-end">
-                <button className="btn btn-light btn-1 me-0 mt-2">Create New Project</button>
+                <button className="btn btn-light btn-1 me-0 new">Create New Project</button>
             </div>
         </div>
     </div>

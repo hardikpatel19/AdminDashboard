@@ -88,3 +88,11 @@ td {
   //   margin-left: -290px;
   // }
 }
+@media (min-width:769px) {
+  .project , .new{
+margin-top: 1rem !important;
+}}
+@media (max-width:768px) {
+  .project , .new {
+margin-top: 0rem !important;
+}}
