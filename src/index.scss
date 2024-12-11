@@ -12954,6 +12954,11 @@ fieldset:disabled .btn {
     letter-spacing: .25em !important
 }
 
+@media (min-width:229px) {
+    .d-lg-block {
+        display: block !important;
+    }
+}
 @media (min-width:576px) {
     .float-sm-start {
         float: left !important
@@ -13013,6 +13018,9 @@ fieldset:disabled .btn {
     }
     .d-sm-none {
         display: none !important
+    }
+    .d-lg-block {
+        display: block !important;
     }
     .border-sm {
         border: var(--dashui-border-width) var(--dashui-border-style) var(--dashui-border-color) !important
@@ -15292,6 +15300,9 @@ fieldset:disabled .btn {
     }
     .d-md-none {
         display: none !important
+    }
+    .d-lg-block {
+        display: block !important;
     }
     .border-md {
         border: var(--dashui-border-width) var(--dashui-border-style) var(--dashui-border-color) !important
@@ -25198,6 +25209,15 @@ fieldset:disabled .btn {
     [data-layout=horizontal] .header .navbar {
         margin: 0 auto
     }
+    .header .navbar {
+        left: 0;
+    }
+    #main-wrapper.toggled .header .navbar {
+        left: 219px;
+    }
+    #main-wrapper .header .navbar {
+            left: 0;
+        }
 }
 
 [data-layout=horizontal] .header #nav-toggle {
@@ -25209,7 +25229,7 @@ fieldset:disabled .btn {
 }
 
 .header .navbar {
-    left: 219px;
+    left: 0;
     padding: .625rem 1.5rem;
     position: absolute;
     right: 0;
@@ -25217,6 +25237,7 @@ fieldset:disabled .btn {
     z-index: 1000;
     @media (max-width:1199.98px) {
         z-index: 900;
+        left: 219px;
        
     }
 }
@@ -25276,9 +25297,9 @@ fieldset:disabled .btn {
     }
 }
 
-#main-wrapper.toggled .header .navbar {
-    left: 0
-}
+// #main-wrapper.toggled .header .navbar {
+//     left: 0;
+// }
 
 @media (max-width:576px) {
     #app-content {
@@ -25288,13 +25309,19 @@ fieldset:disabled .btn {
         margin-left: 14rem
     }
     .header .navbar {
-        left: 0
+        left: 0;
     }
 }
 
 @media (max-width:990px) {
     .header .navbar {
-        z-index: 999
+        z-index: 999;
+        left: 219px;
+    }
+}
+@media (max-width:2500px) {
+    .header .navbar {
+        left: 219px;
     }
 }
 

@@ -42,12 +42,11 @@ const Header = ({ toggle }) => {
               </svg>
             </div>
           </div>
-          <div className="d-none d-md-none d-lg-block w-15">
+          <div className="d-none d-md-none d-lg-block w-15 find">
                         <input
                           ref={searchInput}
                           type="search"
                           className="form-control "
-                          // value={searchQuery}
                           onChange={(e) => {
                           }}
                           placeholder="Search "

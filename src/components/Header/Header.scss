@@ -52,7 +52,7 @@ td {
   border-radius: 8px;
 }
 .table-2{
-  // width: 50%;
+  width: 50%;
   background: #ffffff;
   border: 3px solid white;
   border-radius: 8px;
@@ -63,4 +63,28 @@ td {
 }
 .table-2 td{
   padding: 19px;
+}
+@media (min-width:845px) and (max-width:991px){
+  .find{
+    margin-left: -300px;
+  }
+  // .main-wrapper .find{
+  //   margin-left: -480px;
+  // }
+}
+@media (min-width:745px) and (max-width:844px){
+  .find{
+    margin-left: -200px;
+  }
+// .main-wrapper .find{
+//     margin-left: -400px;
+//   }
+}
+@media (min-width:600px) and (max-width:744px){
+  .find{
+    margin-left: -100px;
+  }
+  // .main-wrapper .find{
+  //   margin-left: -290px;
+  // }
 }
