@@ -3,52 +3,9 @@ import { BsListTask } from "react-icons/bs";
 import { MdOutlineReviews } from "react-icons/md";
 import { MdOutlineUpcoming } from "react-icons/md";
 import { TbCalendarDue } from "react-icons/tb";
-// import { useQuery } from "@tanstack/react-query";
 const Home = () => {
-  // const useToggle = () => {
-  //   const [state, setState] = useState(true);
-  //   const toggle = () => {
-  //     setState(!state);
-  //   };
-  //   return [state, toggle];
-  // };
-
-  // const fetchDashboardCount = async () => {
-    // Perform the API call to fetch company info
-    // try {
-    //   const response = await getDashboardCounts();
-    //   if (response.status === 200) {
-    //     setDashboardCount(response.data.data);
-    //   } else {
-    //     toast.error(response?.response?.data?.message);
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching data:", error); // Log any errors that occur
-    //   throw error;
-    // }
-  // };
-  // const {
-    // isLoading,
-    // isFetching,
-    // data: staffListData,
-    // refetch,
-  // } = useQuery({
-  //   queryKey: ["dashboard-count"],
-  //   queryFn: () => fetchDashboardCount(),
-  //   onSuccess: (Re) => {
-  //     console.log(Re);
-  //   },
-  //   onError: (e) => {
-  //     console.log(e);
-  //   },
-  // });
   const [dashboardCount] = useState([]);
 
-  // const [isToggled, setIsToggle] = useState();
-  // const toggle = () => {
-  //   setIsToggle(!isToggled);
-  // };
-  // console.log(isToggled);
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -182,9 +139,7 @@ const Home = () => {
             </div>
           </div>
           {/* row  */}
-          {/* <div className="row ">
-            <div className="col-xl-12 col-lg-12 col-md-12 col-12 mb-5 mb-xl-17 mt-n10">
-              <div className="card h-100"> */}
+
                 {/* table  */}
                 <div className="table-responsive">
           <table className="table table-hover">
@@ -335,14 +290,6 @@ const Home = () => {
           </table>
         </div>
         
-              {/* </div>
-            </div>
-          </div> */}
-          {/* row  */}
-          {/* row  */}
-          {/* <div className="row ">
-          <div className="col-xl-12 col-lg-12 col-md-12 col-12 mb-5 mb-xl-17 mt-n10">
-          <div className="card h-100"> */}
                 {/* table  */}
                 <div class="table-responsive">
           <table class="table-2 table-hover">
@@ -424,11 +371,6 @@ const Home = () => {
             </tbody>
           </table>
         </div>
-        
-              {/* </div>
-            </div>
-          </div> */}
-          {/* row  */}
 
         </div>
       </div>

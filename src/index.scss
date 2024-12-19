@@ -4281,7 +4281,7 @@ textarea.form-control.is-invalid {
     --dashui-btn-padding-y: 0.5rem;
     --dashui-btn-font-family: ;
     --dashui-btn-font-size: 0.875rem;
-    --dashui-btn-font-weight: 600;
+    --dashui-btn-font-weight: 500;
     --dashui-btn-line-height: 1.5;
     --dashui-btn-color: #475569;
     --dashui-btn-bg: transparent;
@@ -25319,7 +25319,7 @@ fieldset:disabled .btn {
         left: 219px;
     }
 }
-@media (max-width:2500px) {
+@media (max-width:3500px) {
     .header .navbar {
         left: 219px;
     }
