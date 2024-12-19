@@ -64,6 +64,17 @@ td {
 .table-2 td{
   padding: 19px;
 }
+.project {
+  color: #ffffff;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 250;
+  font-size: 24px;
+  line-height: 36px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.32px;
+}
 @media (min-width:845px) and (max-width:991px){
   .find{
     margin-left: -300px;
