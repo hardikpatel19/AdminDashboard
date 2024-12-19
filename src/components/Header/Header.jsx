@@ -35,18 +35,18 @@ const Header = ({ toggle }) => {
                         <input
                           ref={searchInput}
                           type="search"
-                          className="form-control "
+                          className="form-control"
                           onChange={(e) => {
                           }}
                           placeholder="Search "
                         /></div>
           {/*Navbar nav */}
-          <ul className="navbar-nav navbar-right-wrap ms-lg-auto d-flex nav-top-wrap align-items-center ms-4 ms-lg-0">
-            <li className="dropdown stopevent ms-2">
+          <ul className="navbar-nav navbar-right-wrap ms-lg-auto d-flex nav-top-wrap align-items-center ms-0 ms-lg-0">
+            <li className="dropdown stopevent ms-0">
             <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
                 <img
                     src="../assets/images/avatar/brightness.png"
-                    className="img-fluid"
+                    className="brightness img-fluid "
                     alt="Imaged"
                   />
               </div>
