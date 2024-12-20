@@ -25882,7 +25882,31 @@ a {
     position: relative;
     width: 2.5rem
 }
+@media (min-width:374px) and (max-width:440px) {
+   .btn.btn-icon{
+       width: 1.2rem
+   }
+   .avatar-md {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+#nav-toggle.ms-auto {
+    margin-left: -20px !important;
+}
+   }
 
+   @media (max-width:374px) {
+    .btn.btn-icon{
+        width: 1rem
+    }
+    .avatar-md {
+     height: 1.2rem;
+     width: 1.2rem;
+ }
+ #nav-toggle.ms-auto {
+     margin-left: -25px !important;
+ }
+    }
 .btn-icon.btn-xs {
     height: 1rem;
     width: 1rem

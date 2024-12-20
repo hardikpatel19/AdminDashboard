@@ -46,7 +46,7 @@ const Header = ({ toggle }) => {
             <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
                 <img
                     src="../assets/images/avatar/brightness.png"
-                    className="brightness img-fluid "
+                    className="brightness img-fluid"
                     alt="Imaged"
                   />
               </div>
