@@ -15,10 +15,10 @@ const Home = () => {
         <div className="container-fluid component p-0">
         <div className="row p-5 mb-0 ">
             <div className="col-12 col-md-6">
-                <h2 className="text text-white mb-md-0 project">Projects</h2>
+                <h2 className="text text-white mb-md-0 ms-1 project">Script</h2>
             </div>
             <div className="col-12 col-md-6 mb-4 text-md-end">
-                <button className="btn btn-white btn-1 me-0 new">Create New Project</button>
+                <button className="btn btn-white btn-1 me-0 new">Add New Script</button>
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@ const Home = () => {
                   {/* heading */}
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                      <h4 className="mb-0">Projects</h4>
+                      <h4 className="mb-0">Active Script</h4>
                     </div>
                     <div className="icon-shape icon-md bg-primary-soft text-primary rounded-2">
                       <TbCalendarDue size={20} />
@@ -39,9 +39,9 @@ const Home = () => {
                   </div>
                   {/* project number */}
                   <div className="lh-1">
-                    <h1 className=" mb-1 fw-bold">{dashboardCount?.overdue_count?dashboardCount?.overdue_count:0}</h1>
+                    <h1 className=" mb-1 fw-bold">{dashboardCount?.overdue_count?dashboardCount?.overdue_count:18}</h1>
                     <p className="mb-0">
-                      <span className="text-dark me-2">2</span>Completed
+                      <span className="text-dark me-2"></span>
                     </p>
                   </div>
                 </div>
@@ -58,7 +58,7 @@ const Home = () => {
               mb-3"
                   >
                     <div>
-                      <h4 className="mb-0">Active Task</h4>
+                      <h4 className="mb-0">In Maintenance</h4>
                     </div>
                     <div
                       className="icon-shape icon-md bg-primary-soft text-primary
@@ -69,9 +69,9 @@ const Home = () => {
                   </div>
                   {/* project number */}
                   <div className="lh-1">
-                    <h1 className="  mb-1 fw-bold">{dashboardCount?.ongoing_count?dashboardCount?.ongoing_count:0}</h1>
+                    <h1 className="  mb-1 fw-bold">{dashboardCount?.ongoing_count?dashboardCount?.ongoing_count:132}</h1>
                     <p className="mb-0">
-                      <span className="text-dark me-2">28</span>Completed
+                      <span className="text-dark me-2"></span>
                     </p>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ const Home = () => {
               mb-3"
                   >
                     <div>
-                      <h4 className="mb-0">Teams</h4>
+                      <h4 className="mb-0">In Development</h4>
                     </div>
                     <div
                       className="icon-shape icon-md bg-primary-soft text-primary
@@ -99,9 +99,9 @@ const Home = () => {
                   </div>
                   {/* project number */}
                   <div className="lh-1">
-                    <h1 className="  mb-1 fw-bold">{dashboardCount?.under_review_count?dashboardCount?.under_review_count:0}</h1>
+                    <h1 className="  mb-1 fw-bold">{dashboardCount?.under_review_count?dashboardCount?.under_review_count:12}</h1>
                     <p className="mb-0">
-                      <span className="text-dark me-2">1</span>Completed
+                      <span className="text-dark me-2"></span>
                     </p>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ const Home = () => {
               mb-3"
                   >
                     <div>
-                      <h4 className="mb-0">Productivity</h4>
+                      <h4 className="mb-0">Pending Payment </h4>
                     </div>
                     <div
                       className="icon-shape icon-md bg-primary-soft text-primary
@@ -129,9 +129,9 @@ const Home = () => {
                   </div>
                   {/* project number */}
                   <div className="lh-1">
-                    <h1 className="  mb-1 fw-bold">{dashboardCount?.upcoming_count?dashboardCount?.upcoming_count:0}</h1>
+                    <h1 className="  mb-1 fw-bold">{dashboardCount?.upcoming_count?dashboardCount?.upcoming_count:76}</h1>
                     <p className="mb-0">
-                      <span className="text-dark me-2">1</span>Completed
+                      <span className="text-dark me-2"></span>
                     </p>
                   </div>
                 </div>
@@ -142,143 +142,83 @@ const Home = () => {
 
                 {/* table  */}
                 <div className="table-responsive">
-          <table className="table table-hover">
+          <table className="table-2 table-hover">
             <tbody>
             <tr>
-              <td colSpan={5}><h4 className="mb-0">Active Projects</h4></td>
+              <td colSpan={5}><h4 className="mb-1 text-start">Script</h4></td>
             </tr>
               <tr className="bg-primary-soft">
-                <td >Project Name</td>
-                <td >Hours</td>
-                <td >Priority</td>
-                <td > Members</td>
-                <td >Progress</td>
+                <td >No</td>
+                <td >Script name</td>
+                <td >Date of Development</td>
+                <td > Status</td>
+                <td >Developer Name</td>
               </tr>
             
               <tr>
                 <td>
-                <img
-                    src="../assets/images/avatar/pn-1.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  />
-                  &nbsp; Dropbox Design system
+                1.
                 </td>
-                <td>34</td>
-                <td>Medium</td>
-                <td> <img
-                    src="../assets/images/avatar/tp-1.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  /></td>
+                <td>World Bank</td>
+                <td>13/12/2024</td>
+                <td> Active</td>
                 <td>
-                  15%
-                  <progress value="15" max="100"></progress>
+                Meet  velani
                 </td>
               </tr>
               <tr>
                 <td>
-                <img
-                    src="../assets/images/avatar/pn-2.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  />
-                  &nbsp; Stack Team design
+               2.
                 </td>
-                <td>47</td>
-                <td>High</td>
-                <td> <img
-                    src="../assets/images/avatar/tp-2.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  /></td>
+                <td>World Bank</td>
+                <td>13/12/2024</td>
+                <td> Active</td>
                 <td>
-                  35%
-                  <progress value="35" max="100"></progress>
+                Meet  velani
                 </td>
               </tr>
               <tr>
                 <td>
-                <img
-                    src="../assets/images/avatar/pn-3.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  />
-                  &nbsp; Gitdub Satellite
+                3.
                 </td>
-                <td>120</td>
-                <td>Low</td>
-                <td> <img
-                    src="../assets/images/avatar/tp-3.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  /></td>
+                <td>World Bank</td>
+                <td>13/12/2024</td>
+                <td> Active</td>
                 <td>
-                  75%
-                  <progress value="75" max="100"></progress>
+                Meet  velani
                 </td>
               </tr>
               <tr>
                 <td>
-                <img
-                    src="../assets/images/avatar/pn-4.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  />
-                  &nbsp; 3D Character Modeling
+                4.
                 </td>
-                <td>89</td>
-                <td>Medium</td>
-                <td> <img
-                    src="../assets/images/avatar/tp-4.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  /></td>
+                <td>World Bank</td>
+                <td>13/12/2024</td>
+                <td> Active</td>
                 <td>
-                  63%
-                  <progress value="63" max="100"></progress>
+                Meet  velani
                 </td>
               </tr>
               <tr>
                 <td>
-                <img
-                    src="../assets/images/avatar/pn-5.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  />
-                  &nbsp; Webapp Design System
+                5.
                 </td>
-                <td>108</td>
-                <td>Track</td>
-                <td> <img
-                    src="../assets/images/avatar/tp-5.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  /></td>
+                <td>World Bank</td>
+                <td>13/12/2024</td>
+                <td> Active</td>
                 <td>
-                  100%
-                  <progress value="100" max="100"></progress>
+                Meet  velani
                 </td>
               </tr>
               <tr>
                 <td>
-                <img
-                    src="../assets/images/avatar/pn-6.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  />
-                  &nbsp; Gitdub Event Design
+                6.
                 </td>
-                <td>120</td>
-                <td>Low</td>
-                <td> <img
-                    src="../assets/images/avatar/tp-5.png"
-                    className="img-fluid"
-                    alt="Imaged"
-                  /></td>
+                <td>World Bank</td>
+                <td>13/12/2024</td>
+                <td> Active</td>
                 <td>
-                  75%
-                  <progress value="75" max="100"></progress>
+                Meet  velani
                 </td>
               </tr>
               <tr>
@@ -290,87 +230,6 @@ const Home = () => {
           </table>
         </div>
         
-                {/* table  */}
-                <div class="table-responsive">
-          <table class="table-2 table-hover">
-              <tr>
-                <td colspan="2">My Task</td>
-                <td>
-                  <button
-                    class="btn btn-light btn-sm dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Task
-                  </button>
-                </td>
-              </tr>
-              <tr class="bg-light">
-                <td>Name</td>
-                <td>Deadline</td>
-                <td>Status</td>
-              </tr>
-            <tbody>
-              <tr>
-                <td>
-                  <input type="checkbox" id="task1" name="task1" />
-                  <label for="task1"> Design a FreshCart Home page</label>
-                </td>
-                <td>Today</td>
-                <td>Approved</td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" id="task2" name="task2" />
-                  <label for="task2"> Dash UI Dark Version Design</label>
-                </td>
-                <td>Yesterday</td>
-                <td>Pending</td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" id="task3" name="task3" />
-                  <label for="task3"> Dash UI landing page design</label>
-                </td>
-                <td>16 Sept, 2023</td>
-                <td>In Progress</td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" id="task4" name="task4" />
-                  <label for="task4"> Next.js Dash UI version</label>
-                </td>
-                <td>23 Sept, 2023</td>
-                <td >Approved</td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" id="task5" name="task5" />
-                  <label for="task5"> Develop a Dash UI Laravel</label>
-                </td>
-                <td>20 Sept, 2023</td>
-                <td >Pending</td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" id="task6" name="task6" />
-                  <label for="task6"> Coach home page design</label>
-                </td>
-                <td>12 Sept, 2023</td>
-                <td >Approved</td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" id="task7" name="task7" />
-                  <label for="task7"> Develop a Dash UI Laravel</label>
-                </td>
-                <td>11 Sept, 2023</td>
-                <td >Pending</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
 
         </div>
       </div>

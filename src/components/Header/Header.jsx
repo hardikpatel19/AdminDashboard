@@ -1,11 +1,11 @@
 import React, {useRef } from "react";
 import "./Header.scss";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { useStateValue } from "../../StateProvider";
+// import { IoMdNotificationsOutline } from "react-icons/io";
+// import { useStateValue } from "../../StateProvider";
 
 const Header = ({ toggle }) => {
   const searchInput = useRef(null);
-  const [{ userInfo }] = useStateValue();
+  // const [{ userInfo }] = useStateValue();
   
   return (
     <div className="header">
@@ -42,21 +42,26 @@ const Header = ({ toggle }) => {
                         /></div>
           {/*Navbar nav */}
           <ul className="navbar-nav navbar-right-wrap ms-lg-auto d-flex nav-top-wrap align-items-center ms-0 ms-lg-0">
-            <li className="dropdown stopevent ms-0">
-            <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
+            {/* <li className="dropdown stopevent ms-0"> */}
+            {/* <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
                 <img
                     src="../assets/images/avatar/brightness.png"
                     className="brightness img-fluid"
                     alt="Imaged"
                   />
-              </div>
-              <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
+              </div> */}
+              {/* <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
                 <IoMdNotificationsOutline size={28} />
-              </div>
-            </li>
+              </div> */}
+            {/* </li> */}
             {/* List */}
             <li className="dropdown ms-2">
-              <div
+            <img
+                      alt="avatar"
+                      src="./assets/images/avatar/menu.png"
+                      className="rounded-circle"
+                    />
+              {/* <div
                 className="rounded-circle"
                 role="button"
                 id="dropdownUser"
@@ -90,8 +95,8 @@ const Header = ({ toggle }) => {
                       }
                     </>
                   )}
-                </div>
-              </div>
+                </div> */}
+              {/* </div> */}
              
             </li>
           </ul>

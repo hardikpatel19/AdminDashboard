@@ -27,7 +27,7 @@ aside {
 .component {
   width: 101%;
   height: 165px;
-  background: #624bff;
+  background: #23536b;
 }
 .container-fluid .component{
   margin-left:-24px;
@@ -37,43 +37,51 @@ aside {
 }
 td {
   // padding: 3px;
-  text-align: left;
+  text-align: center;
 }
 
 .table .btn {
   color: white;
-  background: #624bff;
-  border: 1px solid #624bff;
+  background: #23536b;
+  border: 1px solid #23536b;
   border-radius: 6px;
 }
-.table{
-  background: white;
-  box-shadow: 0px 2px 4px rgba(0, 0, 20, 0.08), 0px 1px 2px rgba(0, 0, 20, 0.08);
-  border-radius: 8px;
-}
+// .table{
+//   background: #ffffff;
+//   border-collapse: separate;
+//   border-spacing: 0;
+//   box-shadow: 0px 2px 4px rgba(0, 0, 20, 0.08), 0px 1px 2px rgba(0, 0, 20, 0.08);
+//   border-radius: 8px;
+// }
 .table-2{
-  width: 50%;
+  width: 70%;
   background: #ffffff;
-  border: 3px solid white;
-  border-radius: 8px;
   border-collapse: separate;
   border-spacing: 0;
   box-shadow: 0px 2px 4px rgba(0, 0, 20, 0.08), 0px 1px 2px rgba(0, 0, 20, 0.08);
   border-radius: 8px;
 }
 .table-2 td{
-  padding: 19px;
+  padding: 15px;
 }
 .project {
-  color: #ffffff;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 250;
-  font-size: 24px;
-  line-height: 36px;
-  display: flex;
-  align-items: center;
-  letter-spacing: -0.32px;
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 36px;
+display: flex;
+align-items: center;
+letter-spacing: -0.32px;
+color: #FFFFFF;
+}
+
+.new{
+  width: 164.46px;
+height: 39px;
+  background: #FFFFFF;
+border: 1px solid #FFFFFF;
+border-radius: 6px;
 }
 @media (min-width:992px) and (max-width:1100px){
   .container-fluid .component{

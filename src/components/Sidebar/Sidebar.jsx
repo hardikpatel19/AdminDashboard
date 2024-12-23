@@ -1,14 +1,58 @@
 import React from "react";
 import "./Sidebar.scss";
+import { Link, useLocation } from "react-router-dom";
+import { FaHome, FaFolderPlus, FaCode } from "react-icons/fa";
 
 const Sidebar = ({ toggle }) => {
+  const { pathname } = useLocation();
 
   return (
     <div className="app-menu">
     <aside className="sidebar navbar-vertical navbar nav-dashboard" id="sidebar">
-          
-    <h3>Dash UI</h3>
-    <div className="dropdown">
+    <div className="text-center mb-4">
+        <img
+          src="../assets/images/avatar/mainlogo.png"
+          alt="BidsInfoGlobal"
+          style={{ maxWidth: "260px",margintop:"-10px",marginLeft:"-40px" }}
+        />
+      </div>
+       {/* Navigation Links */}
+       <ul className="nav flex-column w-100">
+        {/* Dashboard */}
+        <li className="nav-item mb-1 d-flex align-items-center">
+          <FaHome className="" />
+          <Link
+                to="/"
+                className={`nav-link has-arrow${
+                  pathname === "/" ? "active" : ""
+                } `}
+                onClick={toggle}
+              >
+                {/* <IoHomeOutline size={20} /> */}
+                Dashboard
+              </Link>
+        </li>
+        {/* Script */}
+        <li className="nav-item mb-3 d-flex align-items-center">
+          <FaFolderPlus className="" />
+          <Link
+                to="/script"
+                className={`nav-link has-arrow ${
+                  pathname === "/script" ? "active" : ""
+                } `}
+                onClick={toggle}
+              >
+                {/* <BsPersonVcard size={20} /> */}
+                Script
+              </Link>
+        </li>
+        {/* Developer */}
+        <li className="nav-item d-flex align-items-center">
+          <FaCode className="me-2" />
+          <span className="flex-grow-1">Developer</span>
+        </li>
+      </ul>
+    {/* <div className="dropdown">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-house-door" viewBox="0 0 16 16">
           <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z"/>
         </svg>
@@ -19,8 +63,8 @@ const Sidebar = ({ toggle }) => {
         aria-expanded="false"
       >
         Dashboard
-      </button>
-      <ul className="list flex-column ">
+      </button> */}
+      {/* <ul className="list flex-column ">
         <li className="nav-item mb-2">
           <a className="nav-link" href="https://example.com">Analytics</a>
       </li>
@@ -186,8 +230,8 @@ data-bs-toggle="dropdown"
 aria-expanded="false"
 >
 Components
-</button>
-    </div>
+</button> */}
+    {/* </div> */}
 </aside>
 </div>
   );
