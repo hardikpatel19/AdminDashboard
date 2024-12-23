@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef,  useCallback,useState } from "react";
 import { MdOutlineDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
@@ -78,17 +78,20 @@ const ScriptList = () => {
     };
     const handleConfirmationShow = () => setConfirmationShow(true);
   
-    const filterData = (query) => {
-      let filtered = scriptList;
-  
-      if (query) {
-        filtered = filtered.filter(
-          (item) => item.Name.toLowerCase().includes(query)
-        );
-      }
-      setFilteredData(filtered);
-      setCurrentItems(filtered);
-    };
+    const filterData = useCallback(
+        (query) => {
+          let filtered = scriptList;
+      
+          if (query) {
+            filtered = filtered.filter((item) =>
+              item.Name.toLowerCase().includes(query.toLowerCase())
+            );
+          }
+          setFilteredData(filtered);
+          setCurrentItems(filtered);
+        },
+        [scriptList] // Add dependencies here
+      );
     const handlePageChange = (pageNumber) => {
       setCurrentPage(pageNumber);
     };
@@ -108,7 +111,7 @@ const ScriptList = () => {
     useEffect(() => {
       filterData(searchQuery);
       setCurrentPage(1);
-    }, [searchQuery]);
+    }, [searchQuery, filterData]);
   
     useEffect(() => {
       console.log(scriptId, filteredData);

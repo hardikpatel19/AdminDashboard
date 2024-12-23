@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 
@@ -13,9 +13,9 @@ import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../firebaseConfig";
 
 const AddUpdateScriptDetail = () => {
-  const [tab, setTab] = useState("information");
-  const [{ userInfo }, dispatch] = useStateValue();
-  const [taskStatus, setTaskStatus] = useState("");
+  const [tab] = useState("information");
+  const [ dispatch] = useStateValue();
+  const [taskStatus] = useState("");
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -45,13 +45,12 @@ const AddUpdateScriptDetail = () => {
     register,
     handleSubmit,
     setValue,
-    reset,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm({
     defaultValues: {},
   });
-  const watchedFields = watch();
+  // const watchedFields = watch();
   const onSubmit = async (data) => {
     console.log(data);
     dispatch({ type: "SET_LOADING", status: true });
@@ -104,7 +103,7 @@ const AddUpdateScriptDetail = () => {
       console.error("Error fetching data:", error); // Log any errors that occur
     }
   };
-  const { data, refetch } = useQuery({
+  useQuery({
     queryKey: ["script-detail"],
     queryFn: fetchscriptDetail,
     enabled: scriptId ? true : false,
@@ -115,29 +114,23 @@ const AddUpdateScriptDetail = () => {
     onError: (e) => {
       console.log(e);
     },
-  });
+  })
   // ********************************************** get task data end ****************************************************
 
   useEffect(() => {
-    if (scriptId && tab === "information") {
+    if (scriptId  === "information") {
       setTitle("Update Script");
     }
-    if (!scriptId && tab === "information") {
+    if (!scriptId === "information") {
       setTitle("Add New Script");
     }
   }, [scriptId]);
 
-  const [funHandler, setFunHandler] = useState();
+  const [funHandler] = useState();
   const [confirmationShow, setConfirmationShow] = useState(false);
   const handleConfirmationClose = () => {
     setConfirmationShow(false);
   };
-  const handleConfirmationShow = () => setConfirmationShow(true);
-  const [confirmationResonShow, setConfirmationResonShow] = useState(false);
-  const handleConfirmationResonClose = () => {
-    setConfirmationResonShow(false);
-  };
-  const handleConfirmationResonShow = () => setConfirmationResonShow(true);
 
   return (
     <div id="app-content">
