@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { MdOutlineDelete,MdOutlineVisibility } from "react-icons/md";
+import { MdOutlineDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
@@ -9,18 +9,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 
-const ScriptList = () => {
+const Developer = () => {
   const searchInput = useRef(null);
   const location = useLocation();
-  const viewFile = (id) => {
-    console.log("View file with ID:", id);
-    // Add logic to view the file, such as opening a modal or navigating to another page
-  };
   const searchParams = new URLSearchParams(location.search);
-  const scriptId = searchParams.get("Script_id");
+  const developerId = searchParams.get("Developer_id");
   const deleteData = async (docId) => {
     try {
-      const docRef = doc(db, "scriptDetail", docId);
+      const docRef = doc(db, "developerDetail", docId);
       const re = await deleteDoc(docRef);
       console.log(re);
       refetch();
@@ -29,18 +25,18 @@ const ScriptList = () => {
       toast.error("Error deleting document: ", error);
     }
   };
-  const editTScriptDetail = (id) => {
-    navigate(`/update/script/${id}?status_filter=${searchQuery}`);
+  const editTDeveloperDetail = (id) => {
+    navigate(`/update/developer/${id}?status_filter=${searchQuery}`);
   };
-  const fetchScriptList = async () => {
+  const fetchDeveloperList = async () => {
     try {
-      const response = await getDocs(collection(db, "scriptDetail"));
+      const response = await getDocs(collection(db, "developerDetail"));
       const docsData = response.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       if (docsData) {
-        setScriptList(docsData);
+        setDeveloperList(docsData);
         setFilteredData(docsData);
         setCurrentItems(docsData);
       } else {
@@ -52,8 +48,8 @@ const ScriptList = () => {
     }
   };
   const { isLoading, refetch } = useQuery({
-    queryKey: ["script-list"],
-    queryFn: () => fetchScriptList(),
+    queryKey: ["developer-list"],
+    queryFn: () => fetchDeveloperList(),
     onSuccess: (Re) => {
       console.log(Re);
     },
@@ -69,7 +65,7 @@ const ScriptList = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [scriptList, setScriptList] = useState([]);
+  const [developerList, setDeveloperList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
@@ -83,7 +79,7 @@ const ScriptList = () => {
 
   const filterData = useCallback(
     (query) => {
-      let filtered = scriptList;
+      let filtered = developerList;
 
       if (query) {
         filtered = filtered.filter((item) =>
@@ -93,13 +89,13 @@ const ScriptList = () => {
       setFilteredData(filtered);
       setCurrentItems(filtered);
     },
-    [scriptList] // Add dependencies here
+    [developerList] // Add dependencies here
   );
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
   const removeSelection = () => {
-    navigate("/script");
+    navigate("/developer");
   };
   useEffect(() => {
     const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -117,10 +113,10 @@ const ScriptList = () => {
   }, [searchQuery, filterData]);
 
   useEffect(() => {
-    console.log(scriptId, filteredData);
-    if (scriptId && filteredData.length > 0) {
+    console.log(developerId, filteredData);
+    if (developerId && filteredData.length > 0) {
       const targetIndex = filteredData.findIndex(
-        (item) => item.ID === parseInt(scriptId)
+        (item) => item.ID === parseInt(developerId)
       );
       if (targetIndex !== -1) {
         const pageNumber = Math.floor(targetIndex / ITEMS_PER_PAGE) + 1;
@@ -130,7 +126,7 @@ const ScriptList = () => {
         // );
       }
     }
-  }, [scriptId, filteredData]);
+  }, [developerId, filteredData]);
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -142,7 +138,7 @@ const ScriptList = () => {
               {/* Page header */}
               <div className="d-flex justify-content-between align-items-center mb-5">
                 <div className="mb-2 mb-lg-0">
-                  <h3 className="mb-0  ">Script List</h3>
+                  <h3 className="mb-0  ">Developer</h3>
                 </div>
               </div>
             </div>
@@ -158,27 +154,21 @@ const ScriptList = () => {
                     <div className="col-md-12 mb-3 d-flex justify-content-start">
                       <div
                         className="btn btn-primary me-2"
-                        onClick={() => navigate("/add/script")}
+                        onClick={() => navigate("/add/developer")}
                       >
-                        + Add Script
+                        + Add Developer
                       </div>
                     </div>
                   </div>
                   <>
-                    <div className="row justify-content-end">
-                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex">
-                        <p className="mt-3 me-1">Search:</p>{" "}
+                    <div className="row justify-content-start">
+                      <div className="col-lg-4 col-md-6 mt-md-2 d-flex">
                         <input
-                          ref={searchInput}
                           type="search"
-                          className="form-control "
-                          // value={searchQuery}
-                          onChange={(e) => {
-                            if (e.target.value === "") {
-                              handleSearch();
-                            }
-                          }}
-                          placeholder=""
+                          className="form-control"
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          placeholder="Search by name, email, phone, or status"
                         />
                       </div>
                     </div>
@@ -190,24 +180,26 @@ const ScriptList = () => {
                       <div className="table-responsive table-card">
                         {currentItems.length > 0 ? (
                           <table className="table text-nowrap mb-0 table-centered table-hover">
-                            <thead className="table-light ">
+                            <thead className="table-light">
                               <tr className="text-center">
-                                <th>No</th>
-                                <th>Script Name</th>
-                                <th>Country</th>
-                                <th>Development Date</th>
-                                <th>Developer Name</th>
+                                <th className="">No</th>
+                                <th className="">Developer</th>
+                                <th className="">Phone</th>
+                                <th className="">Email</th>
+                                <th className="">Location</th>
+                                <th className="">Script Count </th>
+                                <th className="">Create Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
 
                             <tbody>
-                              {currentItems.map((script, index) => (
+                              {currentItems.map((developer, index) => (
                                 <tr
                                   id={`user-${index}`}
                                   className={`${
-                                    scriptId === script?.id
+                                    developerId === developer?.id
                                       ? "table-primary"
                                       : ""
                                   }`}
@@ -216,34 +208,21 @@ const ScriptList = () => {
                                     <strong>{index + 1}.</strong>
                                   </td>
 
-                                  <td className="">{script?.Name}</td>
-                                  <td className="">{script?.Country}</td>
-                                  <td className="">{script?.DevelopmentDate}</td>
-                                  <td>
-                                    <div className="truncate">
-                                      {script?.DeveloperName}
-                                    </div>
+                                  <td className="">
+                                    <strong>{developer?.Name}</strong>
                                   </td>
-                                  <td className="">{script?.Status}</td>
+                                  <td className="">{developer?.mobile}</td>
+                                  <td className="">{developer?.Email}</td>
+                                  <td className="">{developer?.address}</td>
+                                  <td className="">{developer?.ScriptCount}</td>
+                                  <td className="">{developer?.CreateDate}</td>
+                                  <td className="">{developer?.Status}</td>
                                   <td>
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="viewOne"
-                                      onClick={() => viewFile(script.id)}
-                                    >
-                                      <MdOutlineVisibility
-                                        size={22}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div id="viewOne" className="d-none">
-                                        <span>View</span>
-                                      </div>
-                                    </div>
                                     <div
                                       className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                       data-template="editOne"
                                       onClick={() =>
-                                        editTScriptDetail(script.id)
+                                        editTDeveloperDetail(developer.id)
                                       }
                                     >
                                       <FaRegEdit
@@ -263,7 +242,7 @@ const ScriptList = () => {
                                         removeSelection();
                                         setFunHandler({
                                           fun: deleteData,
-                                          id: script.id,
+                                          id: developer.id,
                                           title: "delete task",
                                         });
                                       }}
@@ -373,4 +352,4 @@ const ScriptList = () => {
   );
 };
 
-export default ScriptList;
+export default Developer;

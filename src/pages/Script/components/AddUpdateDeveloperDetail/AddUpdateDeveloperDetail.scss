@@ -1,0 +1,14 @@
+.bottom-btns-web {
+    display: flex;
+  }
+  .bottom-btns-mobile {
+    display: none;
+  }
+  @media (max-width: 450px) {
+    .bottom-btns-web {
+      display: none;
+    }
+    .bottom-btns-mobile {
+      display: flex;
+    }
+  }

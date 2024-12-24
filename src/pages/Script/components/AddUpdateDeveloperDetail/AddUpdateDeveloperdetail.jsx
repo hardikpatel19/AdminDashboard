@@ -26,8 +26,7 @@ const uploadFileToStorage = async (file) => {
   }
 };
 
-const AddUpdateScriptDetail = () => {
-  // const [tab] = useState("information");
+const AddUpdateDeveloperdetail = () => {
   const [, dispatch] = useStateValue();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -35,21 +34,21 @@ const AddUpdateScriptDetail = () => {
   const [title, setTitle] = useState("Add Patient");
 
   const navigate = useNavigate();
-  const { scriptId } = useParams();
+  const { developerId } = useParams();
 
-  const navigateToScriptWithId = (Id) => {
+  const navigateToDeveloperWithId = (Id) => {
     if (searchFilter) {
-      navigate(`/script?script_id=${Id}&search_filter=${searchFilter}`);
+      navigate(`/developer?developer_id=${Id}&search_filter=${searchFilter}`);
     } else {
-      navigate(`/script?scriptt_id=${Id}`);
+      navigate(`/developer?developer_id=${Id}`);
     }
   };
 
-  const navigateToScript = () => {
+  const navigateToDeveloper = () => {
     if (searchFilter) {
-      navigate(`/script?search_filter=${searchFilter}`);
+      navigate(`/developer?search_filter=${searchFilter}`);
     } else {
-      navigate(`/script`);
+      navigate(`/developer`);
     }
   };
 
@@ -71,29 +70,29 @@ const AddUpdateScriptDetail = () => {
     try {
       let fileUrl = null;
 
-      if (data.scriptFile && data.scriptFile[0]) {
-        fileUrl = await uploadFileToStorage(data.scriptFile[0]);
+      if (data.developerFile && data.developerFile[0]) {
+        fileUrl = await uploadFileToStorage(data.developerFile[0]);
       }
 
       const documentData = {
         ...data,
-        scriptFile: fileUrl,
+        developerFile: fileUrl,
         userId: auth.currentUser.uid,
         timestamp: new Date(),
       };
 
-      if (scriptId) {
-        const docRef = doc(db, "scriptDetail", scriptId);
+      if (developerId) {
+        const docRef = doc(db, "developerDetail", developerId);
         await updateDoc(docRef, documentData);
         toast.success("Document updated successfully");
-        navigateToScriptWithId(scriptId);
+        navigateToDeveloperWithId(developerId);
       } else {
         const docRef = await addDoc(
-          collection(db, "scriptDetail"),
+          collection(db, "developerDetail"),
           documentData
         );
         toast.success("Form submitted successfully!");
-        navigateToScriptWithId(docRef.id);
+        navigateToDeveloperWithId(docRef.id);
       }
     } catch (error) {
       console.error("Error saving document:", error);
@@ -104,10 +103,10 @@ const AddUpdateScriptDetail = () => {
   };
 
   // Fetch Data for Edit
-  const fetchscriptDetail = async () => {
+  const fetchdeveloperDetail = async () => {
     try {
       dispatch({ type: "SET_LOADING", status: true });
-      const docRef = doc(db, "scriptDetail", scriptId);
+      const docRef = doc(db, "developerDetail", developerId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -125,20 +124,20 @@ const AddUpdateScriptDetail = () => {
   };
 
   useQuery({
-    queryKey: ["script-detail"],
-    queryFn: fetchscriptDetail,
-    enabled: !!scriptId,
+    queryKey: ["developer-detail"],
+    queryFn: fetchdeveloperDetail,
+    enabled: !!developerId,
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
 
   useEffect(() => {
-    if (scriptId) {
-      setTitle("Update Script");
+    if (developerId) {
+      setTitle("Update developer");
     } else {
-      setTitle("Add New Script");
+      setTitle("Add New developer");
     }
-  }, [scriptId]);
+  }, [developerId]);
 
   const [confirmationShow, setConfirmationShow] = useState(false);
   const handleConfirmationClose = () => setConfirmationShow(false);
@@ -147,14 +146,14 @@ const AddUpdateScriptDetail = () => {
     <div id="app-content">
       <div className="app-content-area mb-10">
         <div className="container-fluid">
-          <div className="header px-6">
-            <h1 className="mb-0 h3">{title}</h1>
+          <div className="header px-2">
+            <h1 className="mb-5 h3">{title}</h1>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="card mb-5">
               <div className="card-body">
                 <div className="row">
-                  <div className="mb-4 col-md-12">
+                  <div className="mb-4 col-md-6">
                     <label className="form-label">
                       Name<span className="text-danger">*</span>
                     </label>
@@ -170,50 +169,92 @@ const AddUpdateScriptDetail = () => {
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                      Developer Name<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter developer name"
-                      {...register("DeveloperName", {
-                        required: "Developer Name is required",
-                      })}
-                    />
-                    {errors.DeveloperName && (
-                      <div className="error">
-                        {errors.DeveloperName.message}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-4 col-md-6">
-                    <label className="form-label">
                       Development Date<span className="text-danger">*</span>
                     </label>
                     <input
                       type="date"
                       className="form-control"
                       placeholder="Select development date"
-                      {...register("DevelopmentDate", {
+                      {...register("CreateDate", {
                         required: "Development Date is required",
                       })}
                     />
-                    {errors.DevelopmentDate && (
+                    {errors.CreateDate && (
                       <div className="error">
-                        {errors.DevelopmentDate.message}
+                        {errors.CreateDate.message}
                       </div>
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
-                    <label className="form-label">Country</label>
-                    <select className="form-select" {...register("Country")}>
-                      <option value="">Select a country</option>
-                      <option value="USA">United States</option>
-                      <option value="Canada">Canada</option>
-                      <option value="UK">United Kingdom</option>
-                      <option value="India">India</option>
-                      <option value="Australia">Australia</option>
-                    </select>
+                    <label className="form-label">
+                      Email<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Enter email"
+                      {...register("Email", { required: "Email is required" })}
+                    />
+                    {errors.Email && (
+                      <div className="error">{errors.Email.message}</div>
+                    )}
+                  </div>
+                  {/* form group */}
+                  <div className="mb-4 col-md-6 col-12">
+                    <label className="form-label">
+                      Phone Number <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="form-control"
+                      placeholder="Enter mobile number"
+                      {...register("mobile", {
+                        required: "Mobile is required",
+                        pattern: {
+                          value: /^[0-9]{10}$/,
+                          message: "Invalid mobile number.",
+                        },
+                      })}
+                    />
+                    {errors.mobile && (
+                      <div className="error">{errors.mobile.message}</div>
+                    )}
+                  </div>
+                  {/* form group */}
+                  <div className="mb-4 col-md-12 col-12">
+                    <label className="form-label">
+                      Address
+                      <span className="text-danger">*</span>
+                    </label>
+                    <div className="d-flex ">
+                      <textarea
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter address"
+                        rows={3}
+                        {...register("address", {
+                          required: "Address is required",
+                        })}
+                      />
+                    </div>
+                    {errors.address && (
+                      <div className="error">{errors.address.message}</div>
+                    )}
+                  </div>
+                  <div className="mb-4 col-md-6">
+                    <label className="form-label">
+                      Script Count
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Enter script count"
+                      {...register("ScriptCount")}
+                    />
+                    {errors.ScriptCount && (
+                      <div className="error">{errors.ScriptCount.message}</div>
+                    )}
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">Status</label>
@@ -225,14 +266,6 @@ const AddUpdateScriptDetail = () => {
                       <option value="Completed">Completed</option>
                     </select>
                   </div>
-                  <div className="mb-4">
-                    <label className="form-label">Script File</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      {...register("scriptFile")}
-                    />
-                  </div>
                 </div>
               </div>
             </div>
@@ -240,7 +273,7 @@ const AddUpdateScriptDetail = () => {
               <button
                 type="button"
                 className="btn btn-outline-danger"
-                onClick={() => navigateToScript()}
+                onClick={() => navigateToDeveloper()}
               >
                 Cancel
               </button>
@@ -259,4 +292,4 @@ const AddUpdateScriptDetail = () => {
   );
 };
 
-export default AddUpdateScriptDetail;
+export default AddUpdateDeveloperdetail;

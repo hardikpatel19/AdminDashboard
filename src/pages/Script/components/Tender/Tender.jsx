@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { MdOutlineDelete,MdOutlineVisibility } from "react-icons/md";
+import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
@@ -9,13 +9,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 
-const ScriptList = () => {
-  const searchInput = useRef(null);
-  const location = useLocation();
+const Tender = () => {
   const viewFile = (id) => {
     console.log("View file with ID:", id);
     // Add logic to view the file, such as opening a modal or navigating to another page
   };
+  const searchInput = useRef(null);
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const scriptId = searchParams.get("Script_id");
   const deleteData = async (docId) => {
@@ -136,13 +136,13 @@ const ScriptList = () => {
       {/* Container fluid */}
       <div className="app-content-area">
         <div className=" pt-10 pb-21 mt-n6 mx-n4" />
-        <div className="container-fluid mt-n22 ">
+        <div className="container-fluid mt-n23 ">
           <div className="row">
             <div className="col-lg-12 col-md-12 col-12">
               {/* Page header */}
               <div className="d-flex justify-content-between align-items-center mb-5">
                 <div className="mb-2 mb-lg-0">
-                  <h3 className="mb-0  ">Script List</h3>
+                  <h3 className="mb-0  ">Tenders Script</h3>
                 </div>
               </div>
             </div>
@@ -164,20 +164,56 @@ const ScriptList = () => {
                       </div>
                     </div>
                   </div>
+                  
                   <>
                     <div className="row justify-content-end">
-                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex">
-                        <p className="mt-3 me-1">Search:</p>{" "}
+                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex">
+                        <label className="mt-3 me-1 form-label">
+                           Date:
+                        </label>
                         <input
                           ref={searchInput}
                           type="search"
-                          className="form-control "
-                          // value={searchQuery}
+                          className="form-control  "
+                          value={searchQuery}
                           onChange={(e) => {
                             if (e.target.value === "") {
                               handleSearch();
                             }
                           }}
+                          onClick={() => handleSearch()}
+                          placeholder=""
+                        />
+                      </div>
+                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex">
+                        <label className="mt-3 me-1 form-label">To:</label>
+                        <input
+                          ref={searchInput}
+                          type="search"
+                          className="form-control "
+                          value={searchQuery}
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              handleSearch();
+                            }
+                          }}
+                          onClick={() => handleSearch()}
+                          placeholder=""
+                        />
+                      </div>
+                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex">
+                        <label className="mt-3 me-1 form-label">Search:</label>
+                        <input
+                          ref={searchInput}
+                          type="search"
+                          className="form-control "
+                          value={searchQuery}
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              handleSearch();
+                            }
+                          }}
+                          onClick={() => handleSearch()}
                           placeholder=""
                         />
                       </div>
@@ -190,13 +226,13 @@ const ScriptList = () => {
                       <div className="table-responsive table-card">
                         {currentItems.length > 0 ? (
                           <table className="table text-nowrap mb-0 table-centered table-hover">
-                            <thead className="table-light ">
+                            <thead className="table-light">
                               <tr className="text-center">
-                                <th>No</th>
-                                <th>Script Name</th>
-                                <th>Country</th>
-                                <th>Development Date</th>
-                                <th>Developer Name</th>
+                                <th className="">No</th>
+                                <th className="">Script Name</th>
+                                <th className="">Country</th>
+                                <th className="">Development Date</th>
+                                <th className="">Developer Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                               </tr>
@@ -216,7 +252,10 @@ const ScriptList = () => {
                                     <strong>{index + 1}.</strong>
                                   </td>
 
-                                  <td className="">{script?.Name}</td>
+                                  <td className="">
+                                    <strong>{script?.Name}</strong>
+                                  </td>
+
                                   <td className="">{script?.Country}</td>
                                   <td className="">{script?.DevelopmentDate}</td>
                                   <td>
@@ -373,4 +412,4 @@ const ScriptList = () => {
   );
 };
 
-export default ScriptList;
+export default Tender;

@@ -605,7 +605,7 @@ sup {
 }
 
 a {
-    color: rgba(var(--dashui-link-color-rgb), var(--dashui-link-opacity, 1));
+    color: #475569;
     text-decoration: none
 }
 
@@ -5227,7 +5227,7 @@ fieldset:disabled .btn {
 }
 
 .nav-link {
-    color: var(--dashui-nav-link-color);
+    color: #475569;
     display: block;
     font-size: var(--dashui-nav-link-font-size);
     font-weight: var(--dashui-nav-link-font-weight);
@@ -6251,8 +6251,8 @@ fieldset:disabled .btn {
 
 .active>.page-link,
 .page-link.active {
-    background-color: var(--dashui-pagination-active-bg);
-    border-color: var(--dashui-pagination-active-border-color);
+    background-color: #23536b;
+    border-color: #23536b;
     color: var(--dashui-pagination-active-color);
     z-index: 3
 }

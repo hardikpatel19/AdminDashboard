@@ -2,10 +2,11 @@ import React from "react";
 import "./Sidebar.scss";
 import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaFolderPlus, FaCode } from "react-icons/fa";
+import { Collapse } from "react-bootstrap";
 
 const Sidebar = ({ toggle }) => {
   const { pathname } = useLocation();
-
+  const [openScript, setOpenScript] = React.useState(false);
   return (
     <div className="app-menu">
     <aside className="sidebar navbar-vertical navbar nav-dashboard" id="sidebar">
@@ -19,7 +20,7 @@ const Sidebar = ({ toggle }) => {
        {/* Navigation Links */}
        <ul className="nav flex-column w-100">
         {/* Dashboard */}
-        <li className="nav-item mb-1 d-flex align-items-center">
+        <li className="nav-item mb-1 d-flex align-items-center ">
           <FaHome className="" />
           <Link
                 to="/"
@@ -33,23 +34,48 @@ const Sidebar = ({ toggle }) => {
               </Link>
         </li>
         {/* Script */}
-        <li className="nav-item mb-3 d-flex align-items-center">
-          <FaFolderPlus className="" />
+        <li className="nav-item mb-2">
+          <div
+            className="d-flex align-items-center cursor-pointer"
+            onClick={() => setOpenScript(!openScript)}
+            style={{ cursor: "pointer" }}
+          >
+            <FaFolderPlus size={18} className=" mt-2" />
+            <Link className=" mt-2 nav-link">Script</Link>
+          </div>
+          <Collapse in={openScript}>
+            <ul className="nav flex-column ms-3 mt-2">
+              <li className="nav-item">
+                <span className="nav-link"><Link to="/tender">
+              Tender
+            </Link></span>
+              </li>
+              <li className="nav-item">
+                <span className="nav-link"><Link to="/project">Project</Link></span>
+              </li>
+              <li className="nav-item">
+                <span className="nav-link"><Link to="/ca">CA</Link></span>
+              </li>
+              <li className="nav-item">
+                <span className="nav-link"><Link to="/grants">Grants</Link></span>
+              </li>
+            </ul>
+          </Collapse>
+        </li>
+
+        {/* Developer */}
+        <li className="nav-item mb-1 d-flex align-items-center">
+          <FaCode className="" />
           <Link
-                to="/script"
-                className={`nav-link has-arrow ${
-                  pathname === "/script" ? "active" : ""
+                to="/developer"
+                className={`nav-link has-arrow${
+                  pathname === "/developer" ? "active" : ""
                 } `}
                 onClick={toggle}
               >
-                {/* <BsPersonVcard size={20} /> */}
-                Script
+                {/* <IoHomeOutline size={20} /> */}
+                Developer
               </Link>
-        </li>
-        {/* Developer */}
-        <li className="nav-item d-flex align-items-center">
-          <FaCode className="me-2" />
-          <span className="flex-grow-1">Developer</span>
         </li>
       </ul>
     {/* <div className="dropdown">

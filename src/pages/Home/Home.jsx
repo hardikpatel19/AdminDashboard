@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { BsListTask } from "react-icons/bs";
 import { MdOutlineReviews } from "react-icons/md";
 import { MdOutlineUpcoming } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { TbCalendarDue } from "react-icons/tb";
+
 const Home = () => {
   const [dashboardCount] = useState([]);
+const navigate = useNavigate();
 
   return (
     <div id="app-content">
@@ -18,7 +21,8 @@ const Home = () => {
                 <h2 className="text text-white mb-md-0 ms-1 project">Script</h2>
             </div>
             <div className="col-12 col-md-6 mb-4 text-md-end">
-                <button className="btn btn-white btn-1 me-0 new">Add New Script</button>
+                <button className="btn btn-white btn-1 me-0 new"
+                onClick={() => navigate("/add/script")}>Add New Script</button>
             </div>
         </div>
     </div>
@@ -33,7 +37,7 @@ const Home = () => {
                     <div>
                       <h4 className="mb-0">Active Script</h4>
                     </div>
-                    <div className="icon-shape icon-md bg-primary-soft text-primary rounded-2">
+                    <div className="icon-shape icon-md bg-primary-soft  rounded-2">
                       <TbCalendarDue size={20} />
                     </div>
                   </div>
@@ -61,7 +65,7 @@ const Home = () => {
                       <h4 className="mb-0">In Maintenance</h4>
                     </div>
                     <div
-                      className="icon-shape icon-md bg-primary-soft text-primary
+                      className="icon-shape icon-md bg-primary-soft 
                 rounded-2"
                     >
                       <BsListTask size={20} />
@@ -91,7 +95,7 @@ const Home = () => {
                       <h4 className="mb-0">In Development</h4>
                     </div>
                     <div
-                      className="icon-shape icon-md bg-primary-soft text-primary
+                      className="icon-shape icon-md bg-primary-soft 
                 rounded-2"
                     >
                       <MdOutlineReviews size={20} />
@@ -121,7 +125,7 @@ const Home = () => {
                       <h4 className="mb-0">Pending Payment </h4>
                     </div>
                     <div
-                      className="icon-shape icon-md bg-primary-soft text-primary
+                      className="icon-shape icon-md bg-primary-soft 
                 rounded-2"
                     >
                       <MdOutlineUpcoming size={20} />
@@ -223,7 +227,8 @@ const Home = () => {
               </tr>
               <tr>
                 <td colspan="5" className="text-center">
-                  <button className="btn btn-primary">View All Projects</button>
+                  <button className="btn btn-primary"
+                  onClick={() => navigate("/script")}>View All Script</button>
                 </td>
               </tr>
               </tbody>
