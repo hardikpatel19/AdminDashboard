@@ -47,7 +47,7 @@ const Developer = () => {
       throw error;
     }
   };
-  const { isLoading, refetch } = useQuery({
+  const { refetch } = useQuery({
     queryKey: ["developer-list"],
     queryFn: () => fetchDeveloperList(),
     onSuccess: (Re) => {
@@ -174,7 +174,7 @@ const Developer = () => {
                     </div>
                   </>
                 </div>
-                {!isLoading ? (
+                {/* {!isLoading ? ( */}
                   <>
                     <div className="card-body">
                       <div className="table-responsive table-card">
@@ -333,11 +333,11 @@ const Developer = () => {
                       </div>
                     )}
                   </>
-                ) : (
+                {/* ) : (
                   <div className="m-5 fs-3">
                     <strong>Fetching records..</strong>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>

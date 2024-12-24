@@ -51,7 +51,7 @@ const ScriptList = () => {
       throw error;
     }
   };
-  const { isLoading, refetch } = useQuery({
+  const { refetch } = useQuery({
     queryKey: ["script-list"],
     queryFn: () => fetchScriptList(),
     onSuccess: (Re) => {
@@ -184,7 +184,7 @@ const ScriptList = () => {
                     </div>
                   </>
                 </div>
-                {!isLoading ? (
+                {/* {!isLoading ? ( */}
                   <>
                     <div className="card-body">
                       <div className="table-responsive table-card">
@@ -354,11 +354,11 @@ const ScriptList = () => {
                       </div>
                     )}
                   </>
-                ) : (
+                {/* ) : (
                   <div className="m-5 fs-3">
                     <strong>Fetching records..</strong>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>

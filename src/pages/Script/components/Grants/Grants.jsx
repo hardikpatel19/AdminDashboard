@@ -51,7 +51,7 @@ const Grants = () => {
       throw error;
     }
   };
-  const { isLoading, refetch } = useQuery({
+  const { refetch } = useQuery({
     queryKey: ["script-list"],
     queryFn: () => fetchScriptList(),
     onSuccess: (Re) => {
@@ -167,13 +167,11 @@ const Grants = () => {
                   <>
                     <div className="row justify-content-end">
                       <div className=" col-lg-3 col-md-6 mt-md-2 d-flex">
-                        <label className="mt-3 me-1 form-label">
-                          Date:
-                        </label>
+                        <label className="mt-3 me-1 form-label">Date:</label>
                         <input
                           ref={searchInput}
-                          type="search"
-                          className="form-control  "
+                          type="date"
+                          className="form-control"
                           value={searchQuery}
                           onChange={(e) => {
                             if (e.target.value === "") {
@@ -188,8 +186,8 @@ const Grants = () => {
                         <label className="mt-3 me-1 form-label">To:</label>
                         <input
                           ref={searchInput}
-                          type="search"
-                          className="form-control "
+                          type="date"
+                          className="form-control"
                           value={searchQuery}
                           onChange={(e) => {
                             if (e.target.value === "") {
@@ -206,7 +204,7 @@ const Grants = () => {
                           ref={searchInput}
                           type="search"
                           className="form-control "
-                          value={searchQuery}
+                        //   value={searchQuery}
                           onChange={(e) => {
                             if (e.target.value === "") {
                               handleSearch();
@@ -219,181 +217,177 @@ const Grants = () => {
                     </div>
                   </>
                 </div>
-                {!isLoading ? (
-                  <>
-                    <div className="card-body">
-                      <div className="table-responsive table-card">
-                        {currentItems.length > 0 ? (
-                          <table className="table text-nowrap mb-0 table-centered table-hover">
-                            <thead className="table-light">
-                              <tr className="text-center">
-                                <th className=" ">No</th>
-                                <th className="">Script Name</th>
-                                <th className="">Country</th>
-                                <th className="">Development Date</th>
-                                <th className="">Developer Name</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                {/* {!isLoading ? ( */}
+                <>
+                  <div className="card-body">
+                    <div className="table-responsive table-card">
+                      {currentItems.length > 0 ? (
+                        <table className="table text-nowrap mb-0 table-centered table-hover">
+                          <thead className="table-light">
+                            <tr className="text-center">
+                              <th className=" ">No</th>
+                              <th className="">Script Name</th>
+                              <th className="">Country</th>
+                              <th className="">Development Date</th>
+                              <th className="">Developer Name</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {currentItems.map((script, index) => (
+                              <tr
+                                id={`user-${index}`}
+                                className={`${
+                                  scriptId === script?.id ? "table-primary" : ""
+                                }`}
+                              >
+                                <td>
+                                  <strong>{index + 1}.</strong>
+                                </td>
+
+                                <td className="">{script?.Name}</td>
+                                <td className="">{script?.Country}</td>
+                                <td className="">{script?.DevelopmentDate}</td>
+                                <td>
+                                  <div className="truncate">
+                                    {script?.DeveloperName}
+                                  </div>
+                                </td>
+                                <td className="">{script?.Status}</td>
+                                <td>
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="viewOne"
+                                    onClick={() => viewFile(script.id)}
+                                  >
+                                    <MdOutlineVisibility
+                                      size={22}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div id="viewOne" className="d-none">
+                                      <span>View</span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="editOne"
+                                    onClick={() => editTScriptDetail(script.id)}
+                                  >
+                                    <FaRegEdit
+                                      size={20}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div id="editOne" className="d-none">
+                                      <span>Edit</span>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="trashOne"
+                                    onClick={() => {
+                                      handleConfirmationShow();
+                                      removeSelection();
+                                      setFunHandler({
+                                        fun: deleteData,
+                                        id: script.id,
+                                        title: "delete task",
+                                      });
+                                    }}
+                                  >
+                                    <MdOutlineDelete
+                                      size={22}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div
+                                      id="trashOne"
+                                      className="d-none"
+                                      // onClick={() => deleteTask(task.ID)}
+                                    >
+                                      <span>Delete</span>
+                                    </div>
+                                  </div>
+                                </td>
                               </tr>
-                            </thead>
-
-                            <tbody>
-                              {currentItems.map((script, index) => (
-                                <tr
-                                  id={`user-${index}`}
-                                  className={`${
-                                    scriptId === script?.id
-                                      ? "table-primary"
-                                      : ""
-                                  }`}
-                                >
-                                  <td>
-                                    <strong>{index + 1}.</strong>
-                                  </td>
-
-                                  <td className="">{script?.Name}</td>
-                                  <td className="">{script?.Country}</td>
-                                  <td className="">{script?.DevelopmentDate}</td>
-                                  <td>
-                                    <div className="truncate">
-                                      {script?.DeveloperName}
-                                    </div>
-                                  </td>
-                                  <td className="">{script?.Status}</td>
-                                  <td>
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="viewOne"
-                                      onClick={() => viewFile(script.id)}
-                                    >
-                                      <MdOutlineVisibility
-                                        size={22}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div id="viewOne" className="d-none">
-                                        <span>View</span>
-                                      </div>
-                                    </div>
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="editOne"
-                                      onClick={() =>
-                                        editTScriptDetail(script.id)
-                                      }
-                                    >
-                                      <FaRegEdit
-                                        size={20}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div id="editOne" className="d-none">
-                                        <span>Edit</span>
-                                      </div>
-                                    </div>
-
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="trashOne"
-                                      onClick={() => {
-                                        handleConfirmationShow();
-                                        removeSelection();
-                                        setFunHandler({
-                                          fun: deleteData,
-                                          id: script.id,
-                                          title: "delete task",
-                                        });
-                                      }}
-                                    >
-                                      <MdOutlineDelete
-                                        size={22}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div
-                                        id="trashOne"
-                                        className="d-none"
-                                        // onClick={() => deleteTask(task.ID)}
-                                      >
-                                        <span>Delete</span>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <div className="m-5 fs-3">
-                            <strong>No records found.!</strong>
-                          </div>
-                        )}
-                      </div>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div className="m-5 fs-3">
+                          <strong>No records found.!</strong>
+                        </div>
+                      )}
                     </div>
-                    {filteredData.length > 0 && (
-                      <div className="card-footer d-md-flex justify-content-between align-items-center">
-                        <span>
-                          Showing{" "}
-                          {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
-                          {currentPage * ITEMS_PER_PAGE >= filteredData.length
-                            ? filteredData.length
-                            : currentPage * ITEMS_PER_PAGE}{" "}
-                          of {filteredData.length} entries
-                        </span>
-                        <nav className="mt-2 mt-md-0">
-                          <ul className="pagination mb-0 ">
-                            <li
-                              className="page-item "
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                if (currentPage > 1) {
-                                  handlePageChange(currentPage - 1);
+                  </div>
+                  {filteredData.length > 0 && (
+                    <div className="card-footer d-md-flex justify-content-between align-items-center">
+                      <span>
+                        Showing{" "}
+                        {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
+                        {currentPage * ITEMS_PER_PAGE >= filteredData.length
+                          ? filteredData.length
+                          : currentPage * ITEMS_PER_PAGE}{" "}
+                        of {filteredData.length} entries
+                      </span>
+                      <nav className="mt-2 mt-md-0">
+                        <ul className="pagination mb-0 ">
+                          <li
+                            className="page-item "
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              if (currentPage > 1) {
+                                handlePageChange(currentPage - 1);
+                                removeSelection();
+                              }
+                            }}
+                          >
+                            <div className="page-link">Previous</div>
+                          </li>
+                          {Array(totalPages ? totalPages : 0)
+                            .fill()
+                            .map((item, index) => (
+                              <li
+                                style={{ cursor: "pointer" }}
+                                className={`${
+                                  currentPage === index + 1
+                                    ? "page-item active"
+                                    : "page-item"
+                                }`}
+                                onClick={() => {
+                                  handlePageChange(index + 1);
                                   removeSelection();
+                                }}
+                              >
+                                <div className="page-link">{index + 1}</div>
+                              </li>
+                            ))}
+
+                          <li className="page-item">
+                            <div
+                              style={{ cursor: "pointer" }}
+                              className="page-link"
+                              onClick={() => {
+                                if (totalPages > currentPage) {
+                                  removeSelection();
+                                  handlePageChange(currentPage + 1);
                                 }
                               }}
                             >
-                              <div className="page-link">Previous</div>
-                            </li>
-                            {Array(totalPages ? totalPages : 0)
-                              .fill()
-                              .map((item, index) => (
-                                <li
-                                  style={{ cursor: "pointer" }}
-                                  className={`${
-                                    currentPage === index + 1
-                                      ? "page-item active"
-                                      : "page-item"
-                                  }`}
-                                  onClick={() => {
-                                    handlePageChange(index + 1);
-                                    removeSelection();
-                                  }}
-                                >
-                                  <div className="page-link">{index + 1}</div>
-                                </li>
-                              ))}
-
-                            <li className="page-item">
-                              <div
-                                style={{ cursor: "pointer" }}
-                                className="page-link"
-                                onClick={() => {
-                                  if (totalPages > currentPage) {
-                                    removeSelection();
-                                    handlePageChange(currentPage + 1);
-                                  }
-                                }}
-                              >
-                                Next
-                              </div>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
-                    )}
-                  </>
-                ) : (
+                              Next
+                            </div>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
+                  )}
+                </>
+                {/* ) : (
                   <div className="m-5 fs-3">
                     <strong>Fetching records..</strong>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>

@@ -146,7 +146,7 @@ const navigate = useNavigate();
 
                 {/* table  */}
                 <div className="table-responsive">
-          <table className="table-2 table-hover">
+          <table className="table table-hover">
             <tbody>
             <tr>
               <td colSpan={5}><h4 className="mb-1 text-start">Script</h4></td>

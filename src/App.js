@@ -69,11 +69,7 @@ function App() {
             <Route path="/grants" element={<Grants />} />
             <Route path="/developer" element={<Developer />} />
             <Route path="/add/developer" element={<AddUpdateDeveloperdetail />} />
-            <Route path="/update/script/:scriptId" element={<AddUpdateScriptDetail />} />
-
-            {/* <Route path="/patient" element={<PatientList />} />
-            <Route path="/add/patient" element={<AddUpdatePatientDetail />} />
-            <Route path="/update/patient/:patientId" element={<AddUpdatePatientDetail />} /> */}
+            <Route path="/update/developer/:developerId" element={<AddUpdateDeveloperdetail />} />
           </Route>
 
           {/* Redirect unknown paths to home */}
