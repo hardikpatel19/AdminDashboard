@@ -289,7 +289,7 @@ const ScriptList = () => {
                           </table>
                         ) : (
                           <div className="m-5 fs-3">
-                            {/* <strong>No records found.!</strong> */}
+                            <strong>No records found.!</strong>
                           </div>
                         )}
                       </div>
