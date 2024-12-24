@@ -216,7 +216,9 @@ const ScriptList = () => {
                                     <strong>{index + 1}.</strong>
                                   </td>
 
-                                  <td className="">{script?.Name}</td>
+                                  <td className="">
+                                  <strong>{script?.Name}</strong>
+                                </td>
                                   <td className="">{script?.Country}</td>
                                   <td className="">{script?.DevelopmentDate}</td>
                                   <td>
@@ -287,7 +289,7 @@ const ScriptList = () => {
                           </table>
                         ) : (
                           <div className="m-5 fs-3">
-                            <strong>No records found.!</strong>
+                            {/* <strong>No records found.!</strong> */}
                           </div>
                         )}
                       </div>
