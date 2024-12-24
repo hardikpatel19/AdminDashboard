@@ -8,6 +8,7 @@ import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
+import { projectData } from "../../../../utils/dummyData";
 
 const Project = () => {
   const searchInput = useRef(null);
@@ -40,9 +41,9 @@ const Project = () => {
         ...doc.data(),
       }));
       if (docsData) {
-        setScriptList(docsData);
-        setFilteredData(docsData);
-        setCurrentItems(docsData);
+        // setScriptList(docsData);
+        // setFilteredData(docsData);
+        // setCurrentItems(docsData);
       } else {
         toast.error(response?.response?.data?.message);
       }
@@ -69,7 +70,7 @@ const Project = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [scriptList, setScriptList] = useState([]);
+  const [scriptList] = useState([projectData]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
