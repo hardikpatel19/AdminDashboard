@@ -70,7 +70,7 @@ const ScriptList = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [scriptList] = useState([scriptListData]);
+  const [scriptList] = useState(scriptListData);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);

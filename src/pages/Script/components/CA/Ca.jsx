@@ -70,7 +70,7 @@ const Ca = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [scriptList] = useState([caData]);
+  const [scriptList] = useState(caData);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
