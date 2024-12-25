@@ -8,6 +8,7 @@ import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
+import { developerData } from "../../../../utils/dummyData";
 
 const Developer = () => {
   const searchInput = useRef(null);
@@ -36,9 +37,9 @@ const Developer = () => {
         ...doc.data(),
       }));
       if (docsData) {
-        setDeveloperList(docsData);
-        setFilteredData(docsData);
-        setCurrentItems(docsData);
+        // setDeveloperList(docsData);
+        // setFilteredData(docsData);
+        // setCurrentItems(docsData);
       } else {
         toast.error(response?.response?.data?.message);
       }
@@ -65,7 +66,7 @@ const Developer = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [developerList, setDeveloperList] = useState([]);
+  const [developerList] = useState(developerData);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
@@ -164,10 +165,16 @@ const Developer = () => {
                     <div className="row justify-content-start">
                       <div className="col-lg-4 col-md-6 mt-md-2 d-flex">
                         <input
+                          ref={searchInput}
                           type="search"
                           className="form-control"
-                          value={searchQuery}
-                          onChange={(e) => handleSearch(e.target.value)}
+                          // value={searchQuery}
+                          onChange={(e) => {
+                            if (e.target.value === "Name") {
+                              handleSearch();
+                            }
+                          }}
+                          onClick={() => handleSearch()}
                           placeholder="Search by name, email, phone, or status"
                         />
                       </div>
@@ -215,7 +222,7 @@ const Developer = () => {
                                   <td className="">{developer?.Email}</td>
                                   <td className="">{developer?.address}</td>
                                   <td className="">{developer?.ScriptCount}</td>
-                                  <td className="">{developer?.CreateDate}</td>
+                                  <td className="">{developer?.CreateDate }</td>
                                   <td className="">{developer?.Status}</td>
                                   <td>
                                     <div

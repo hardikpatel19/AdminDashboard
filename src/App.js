@@ -20,8 +20,8 @@ import Tender from "./pages/Script/components/Tender/Tender";
 import Project from "./pages/Script/components/Project/Project";
 import Ca from "./pages/Script/components/CA/Ca";
 import Grants from "./pages/Script/components/Grants/Grants";
-import Developer from "./pages/Script/components/Developer/Developer";
-import AddUpdateDeveloperdetail from "./pages/Script/components/AddUpdateDeveloperDetail/AddUpdateDeveloperdetail";
+import Developer from "./pages/Developer/components/Developer/Developer";
+import AddUpdateDeveloperdetail from "./pages/Developer/components/AddUpdateDeveloperDetail/AddUpdateDeveloperdetail";
 // import AddUpdateScriptDetail from "./pages/Script/components/AddUpdateScriptDetail/AddUpdateScriptDetail";
 
 
