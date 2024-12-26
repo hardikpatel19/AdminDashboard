@@ -5217,7 +5217,7 @@ fieldset:disabled .btn {
     --dashui-nav-link-padding-y: 0.5rem;
     --dashui-nav-link-font-weight: ;
     --dashui-nav-link-color: var(--dashui-link-color);
-    --dashui-nav-link-hover-color: var(--dashui-link-hover-color);
+    --dashui-nav-link-hover-color: #1d3f50;
     --dashui-nav-link-disabled-color: var(--dashui-secondary-color);
     display: flex;
     flex-wrap: wrap;
@@ -10410,6 +10410,10 @@ fieldset:disabled .btn {
 
 .ms-23 {
     margin-left: 9.5rem !important
+}
+
+.ms-30 {
+    margin-left: 36.5rem !important
 }
 
 .ms-auto {

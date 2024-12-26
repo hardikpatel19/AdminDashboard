@@ -162,8 +162,8 @@ const Developer = () => {
                     </div>
                   </div>
                   <>
-                    <div className="row justify-content-start">
-                      <div className="col-lg-4 col-md-6 mt-md-2 d-flex">
+                    <div className="row ">
+                      <div className="col-lg-4 col-md-6 mt-md-2 d-flex justify-content-start">
                         <input
                           ref={searchInput}
                           type="search"
@@ -178,168 +178,190 @@ const Developer = () => {
                           placeholder="Search by name, email, phone, or status"
                         />
                       </div>
+                      <div className="col-lg-2 col-md-6 mt-md-2 d-flex justify-content-end ms-30">
+                        <input
+                          ref={searchInput}
+                          type="search"
+                          className="form-control"
+                          list="statusOptions" // Connects the input to the datalist
+                          onChange={(e) => {
+                            if (e.target.value === "Status") {
+                              handleSearch();
+                            }
+                          }}
+                          onClick={() => handleSearch()}
+                          placeholder="Status"
+                        />
+                        {/* Datalist for predefined options */}
+                        <datalist id="statusOptions">
+                          <option value="Active" />
+                          <option value="Inactive" />
+                          <option value="Pending" />
+                          <option value="Completed" />
+                        </datalist>
+                      </div>
                     </div>
                   </>
                 </div>
                 {/* {!isLoading ? ( */}
-                  <>
-                    <div className="card-body">
-                      <div className="table-responsive table-card">
-                        {currentItems.length > 0 ? (
-                          <table className="table text-nowrap mb-0 table-centered table-hover">
-                            <thead className="table-light">
-                              <tr className="text-center">
-                                <th className="">No</th>
-                                <th className="">Developer</th>
-                                <th className="">Phone</th>
-                                <th className="">Email</th>
-                                <th className="">Location</th>
-                                <th className="">Script Count </th>
-                                <th className="">Create Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                <>
+                  <div className="card-body">
+                    <div className="table-responsive table-card">
+                      {currentItems.length > 0 ? (
+                        <table className="table text-nowrap mb-0 table-centered table-hover">
+                          <thead className="table-light">
+                            <tr className="text-center">
+                              <th className="">No</th>
+                              <th className="">Developer</th>
+                              <th className="">Phone</th>
+                              <th className="">Email</th>
+                              <th className="">Location</th>
+                              <th className="">Script Count </th>
+                              <th className="">Create Date</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {currentItems.map((developer, index) => (
+                              <tr
+                                id={`user-${index}`}
+                                className={`${
+                                  developerId === developer?.id
+                                    ? "table-primary"
+                                    : ""
+                                }`}
+                              >
+                                <td>
+                                  <strong>{index + 1}.</strong>
+                                </td>
+
+                                <td className="">
+                                  <strong>{developer?.Name}</strong>
+                                </td>
+                                <td className="">{developer?.mobile}</td>
+                                <td className="">{developer?.Email}</td>
+                                <td className="">{developer?.address}</td>
+                                <td className="">{developer?.ScriptCount}</td>
+                                <td className="">{developer?.CreateDate}</td>
+                                <td className="">{developer?.Status}</td>
+                                <td>
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="editOne"
+                                    onClick={() =>
+                                      editTDeveloperDetail(developer.id)
+                                    }
+                                  >
+                                    <FaRegEdit
+                                      size={20}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div id="editOne" className="d-none">
+                                      <span>Edit</span>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="trashOne"
+                                    onClick={() => {
+                                      handleConfirmationShow();
+                                      removeSelection();
+                                      setFunHandler({
+                                        fun: deleteData,
+                                        id: developer.id,
+                                        title: "delete task",
+                                      });
+                                    }}
+                                  >
+                                    <MdOutlineDelete
+                                      size={22}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div
+                                      id="trashOne"
+                                      className="d-none"
+                                      // onClick={() => deleteTask(task.ID)}
+                                    >
+                                      <span>Delete</span>
+                                    </div>
+                                  </div>
+                                </td>
                               </tr>
-                            </thead>
-
-                            <tbody>
-                              {currentItems.map((developer, index) => (
-                                <tr
-                                  id={`user-${index}`}
-                                  className={`${
-                                    developerId === developer?.id
-                                      ? "table-primary"
-                                      : ""
-                                  }`}
-                                >
-                                  <td>
-                                    <strong>{index + 1}.</strong>
-                                  </td>
-
-                                  <td className="">
-                                    <strong>{developer?.Name}</strong>
-                                  </td>
-                                  <td className="">{developer?.mobile}</td>
-                                  <td className="">{developer?.Email}</td>
-                                  <td className="">{developer?.address}</td>
-                                  <td className="">{developer?.ScriptCount}</td>
-                                  <td className="">{developer?.CreateDate }</td>
-                                  <td className="">{developer?.Status}</td>
-                                  <td>
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="editOne"
-                                      onClick={() =>
-                                        editTDeveloperDetail(developer.id)
-                                      }
-                                    >
-                                      <FaRegEdit
-                                        size={20}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div id="editOne" className="d-none">
-                                        <span>Edit</span>
-                                      </div>
-                                    </div>
-
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="trashOne"
-                                      onClick={() => {
-                                        handleConfirmationShow();
-                                        removeSelection();
-                                        setFunHandler({
-                                          fun: deleteData,
-                                          id: developer.id,
-                                          title: "delete task",
-                                        });
-                                      }}
-                                    >
-                                      <MdOutlineDelete
-                                        size={22}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div
-                                        id="trashOne"
-                                        className="d-none"
-                                        // onClick={() => deleteTask(task.ID)}
-                                      >
-                                        <span>Delete</span>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <div className="m-5 fs-3">
-                            <strong>No records found.!</strong>
-                          </div>
-                        )}
-                      </div>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div className="m-5 fs-3">
+                          <strong>No records found.!</strong>
+                        </div>
+                      )}
                     </div>
-                    {filteredData.length > 0 && (
-                      <div className="card-footer d-md-flex justify-content-between align-items-center">
-                        <span>
-                          Showing{" "}
-                          {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
-                          {currentPage * ITEMS_PER_PAGE >= filteredData.length
-                            ? filteredData.length
-                            : currentPage * ITEMS_PER_PAGE}{" "}
-                          of {filteredData.length} entries
-                        </span>
-                        <nav className="mt-2 mt-md-0">
-                          <ul className="pagination mb-0 ">
-                            <li
-                              className="page-item "
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                if (currentPage > 1) {
-                                  handlePageChange(currentPage - 1);
+                  </div>
+                  {filteredData.length > 0 && (
+                    <div className="card-footer d-md-flex justify-content-between align-items-center">
+                      <span>
+                        Showing{" "}
+                        {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
+                        {currentPage * ITEMS_PER_PAGE >= filteredData.length
+                          ? filteredData.length
+                          : currentPage * ITEMS_PER_PAGE}{" "}
+                        of {filteredData.length} entries
+                      </span>
+                      <nav className="mt-2 mt-md-0">
+                        <ul className="pagination mb-0 ">
+                          <li
+                            className="page-item "
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              if (currentPage > 1) {
+                                handlePageChange(currentPage - 1);
+                                removeSelection();
+                              }
+                            }}
+                          >
+                            <div className="page-link">Previous</div>
+                          </li>
+                          {Array(totalPages ? totalPages : 0)
+                            .fill()
+                            .map((item, index) => (
+                              <li
+                                style={{ cursor: "pointer" }}
+                                className={`${
+                                  currentPage === index + 1
+                                    ? "page-item active"
+                                    : "page-item"
+                                }`}
+                                onClick={() => {
+                                  handlePageChange(index + 1);
                                   removeSelection();
+                                }}
+                              >
+                                <div className="page-link">{index + 1}</div>
+                              </li>
+                            ))}
+
+                          <li className="page-item">
+                            <div
+                              style={{ cursor: "pointer" }}
+                              className="page-link"
+                              onClick={() => {
+                                if (totalPages > currentPage) {
+                                  removeSelection();
+                                  handlePageChange(currentPage + 1);
                                 }
                               }}
                             >
-                              <div className="page-link">Previous</div>
-                            </li>
-                            {Array(totalPages ? totalPages : 0)
-                              .fill()
-                              .map((item, index) => (
-                                <li
-                                  style={{ cursor: "pointer" }}
-                                  className={`${
-                                    currentPage === index + 1
-                                      ? "page-item active"
-                                      : "page-item"
-                                  }`}
-                                  onClick={() => {
-                                    handlePageChange(index + 1);
-                                    removeSelection();
-                                  }}
-                                >
-                                  <div className="page-link">{index + 1}</div>
-                                </li>
-                              ))}
-
-                            <li className="page-item">
-                              <div
-                                style={{ cursor: "pointer" }}
-                                className="page-link"
-                                onClick={() => {
-                                  if (totalPages > currentPage) {
-                                    removeSelection();
-                                    handlePageChange(currentPage + 1);
-                                  }
-                                }}
-                              >
-                                Next
-                              </div>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
-                    )}
-                  </>
+                              Next
+                            </div>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
+                  )}
+                </>
                 {/* ) : (
                   <div className="m-5 fs-3">
                     <strong>Fetching records..</strong>

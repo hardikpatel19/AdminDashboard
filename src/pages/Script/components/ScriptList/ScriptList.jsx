@@ -167,8 +167,8 @@ const ScriptList = () => {
                   </div>
                   <>
                     <div className="row justify-content-end">
-                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex">
-                        <p className="mt-3 me-1">Search:</p>{" "}
+                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex">
+                        <label className="mt-3 me-2 form-label">Search</label>
                         <input
                           ref={searchInput}
                           type="search"
