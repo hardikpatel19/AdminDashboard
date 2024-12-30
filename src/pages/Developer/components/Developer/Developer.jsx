@@ -162,8 +162,8 @@ const Developer = () => {
                     </div>
                   </div>
                   <>
-                    <div className="row ">
-                      <div className="col-lg-4 col-md-6 mt-md-2 d-flex justify-content-start">
+                    <div className="row align-items-center">
+                      <div className="col-lg-4 col-md-6 mt-md-2 d-flex justify-content-start mb-1">
                         <input
                           ref={searchInput}
                           type="search"
@@ -178,7 +178,7 @@ const Developer = () => {
                           placeholder="Search by name, email, phone, or status"
                         />
                       </div>
-                      <div className="col-lg-2 col-md-6 mt-md-2 d-flex justify-content-end ms-30">
+                      <div className="col-lg-2 col-md-6 mt-md-2 d-flex justify-content-end mb-1">
                         <input
                           ref={searchInput}
                           type="search"

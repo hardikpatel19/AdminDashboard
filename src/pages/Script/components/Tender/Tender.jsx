@@ -8,7 +8,7 @@ import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
-import { tenderData } from "../../../../utils/dummyData";
+import {  tenderData1 } from "../../../../utils/dummyData";
 
 const Tender = () => {
   const viewFile = (id) => {
@@ -70,7 +70,7 @@ const Tender = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [scriptList] = useState(tenderData);
+  const [scriptList] = useState(tenderData1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
@@ -168,7 +168,7 @@ const Tender = () => {
 
                   <>
                     <div className="row justify-content-end">
-                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex">
+                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex mb-1">
                         <label className="mt-3 me-1 form-label">Date:</label>
                         <input
                           ref={searchInput}
@@ -184,7 +184,7 @@ const Tender = () => {
                           placeholder=""
                         />
                       </div>
-                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex">
+                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex mb-1">
                         <label className="mt-3 me-1 form-label">To:</label>
                         <input
                           ref={searchInput}
@@ -200,7 +200,7 @@ const Tender = () => {
                           placeholder=""
                         />
                       </div>
-                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex">
+                      <div className=" col-lg-3 col-md-6 mt-md-1 d-flex mb-1">
                         <label className="mt-3 me-1 form-label">Search:</label>
                         <input
                           ref={searchInput}

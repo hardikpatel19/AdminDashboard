@@ -7,6 +7,7 @@ import { FaHome, FaFolderPlus, FaCode } from "react-icons/fa";
 const Sidebar = ({ toggle }) => {
   const { pathname } = useLocation();
   const [openScript, setOpenScript] = React.useState(false);
+  const [openData, setOpenData] = React.useState(false);
   return (
     <div className="app-menu">
     <aside className="sidebar navbar-vertical navbar nav-dashboard" id="sidebar">
@@ -54,22 +55,22 @@ const Sidebar = ({ toggle }) => {
       {openScript && (
         <ul className="pl-6 mt-2">
           <li className="mb-2">
-            <Link to="/tender" className="text-blue-600 hover:underline">
+            <Link to="/tender" className="text-blue-600 ">
               Tender
             </Link>
           </li>
           <li className="mb-2">
-            <Link to="/project" className="text-blue-600 hover:underline">
+            <Link to="/project" className="text-blue-600 ">
               Project
             </Link>
           </li>
           <li className="mb-2">
-            <Link to="/ca" className="text-blue-600 hover:underline">
+            <Link to="/ca" className="text-blue-600 ">
               CA
             </Link>
           </li>
           <li className="mb-2">
-            <Link to="/grants" className="text-blue-600 hover:underline">
+            <Link to="/grants" className="text-blue-600 ">
               Grants
             </Link>
           </li>
@@ -89,6 +90,64 @@ const Sidebar = ({ toggle }) => {
               >
                 {/* <IoHomeOutline size={20} /> */}
                 Developer
+              </Link>
+        </li>
+        <li className="border-b-2 mb-3">
+        {/* Script Section */}
+      <div
+        className="flex items-center   cursor-pointer hover:bg-gray-200"
+        onClick={() => setOpenData(!openData)}
+      >
+        <FaFolderPlus size={18} className="me-4" />
+        <span className="text-sm font-semibold ">Data</span>
+        <span
+          className={`ml-auto transition-transform duration-200 ${
+            openData ? "rotate-180" : ""
+          }`}
+        >
+          
+        </span>
+      </div>
+
+      {/* Collapsible Content */}
+      {openData && (
+        <ul className="pl-6 mt-2">
+          <li className="mb-2">
+            <Link to="/tenderData" className="text-blue-600 ">
+              Tender
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link to="/projectData" className="text-blue-600 ">
+              Project
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link to="/caData" className="text-blue-600 ">
+              CA
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link to="/grantsData" className="text-blue-600 ">
+              Grants
+            </Link>
+          </li>
+        </ul>
+      )}
+    </li>
+
+     {/* AdminEmail */}
+     <li className="nav-item mb-3 d-flex align-items-center ">
+     <FaFolderPlus size={18} />
+          <Link
+                to="/"
+                className={`nav-link has-arrow${
+                  pathname === "/" ? "active" : ""
+                } `}
+                onClick={toggle}
+              >
+                {/* <IoHomeOutline size={20} /> */}
+                Admin Email
               </Link>
         </li>
       </ul>

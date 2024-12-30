@@ -8,7 +8,7 @@ import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
-import { scriptListData } from "../../../../utils/dummyData";
+import { scriptListData1 } from "../../../../utils/dummyData";
 
 const ScriptList = () => {
   const searchInput = useRef(null);
@@ -70,7 +70,7 @@ const ScriptList = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [scriptList] = useState(scriptListData);
+  const [scriptList] = useState(scriptListData1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
@@ -198,6 +198,7 @@ const ScriptList = () => {
                                 <th>Country</th>
                                 <th>Development Date</th>
                                 <th>Developer Name</th>
+                                <th>Big Ref No</th>
                                 <th>Status</th>
                                 <th>Action</th>
                               </tr>
@@ -222,6 +223,7 @@ const ScriptList = () => {
                                 </td>
                                   <td className="">{script?.Country}</td>
                                   <td className="">{script?.DevelopmentDate}</td>
+                                  <td className="">{script?.BigRefNo}</td>
                                   <td>
                                     <div className="truncate">
                                       {script?.DeveloperName}

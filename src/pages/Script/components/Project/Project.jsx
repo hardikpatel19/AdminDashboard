@@ -8,7 +8,7 @@ import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
-import { projectData } from "../../../../utils/dummyData";
+import {  projectData1 } from "../../../../utils/dummyData";
 
 const Project = () => {
   const searchInput = useRef(null);
@@ -70,7 +70,7 @@ const Project = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState();
   const [totalPages, setTotalPages] = useState();
-  const [scriptList] = useState(projectData);
+  const [scriptList] = useState(projectData1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
@@ -167,7 +167,7 @@ const Project = () => {
                   </div>
                   <>
                     <div className="row justify-content-end">
-                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex">
+                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex mb-1">
                         <label className="mt-3 me-1 form-label">Date:</label>
                         <input
                           ref={searchInput}
@@ -183,7 +183,7 @@ const Project = () => {
                           placeholder=""
                         />
                       </div>
-                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex">
+                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex mb-1">
                         <label className="mt-3 me-1 form-label">To:</label>
                         <input
                           ref={searchInput}
@@ -199,7 +199,7 @@ const Project = () => {
                           placeholder=""
                         />
                       </div>
-                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex">
+                      <div className=" col-lg-3 col-md-6 mt-md-2 d-flex mb-1">
                         <label className="mt-3 me-1 form-label">Search:</label>
                         <input
                           ref={searchInput}

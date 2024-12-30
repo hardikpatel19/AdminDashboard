@@ -22,6 +22,14 @@ import Ca from "./pages/Script/components/CA/Ca";
 import Grants from "./pages/Script/components/Grants/Grants";
 import Developer from "./pages/Developer/components/Developer/Developer";
 import AddUpdateDeveloperdetail from "./pages/Developer/components/AddUpdateDeveloperDetail/AddUpdateDeveloperdetail";
+import TenderData from "./pages/Data/components/TenderData/TenderData";
+import AddUpdateTenderDetail from "./pages/Data/components/AddUpdateTenderDetail/AddUpdateTenderDetail";
+import ProjectData from "./pages/Data/components/ProjectData/ProjectData";
+import AddUpdateProjectDetail from "./pages/Data/components/AddUpdateProjectDetail/AddUpdateProjectDetail";
+import CaData from "./pages/Data/components/CAData/CaData";
+import AddUpdateCaDetail from "./pages/Data/components/AddUpdateCaDetail/AddUpdateCaDetail";
+import GrantsData from "./pages/Data/components/GrantsData/GrantsData";
+import AddUpdateGrantsDetail from "./pages/Data/components/AddUpdateGrantsDetail/AddUpdateGrantsDetail";
 // import AddUpdateScriptDetail from "./pages/Script/components/AddUpdateScriptDetail/AddUpdateScriptDetail";
 
 
@@ -70,6 +78,18 @@ function App() {
             <Route path="/developer" element={<Developer />} />
             <Route path="/add/developer" element={<AddUpdateDeveloperdetail />} />
             <Route path="/update/developer/:developerId" element={<AddUpdateDeveloperdetail />} />
+            <Route path="/tenderData" element={<TenderData />} />
+            <Route path="/add/tender" element={<AddUpdateTenderDetail />} />
+            <Route path="/update/tender/:tenderId" element={<AddUpdateTenderDetail />} />
+            <Route path="/projectData" element={<ProjectData />} />
+            <Route path="/add/project" element={<AddUpdateProjectDetail />} />
+            <Route path="/update/project/:projectId" element={<AddUpdateProjectDetail />} />
+            <Route path="/caData" element={<CaData />} />
+            <Route path="/add/ca" element={<AddUpdateCaDetail />} />
+            <Route path="/update/ca/:caId" element={<AddUpdateCaDetail />} />
+            <Route path="/grantsData" element={<GrantsData />} />
+            <Route path="/add/grants" element={<AddUpdateGrantsDetail />} />
+            <Route path="/update/grants/:grantsId" element={<AddUpdateGrantsDetail />} />
           </Route>
 
           {/* Redirect unknown paths to home */}

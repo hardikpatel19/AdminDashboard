@@ -233,6 +233,23 @@ const AddUpdateScriptDetail = () => {
                       {...register("scriptFile")}
                     />
                   </div>
+
+                  <div className="mb-4 col-md-6">
+                    <label className="form-label">
+                      Big Ref No
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Enter address"
+                      {...register("BigRefNo")}
+                    />
+                    {errors.BigRefNo && (
+                      <div className="error">
+                        {errors.BigRefNo.message}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
