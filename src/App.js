@@ -35,8 +35,8 @@ import GrantsData from "./pages/Data/components/GrantsData/GrantsData";
 import AddUpdateGrantsDetail from "./pages/Data/components/AddUpdateGrantsDetail/AddUpdateGrantsDetail";
 import AdminEmail from "./pages/AdminEmail/components/AdminEmail/AdminEmail";
 import AddUpdateAdminEmailDetail from "./pages/AdminEmail/components/AddUpdateAdminEmailDetail/AddUpdateAdminEmailDetail";
+import { ToastContainer } from "react-toastify";
 // import AddUpdateScriptDetail from "./pages/Script/components/AddUpdateScriptDetail/AddUpdateScriptDetail";
-
 
 function App() {
   const [{ userLoggedIn, sysConfig, isLoading }, dispatch] = useStateValue();
@@ -63,7 +63,7 @@ function App() {
         <Toaster /> */}
         {/* Main application routes */}
         <Routes>
-        <Route
+          <Route
             path="/sign-in"
             element={
               <ProtectRoute>
@@ -81,33 +81,63 @@ function App() {
               </>
             }
           >
-            
-            <Route index element={<Home />} />
+            <Route
+              index
+              element={
+                <ProtectRoute>
+                  <Home />
+                </ProtectRoute>
+              }
+            />
             <Route path="/script" element={<ScriptList />} />
             <Route path="/add/script" element={<AddUpdateScriptDetail />} />
-            <Route path="/update/script/:scriptId" element={<AddUpdateScriptDetail />} />
+            <Route
+              path="/update/script/:scriptId"
+              element={<AddUpdateScriptDetail />}
+            />
             <Route path="/tender" element={<Tender />} />
             <Route path="/project" element={<Project />} />
             <Route path="/ca" element={<Ca />} />
             <Route path="/grants" element={<Grants />} />
             <Route path="/developer" element={<Developer />} />
-            <Route path="/add/developer" element={<AddUpdateDeveloperdetail />} />
-            <Route path="/update/developer/:developerId" element={<AddUpdateDeveloperdetail />} />
+            <Route
+              path="/add/developer"
+              element={<AddUpdateDeveloperdetail />}
+            />
+            <Route
+              path="/update/developer/:developerId"
+              element={<AddUpdateDeveloperdetail />}
+            />
             <Route path="/tenderData" element={<TenderData />} />
             <Route path="/add/tender" element={<AddUpdateTenderDetail />} />
-            <Route path="/update/tender/:tenderId" element={<AddUpdateTenderDetail />} />
+            <Route
+              path="/update/tender/:tenderId"
+              element={<AddUpdateTenderDetail />}
+            />
             <Route path="/projectData" element={<ProjectData />} />
             <Route path="/add/project" element={<AddUpdateProjectDetail />} />
-            <Route path="/update/project/:projectId" element={<AddUpdateProjectDetail />} />
+            <Route
+              path="/update/project/:projectId"
+              element={<AddUpdateProjectDetail />}
+            />
             <Route path="/caData" element={<CaData />} />
             <Route path="/add/ca" element={<AddUpdateCaDetail />} />
             <Route path="/update/ca/:caId" element={<AddUpdateCaDetail />} />
             <Route path="/grantsData" element={<GrantsData />} />
             <Route path="/add/grants" element={<AddUpdateGrantsDetail />} />
-            <Route path="/update/grants/:grantsId" element={<AddUpdateGrantsDetail />} />
+            <Route
+              path="/update/grants/:grantsId"
+              element={<AddUpdateGrantsDetail />}
+            />
             <Route path="/adminEmail" element={<AdminEmail />} />
-            <Route path="/add/adminEmail" element={<AddUpdateAdminEmailDetail />} />
-            <Route path="/update/adminEmail/:adminEmailId" element={<AddUpdateAdminEmailDetail />} />
+            <Route
+              path="/add/adminEmail"
+              element={<AddUpdateAdminEmailDetail />}
+            />
+            <Route
+              path="/update/adminEmail/:adminEmailId"
+              element={<AddUpdateAdminEmailDetail />}
+            />
           </Route>
           <Route path="*" element={<Navigate to="/sign-in" />} />
 
@@ -115,6 +145,8 @@ function App() {
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
+    
     </div>
   );
 }

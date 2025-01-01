@@ -37,13 +37,8 @@ export const ENTITY_TYPE = [
 
 
 export const api = {
-  signup: "/signup",
-  login: "/login",
-  logout: "/logout",
-  listStaff: "/list_users",
-  user: "/users",
-  editeUser: "/user",
-  addCompanyInfo: "/add_company_info",
-  companyInfo: "/company_info",
+  login: "/auth/user-login",
+  tender:"/tenders/list"
+ 
   
 };

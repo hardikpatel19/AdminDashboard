@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
-import toast from "react-hot-toast";
+
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
@@ -9,6 +9,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import {  tenderData2 } from "../../../../utils/dummyData";
+import { getTender } from "../../../../apiCall";
+import { toast } from "react-toastify";
 
 const TenderData = () => {
     const viewFile = (id) => {
@@ -35,15 +37,14 @@ const TenderData = () => {
       };
       const fetchTenderList = async () => {
         try {
-          const response = await getDocs(collection(db, "tenderDetail"));
-          const docsData = response.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          if (docsData) {
-            // setTenderList(docsData);
-            // setFilteredData(docsData);
-            // setCurrentItems(docsData);
+          const response = await getTender();
+          console.log(response)
+          
+          if (response?.status === 201) {
+            console.log(response?.data?.result?.result)
+            setTenderList(response?.data?.result?.result);
+            setFilteredData(response?.data?.result?.result);
+            setCurrentItems(response?.data?.result?.result);
           } else {
             toast.error(response?.response?.data?.message);
           }
@@ -70,7 +71,7 @@ const TenderData = () => {
       const [funHandler, setFunHandler] = useState();
       const [currentPage, setCurrentPage] = useState();
       const [totalPages, setTotalPages] = useState();
-      const [tenderList] = useState((tenderData2));
+      const [tenderList,setTenderList] = useState();
       const [searchQuery, setSearchQuery] = useState("");
     
       const [filteredData, setFilteredData] = useState([]);
@@ -91,8 +92,8 @@ const TenderData = () => {
               item.Name.toLowerCase().includes(query.toLowerCase())
             );
           }
-          setFilteredData(filtered);
-          setCurrentItems(filtered);
+          // setFilteredData(filtered);
+          // setCurrentItems(filtered);
         },
         [tenderList] // Add dependencies here
       );
@@ -105,7 +106,7 @@ const TenderData = () => {
       useEffect(() => {
         const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
         const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-        setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
+        // setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
         setTotalPages(totalPageCount);
         if (totalPageCount !== 0 && totalPageCount < currentPage) {
           setCurrentPage(totalPageCount);
@@ -131,7 +132,7 @@ const TenderData = () => {
             // );
           }
         }
-      }, [tenderId, filteredData]);
+      }, [ filteredData]);
       return (
         <div id="app-content">
           {/* Container fluid */}
@@ -224,6 +225,7 @@ const TenderData = () => {
                     <>
                       <div className="card-body">
                         <div className="table-responsive table-card">
+                          {console.log(currentItems)}
                           {currentItems.length > 0 ? (
                             <table className="table text-nowrap mb-0 table-centered table-hover">
                               <thead className="table-light">

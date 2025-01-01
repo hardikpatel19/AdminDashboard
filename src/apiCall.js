@@ -16,8 +16,8 @@ export const login = (data) => {
 };
 
 // logout
-export const logout = () => {
-  return request({ url: api.logout, method: "get" });
+export const getTender = () => {
+  return request({ url: `${api.tender}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=&cpv_codes=&sectors=&regions&funding_agency`, method: "get" });
 };
 
 // get login detail

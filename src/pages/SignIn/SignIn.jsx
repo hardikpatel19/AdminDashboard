@@ -1,45 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { checkSysConfig, getLoginPageDetail, login } from "../../apiCall";
-import toast from "react-hot-toast";
+
 import { useNavigate } from "react-router-dom";
 import { useStateValue } from "../../StateProvider";
 import { useQuery } from "@tanstack/react-query";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
+import { toast } from "react-toastify";
 const SignIn = () => {
   const [, dispatch] = useStateValue();
   const navigate = useNavigate();
 
-  // ***************************************************** fetch company info start *****************************************************
-  const fetchData = async () => {
-    // Perform the API call to fetch company info
-    try {
-      const response = await getLoginPageDetail();
-      if (response?.status === 200) {
-        setLoginPageDetail(response.data);
-        if (response?.data?.company_info?.status === "error") {
-          toast.error(response?.data?.company_info?.message);
-        }
-      } else if (response?.response) {
-        toast.error(response?.response?.data?.message);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error); // Log any errors that occur
-      throw error;
-    }
-  };
-
-  const { data } = useQuery({
-    queryKey: ["staff-list"],
-    queryFn: () => fetchData(),
-  });
-
   // ***************************************************** fetch company info end *****************************************************
-
-  const [loginPageDetail, setLoginPageDetail] = useState(
-    data?.status === 200 ? data?.data : {}
-  );
 
   const {
     register,
@@ -48,54 +21,20 @@ const SignIn = () => {
   } = useForm();
   const onSubmit = async (data) => {
     dispatch({ type: "SET_LOADING", status: true });
-
     const re = await login(data);
     console.log(re);
-    if (re?.status === 200) {
-      localStorage.setItem("token", re?.data?.session_data?.access_token);
-      dispatch({
-        type: "SET_USER_INFO",
-        data: {
-          user_loginid: re?.data?.session_data?.user_loginid,
-          user_name: re?.data?.session_data?.user_name,
-          user_type: re?.data?.session_data?.user_type,
-          user_profile_img: re?.data?.session_data?.user_profile_img,
-          user_gender: re?.data?.session_data?.user_gender,
-          user_code: re?.data?.session_data?.user_code,
-        },
-      });
-      if (re?.data?.session_data?.access_token) {
-
-        try {
-          const checkSysConfigRe = await checkSysConfig();
-          if (checkSysConfigRe?.status === 200) {
-            dispatch({ type: "SET_SYS_CONFIG", data: checkSysConfigRe?.data });
-
-            if (re?.data?.session_data?.reset_password_token) {
-              navigate(
-                `/change-password?resetToken=${re?.data?.session_data?.reset_password_token}&LoginId=${data?.LoginId}`
-              );
-            } else {
-              toast.success("Login Successful.");
-
-              dispatch({ type: "SET_LOGIN_STATUS", status: true });
-              navigate("/");
-            }
-          } else if (checkSysConfigRe?.response) {
-            toast.error(checkSysConfigRe.response.data.message);
-          }
-        } catch { }
-      }
-    } else if (re?.response) {
-      if (re?.response?.data?.company_info?.message) {
-        toast.error(re?.response?.data?.company_info?.message);
-      } else {
-        toast.error(re?.response?.data?.message);
-      }
+    if (re?.status === 201) {
+      
+      localStorage.setItem("token", re?.data?.result?.tokens);
+      localStorage.setItem("islogin","true")
+      toast.success(re?.data?.message);
+      navigate("/");
+    } else {
+      toast.error(re?.response?.data?.message);
     }
     dispatch({ type: "SET_LOADING", status: false });
   };
-  const [isPassVisible, setIsPassVisible] = useState(false)
+  const [isPassVisible, setIsPassVisible] = useState(false);
 
   return (
     <div className="container d-flex flex-column">
@@ -135,19 +74,19 @@ const SignIn = () => {
                 {/* Username */}
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
-                    Login Id
+                    Email
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Login id"
+                    placeholder="Email"
                     required=""
-                    {...register("LoginId", {
-                      required: "Login id is required",
+                    {...register("email", {
+                      required: "email is required",
                     })}
                   />
-                  {errors.LoginId && (
-                    <div className="error">{errors.LoginId.message}</div>
+                  {errors.email && (
+                    <div className="error">{errors.email.message}</div>
                   )}
                 </div>
                 {/* Password */}
@@ -156,17 +95,24 @@ const SignIn = () => {
                     Password
                   </label>
                   <div className="pass-input position-relative">
-
                     <input
                       type={`${isPassVisible ? "text" : "password"}`}
                       className="form-control"
                       placeholder="Password"
-                      {...register("Pswd", { required: "Password is required" })}
+                      {...register("password", {
+                        required: "Password is required",
+                      })}
                     />
                     <div
                       className="input-group-append position-absolute"
                       onClick={() => setIsPassVisible(!isPassVisible)}
-                      style={{ cursor: "pointer", paddingLeft: "10px", transform: "translateY(-50%)", top: "50%",right:"10px" }}
+                      style={{
+                        cursor: "pointer",
+                        paddingLeft: "10px",
+                        transform: "translateY(-50%)",
+                        top: "50%",
+                        right: "10px",
+                      }}
                     >
                       {isPassVisible ? (
                         <IoMdEyeOff size={20} />
@@ -175,8 +121,8 @@ const SignIn = () => {
                       )}
                     </div>
                   </div>
-                  {errors.Pswd && (
-                    <div className="error">{errors.Pswd.message}</div>
+                  {errors.password && (
+                    <div className="error">{errors.password.message}</div>
                   )}
                 </div>
                 {/* Checkbox */}
@@ -191,11 +137,6 @@ const SignIn = () => {
                       Login
                     </button>
                   </div>
-                  {loginPageDetail?.system_admin?.status === "error" && (
-                    <h4 className="mt-3 text-center text-danger ">
-                      {loginPageDetail?.system_admin?.message}{" "}
-                    </h4>
-                  )}
                 </div>
               </form>
             </div>
