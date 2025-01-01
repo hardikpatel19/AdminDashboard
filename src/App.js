@@ -13,7 +13,10 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import useDisableScroll from "./utils/useDisableScroll ";
+import { useStateValue } from "./StateProvider";
+import { ProtectRoute } from "./utils/ProtectRoutes";
 import Home from "./pages/Home/Home";
+import SignIn from "./pages/SignIn/SignIn";
 import ScriptList from "./pages/Script/components/ScriptList/ScriptList";
 import AddUpdateScriptDetail from "./pages/Script/components/AddUpdateScriptDetail/AddUpdateScriptDetail";
 import Tender from "./pages/Script/components/Tender/Tender";
@@ -30,10 +33,13 @@ import CaData from "./pages/Data/components/CAData/CaData";
 import AddUpdateCaDetail from "./pages/Data/components/AddUpdateCaDetail/AddUpdateCaDetail";
 import GrantsData from "./pages/Data/components/GrantsData/GrantsData";
 import AddUpdateGrantsDetail from "./pages/Data/components/AddUpdateGrantsDetail/AddUpdateGrantsDetail";
+import AdminEmail from "./pages/AdminEmail/components/AdminEmail/AdminEmail";
+import AddUpdateAdminEmailDetail from "./pages/AdminEmail/components/AddUpdateAdminEmailDetail/AddUpdateAdminEmailDetail";
 // import AddUpdateScriptDetail from "./pages/Script/components/AddUpdateScriptDetail/AddUpdateScriptDetail";
 
 
 function App() {
+  const [{ userLoggedIn, sysConfig, isLoading }, dispatch] = useStateValue();
   const [isToggled, setIsToggle] = useState(true);
   useDisableScroll();
 
@@ -57,6 +63,14 @@ function App() {
         <Toaster /> */}
         {/* Main application routes */}
         <Routes>
+        <Route
+            path="/sign-in"
+            element={
+              <ProtectRoute>
+                <SignIn />
+              </ProtectRoute>
+            }
+          ></Route>
           <Route
             path="/"
             element={
@@ -67,6 +81,7 @@ function App() {
               </>
             }
           >
+            
             <Route index element={<Home />} />
             <Route path="/script" element={<ScriptList />} />
             <Route path="/add/script" element={<AddUpdateScriptDetail />} />
@@ -90,10 +105,14 @@ function App() {
             <Route path="/grantsData" element={<GrantsData />} />
             <Route path="/add/grants" element={<AddUpdateGrantsDetail />} />
             <Route path="/update/grants/:grantsId" element={<AddUpdateGrantsDetail />} />
+            <Route path="/adminEmail" element={<AdminEmail />} />
+            <Route path="/add/adminEmail" element={<AddUpdateAdminEmailDetail />} />
+            <Route path="/update/adminEmail/:adminEmailId" element={<AddUpdateAdminEmailDetail />} />
           </Route>
+          <Route path="*" element={<Navigate to="/sign-in" />} />
 
           {/* Redirect unknown paths to home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
