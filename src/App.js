@@ -63,22 +63,15 @@ function App() {
         <Toaster /> */}
         {/* Main application routes */}
         <Routes>
-          <Route
-            path="/sign-in"
-            element={
-              <ProtectRoute>
-                <SignIn />
-              </ProtectRoute>
-            }
-          ></Route>
+          <Route path="/sign-in" element={<SignIn />}></Route>
           <Route
             path="/"
             element={
-              <>
+              <ProtectRoute>
                 <Header toggle={toggle} />
                 <Sidebar toggle={toggle} />
                 <Outlet />
-              </>
+              </ProtectRoute>
             }
           >
             <Route
@@ -145,8 +138,7 @@ function App() {
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>
       </BrowserRouter>
-      <ToastContainer />
-    
+      <ToastContainer position="top-center"/>
     </div>
   );
 }

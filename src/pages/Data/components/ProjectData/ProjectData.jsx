@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
-import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
@@ -9,6 +8,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import {  projectData2 } from "../../../../utils/dummyData";
+import { getProject } from "../../../../apiCall";
+import { toast } from "react-toastify";
 
 const ProjectData = () => {
     const viewFile = (id) => {
@@ -27,7 +28,7 @@ const ProjectData = () => {
           refetch();
           toast.success("Document deleted successfully");
         } catch (error) {
-          toast.error("Error deleting document: ", error);
+            toast.error("Error deleting document: ", error);
         }
       };
       const editTProjectDetail = (id) => {
@@ -35,23 +36,22 @@ const ProjectData = () => {
       };
       const fetchProjectList = async () => {
         try {
-          const response = await getDocs(collection(db, "projectDetail"));
-          const docsData = response.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          if (docsData) {
-            // setProjectList(docsData);
-            // setFilteredData(docsData);
-            // setCurrentItems(docsData);
-          } else {
-            toast.error(response?.response?.data?.message);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error); // Log any errors that occur
-          throw error;
-        }
-      };
+                 const response = await getProject();
+                 console.log(response)
+                 
+                 if (response?.status === 201) {
+                   console.log(response?.data?.result?.result)
+                   setProjectList(response?.data?.result?.result);
+                   setFilteredData(response?.data?.result?.result);
+                   setCurrentItems(response?.data?.result?.result);
+                 } else {
+                   toast.error(response?.response?.data?.message);
+                 }
+               } catch (error) {
+                 console.error("Error fetching data:", error); // Log any errors that occur
+                 throw error;
+               }
+             };
       const { refetch } = useQuery({
         queryKey: ["project-list"],
         queryFn: () => fetchProjectList(),
@@ -70,7 +70,7 @@ const ProjectData = () => {
       const [funHandler, setFunHandler] = useState();
       const [currentPage, setCurrentPage] = useState();
       const [totalPages, setTotalPages] = useState();
-      const [projectList] = useState((projectData2));
+      const [projectList,setProjectList] = useState();
       const [searchQuery, setSearchQuery] = useState("");
     
       const [filteredData, setFilteredData] = useState([]);
@@ -91,8 +91,8 @@ const ProjectData = () => {
               item.Name.toLowerCase().includes(query.toLowerCase())
             );
           }
-          setFilteredData(filtered);
-          setCurrentItems(filtered);
+        //   setFilteredData(filtered);
+        //   setCurrentItems(filtered);
         },
         [projectList] // Add dependencies here
       );
@@ -105,7 +105,7 @@ const ProjectData = () => {
       useEffect(() => {
         const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
         const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-        setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
+        // setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
         setTotalPages(totalPageCount);
         if (totalPageCount !== 0 && totalPageCount < currentPage) {
           setCurrentPage(totalPageCount);
@@ -131,7 +131,7 @@ const ProjectData = () => {
             // );
           }
         }
-      }, [projectId, filteredData]);
+      }, [ filteredData]);
       return (
         <div id="app-content">
           {/* Container fluid */}
@@ -261,24 +261,24 @@ const ProjectData = () => {
                                       <strong>{index + 1}.</strong>
                                     </td>
                                     <td className="">
-                                      <strong>{project?.Title}</strong>
+                                      <strong>{project?.title}</strong>
                                     </td>
                                     <td className="">
                                       <strong>{project?.Name}</strong>
                                     </td>
-                                    <td className="">{project?.Background}</td>
-                                    <td className="">{project?.Location}</td>
+                                    <td className="">{project?.project_background}</td>
+                                    <td className="">{project?.project_location}</td>
                                     <td className="">{project?.Status}</td>
-                                    <td className="">{project?.PublishDate}</td>
-                                    <td className="">{project?.EstimatedDate}</td>
+                                    <td className="">{project?.project_publishing_date}</td>
+                                    <td className="">{project?.estimated_project_completion_date}</td>
     
-                                    <td className="">{project?.BigRefNo}</td>
+                                    <td className="">{project?.big_ref_no}</td>
                                     <td className="">{project?.ClientName}</td>
                                     <td className="">{project?.ClientAddress}</td>
-                                    <td className="">{project?.Sectors}</td>
-                                    <td className="">{project?.CPVCode}</td>
+                                    <td className="">{project?.sectors}</td>
+                                    <td className="">{project?.cpv_codes}</td>
                                     <td className="">{project?.FundingAgency}</td>
-                                    <td className="">{project?.Regions}</td>
+                                    <td className="">{project?.regions}</td>
                                     <td className="">{project?.Date}</td>
                                     
                                     <td>

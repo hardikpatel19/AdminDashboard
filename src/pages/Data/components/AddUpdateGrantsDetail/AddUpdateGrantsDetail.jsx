@@ -188,10 +188,10 @@ const AddUpdateGrantsDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="location"
-                        {...register("Location")}
+                        {...register("location")}
                       />
-                      {errors.Location && (
-                        <div className="error">{errors.Location.message}</div>
+                      {errors.location && (
+                        <div className="error">{errors.location.message}</div>
                       )}
                     </div>
 
@@ -201,10 +201,10 @@ const AddUpdateGrantsDetail = () => {
                         type="number"
                         className="form-control"
                         placeholder="big_ref_no"
-                        {...register("BigRefNo")}
+                        {...register("big_ref_no")}
                       />
-                      {errors.BigRefNo && (
-                        <div className="error">{errors.BigRefNo.message}</div>
+                      {errors.big_ref_no && (
+                        <div className="error">{errors.big_ref_no.message}</div>
                       )}
                     </div>
   
@@ -214,10 +214,10 @@ const AddUpdateGrantsDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="title"
-                        {...register("Title")}
+                        {...register("title")}
                       />
-                      {errors.Title && (
-                        <div className="error">{errors.Title.message}</div>
+                      {errors.title && (
+                        <div className="error">{errors.title.message}</div>
                       )}
                     </div>
   
@@ -283,10 +283,10 @@ const AddUpdateGrantsDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="input here"
-                        {...register("Sectors")}
+                        {...register("sectors")}
                       />
-                      {errors.Sectors && (
-                        <div className="error">{errors.Sectors.message}</div>
+                      {errors.sectors && (
+                        <div className="error">{errors.sectors.message}</div>
                       )}
                     </div>
   
@@ -296,10 +296,10 @@ const AddUpdateGrantsDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="deadline"
-                        {...register("Deadline")}
+                        {...register("deadline")}
                       />
-                      {errors.Deadline && (
-                        <div className="error">{errors.Deadline.message}</div>
+                      {errors.deadline && (
+                        <div className="error">{errors.deadline.message}</div>
                       )}
                     </div>
   
@@ -324,10 +324,10 @@ const AddUpdateGrantsDetail = () => {
                         type="number"
                         className="form-control"
                         placeholder="input here"
-                        {...register("CPVCode")}
+                        {...register("cpv_codes")}
                       />
-                      {errors.CPVCode && (
-                        <div className="error">{errors.CPVCode.message}</div>
+                      {errors.cpv_codes && (
+                        <div className="error">{errors.cpv_codes.message}</div>
                       )}
                     </div>
 
@@ -337,11 +337,11 @@ const AddUpdateGrantsDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="input here"
-                        {...register("FundingAgency")}
+                        {...register("funding_agency")}
                       />
-                      {errors.FundingAgency && (
+                      {errors.funding_agency && (
                         <div className="error">
-                          {errors.FundingAgency.message}
+                          {errors.funding_agency.message}
                         </div>
                       )}
                     </div>
@@ -352,10 +352,10 @@ const AddUpdateGrantsDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="input here"
-                        {...register("Regions")}
+                        {...register("regions")}
                       />
-                      {errors.Regions && (
-                        <div className="error">{errors.Regions.message}</div>
+                      {errors.regions && (
+                        <div className="error">{errors.regions.message}</div>
                       )}
                     </div>
   
@@ -382,11 +382,11 @@ const AddUpdateGrantsDetail = () => {
                         type="date"
                         className="form-control"
                         placeholder="Select post date"
-                        {...register("PostDate")}
+                        {...register("post_date")}
                       />
-                      {errors.PostDate && (
+                      {errors.post_date && (
                         <div className="error">
-                          {errors.PostDate.message}
+                          {errors.post_date.message}
                         </div>
                       )}
                     </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
-import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
@@ -9,6 +8,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import {  grantsData2 } from "../../../../utils/dummyData";
+import { getGrants } from "../../../../apiCall";
+import { toast } from "react-toastify";
 
 const GrantsData = () => {
     const viewFile = (id) => {
@@ -35,23 +36,22 @@ const GrantsData = () => {
       };
       const fetchGrantsList = async () => {
         try {
-          const response = await getDocs(collection(db, "grantsDetail"));
-          const docsData = response.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          if (docsData) {
-            // setGrantsList(docsData);
-            // setFilteredData(docsData);
-            // setCurrentItems(docsData);
-          } else {
-            toast.error(response?.response?.data?.message);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error); // Log any errors that occur
-          throw error;
-        }
-      };
+                         const response = await getGrants();
+                         console.log(response)
+                         
+                         if (response?.status === 201) {
+                           console.log(response?.data?.result?.result)
+                           setGrantsList(response?.data?.result?.result);
+                           setFilteredData(response?.data?.result?.result);
+                           setCurrentItems(response?.data?.result?.result);
+                         } else {
+                           toast.error(response?.response?.data?.message);
+                         }
+                       } catch (error) {
+                         console.error("Error fetching data:", error); // Log any errors that occur
+                         throw error;
+                       }
+                     };
       const { refetch } = useQuery({
         queryKey: ["grants-list"],
         queryFn: () => fetchGrantsList(),
@@ -70,7 +70,7 @@ const GrantsData = () => {
       const [funHandler, setFunHandler] = useState();
       const [currentPage, setCurrentPage] = useState();
       const [totalPages, setTotalPages] = useState();
-      const [grantsList] = useState((grantsData2));
+      const [grantsList,setGrantsList] = useState();
       const [searchQuery, setSearchQuery] = useState("");
     
       const [filteredData, setFilteredData] = useState([]);
@@ -91,8 +91,8 @@ const GrantsData = () => {
               item.Name.toLowerCase().includes(query.toLowerCase())
             );
           }
-          setFilteredData(filtered);
-          setCurrentItems(filtered);
+        //   setFilteredData(filtered);
+        //   setCurrentItems(filtered);
         },
         [grantsList] // Add dependencies here
       );
@@ -105,7 +105,7 @@ const GrantsData = () => {
       useEffect(() => {
         const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
         const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-        setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
+        // setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
         setTotalPages(totalPageCount);
         if (totalPageCount !== 0 && totalPageCount < currentPage) {
           setCurrentPage(totalPageCount);
@@ -131,7 +131,7 @@ const GrantsData = () => {
             // );
           }
         }
-      }, [grantsId, filteredData]);
+      }, [ filteredData]);
       return (
         <div id="app-content">
           {/* Container fluid */}
@@ -269,23 +269,23 @@ const GrantsData = () => {
                                     <td className="">
                                       <strong>{grants?.ContactInformation}</strong>
                                     </td>
-                                    <td className="">{grants?.Location}</td>
-                                    <td className="">{grants?.BigRefNo}</td>
-                                    <td className="">{grants?.Title}</td>
+                                    <td className="">{grants?.location}</td>
+                                    <td className="">{grants?.big_ref_no}</td>
+                                    <td className="">{grants?.title}</td>
                                     <td className="">{grants?.Type}</td>
                                     <td className="">{grants?.Status}</td>
     
                                     <td className="">{grants?.Value}</td>
                                     <td className="">{grants?.TypeOfServices}</td>
-                                    <td className="">{grants?.Sectors}</td>
-                                    <td className="">{grants?.Deadline}</td>
+                                    <td className="">{grants?.sectors}</td>
+                                    <td className="">{grants?.deadline}</td>
                                     <td className="">{grants?.Duration}</td>
                                     <td className="">{grants?.Attachment}</td>
-                                    <td className="">{grants?.PostDate}</td>
-                                    <td className="">{grants?.FundingAgency}</td>
-                                    <td className="">{grants?.CPVCode}</td>
-                                    <td className="">{grants?.Regions}</td>
-                                    <td className="">{grants?.Date}</td>
+                                    <td className="">{grants?.post_date}</td>
+                                    <td className="">{grants?.funding_agency}</td>
+                                    <td className="">{grants?.cpv_codes}</td>
+                                    <td className="">{grants?.regions}</td>
+                                    <td className="">{grants?.createAt}</td>
                                     
                                     <td>
                                       <div

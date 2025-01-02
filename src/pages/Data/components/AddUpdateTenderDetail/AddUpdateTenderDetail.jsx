@@ -162,10 +162,10 @@ const AddUpdateTenderDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="title"
-                        {...register("Title")}
+                        {...register("title")}
                       />
-                      {errors.Title && (
-                        <div className="error">{errors.Title.message}</div>
+                      {errors.title && (
+                        <div className="error">{errors.title.message}</div>
                       )}
                     </div>
 
@@ -267,10 +267,10 @@ const AddUpdateTenderDetail = () => {
                         type="number"
                         className="form-control"
                         placeholder="big_ref_no"
-                        {...register("BigRefNo", { required: "Number is required" })}
+                        {...register("big_ref_no", { required: "Number is required" })}
                       />
-                      {errors.BigRefNo && (
-                        <div className="error">{errors.BigRefNo.message}</div>
+                      {errors.big_ref_no && (
+                        <div className="error">{errors.big_ref_no.message}</div>
                       )}
                     </div>
 
@@ -282,10 +282,10 @@ const AddUpdateTenderDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="description"
-                        {...register("Description")}
+                        {...register("description")}
                       />
-                      {errors.Description && (
-                        <div className="error">{errors.Description.message}</div>
+                      {errors.description && (
+                        <div className="error">{errors.description.message}</div>
                       )}
                     </div>
 
@@ -352,11 +352,11 @@ const AddUpdateTenderDetail = () => {
                         type="date"
                         className="form-control"
                         placeholder="Select publishing date"
-                        {...register("PublishingDate")}
+                        {...register("published_date")}
                       />
-                      {errors.PublishingDate && (
+                      {errors.published_date && (
                         <div className="error">
-                          {errors.PublishingDate.message}
+                          {errors.published_date.message}
                         </div>
                       )}
                     </div>
@@ -369,11 +369,11 @@ const AddUpdateTenderDetail = () => {
                         type="date"
                         className="form-control"
                         placeholder="Select closing date"
-                        {...register("ClosingDate")}
+                        {...register("closing_date")}
                       />
-                      {errors.ClosingDate && (
+                      {errors.closing_date && (
                         <div className="error">
-                          {errors.ClosingDate.message}
+                          {errors.closing_date.message}
                         </div>
                       )}
                     </div>
@@ -386,10 +386,10 @@ const AddUpdateTenderDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="input here"
-                        {...register("Country")}
+                        {...register("country")}
                       />
-                      {errors.Country && (
-                        <div className="error">{errors.Country.message}</div>
+                      {errors.country && (
+                        <div className="error">{errors.country.message}</div>
                       )}
                     </div>
 
@@ -446,10 +446,10 @@ const AddUpdateTenderDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="input here"
-                        {...register("Sectors", { required: "Sector is required" })}
+                        {...register("sectors", { required: "Sector is required" })}
                       />
-                      {errors.Sectors && (
-                        <div className="error">{errors.Sectors.message}</div>
+                      {errors.sectors && (
+                        <div className="error">{errors.sectors.message}</div>
                       )}
                     </div>
 
@@ -480,13 +480,13 @@ const AddUpdateTenderDetail = () => {
                         type="number"
                         className="form-control"
                         placeholder="input here"
-                        {...register("CpvCode", {
+                        {...register("cpv_codes", {
                           required: "CPV Code is required",
                         })}
                       />
-                      {errors.CpvCode && (
+                      {errors.cpv_codes && (
                         <div className="error">
-                          {errors.CpvCode.message}
+                          {errors.cpv_codes.message}
                         </div>
                       )}
                     </div>

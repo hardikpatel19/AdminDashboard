@@ -159,10 +159,10 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="title"
-                      {...register("Title", { required: "Title is required" })}
+                      {...register("title", { required: "Title is required" })}
                     />
-                    {errors.Title && (
-                      <div className="error">{errors.Title.message}</div>
+                    {errors.title && (
+                      <div className="error">{errors.title.message}</div>
                     )}
                   </div>
 
@@ -254,10 +254,10 @@ const AddUpdateCaDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="big_ref_no"
-                      {...register("BigRefNo")}
+                      {...register("big_ref_no")}
                     />
-                    {errors.BigRefNo && (
-                      <div className="error">{errors.BigRefNo.message}</div>
+                    {errors.big_ref_no && (
+                      <div className="error">{errors.big_ref_no.message}</div>
                     )}
                   </div>
 
@@ -293,11 +293,11 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="project_location"
-                      {...register("ProjectLocation")}
+                      {...register("project_location")}
                     />
-                    {errors.ProjectLocation && (
+                    {errors.project_location && (
                       <div className="error">
-                        {errors.ProjectLocation.message}
+                        {errors.project_location.message}
                       </div>
                     )}
                   </div>
@@ -308,11 +308,11 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="contract_details"
-                      {...register("ContractorDetails")}
+                      {...register("contractor_details")}
                     />
-                    {errors.ContractorDetails && (
+                    {errors.contractor_details && (
                       <div className="error">
-                        {errors.ContractorDetails.message}
+                        {errors.contractor_details.message}
                       </div>
                     )}
                   </div>
@@ -338,10 +338,10 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="description"
-                      {...register("Description")}
+                      {...register("description")}
                     />
-                    {errors.Description && (
-                      <div className="error">{errors.Description.message}</div>
+                    {errors.description && (
+                      <div className="error">{errors.description.message}</div>
                     )}
                   </div>
 
@@ -353,11 +353,11 @@ const AddUpdateCaDetail = () => {
                       type="date"
                       className="form-control"
                       placeholder="Select publish date"
-                      {...register("AwardsPublishDate")}
+                      {...register("awards_publish_date")}
                     />
-                    {errors.AwardsPublishDate && (
+                    {errors.awards_publish_date && (
                       <div className="error">
-                        {errors.AwardsPublishDate.message}
+                        {errors.awards_publish_date.message}
                       </div>
                     )}
                   </div>
@@ -368,10 +368,10 @@ const AddUpdateCaDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="input here"
-                      {...register("CPVCode")}
+                      {...register("cpv_codes")}
                     />
-                    {errors.CPVCode && (
-                      <div className="error">{errors.CPVCode.message}</div>
+                    {errors.cpv_codes && (
+                      <div className="error">{errors.cpv_codes.message}</div>
                     )}
                   </div>
 
@@ -381,10 +381,10 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("Sectors")}
+                      {...register("sectors")}
                     />
-                    {errors.Sectors && (
-                      <div className="error">{errors.Sectors.message}</div>
+                    {errors.sectors && (
+                      <div className="error">{errors.sectors.message}</div>
                     )}
                   </div>
 
@@ -394,11 +394,11 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("FundingAgency")}
+                      {...register("funding_agency")}
                     />
-                    {errors.FundingAgency && (
+                    {errors.funding_agency && (
                       <div className="error">
-                        {errors.FundingAgency.message}
+                        {errors.funding_agency.message}
                       </div>
                     )}
                   </div>
@@ -409,10 +409,10 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("Regions")}
+                      {...register("regions")}
                     />
-                    {errors.Regions && (
-                      <div className="error">{errors.Regions.message}</div>
+                    {errors.regions && (
+                      <div className="error">{errors.regions.message}</div>
                     )}
                   </div>
 

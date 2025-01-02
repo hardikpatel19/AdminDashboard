@@ -15,16 +15,23 @@ export const login = (data) => {
   return request({ url: api.login, method: "post", data: data });
 };
 
-// logout
+// tender
 export const getTender = () => {
   return request({ url: `${api.tender}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=&cpv_codes=&sectors=&regions&funding_agency`, method: "get" });
 };
 
-// get login detail
-export const getLoginPageDetail = () => {
-  return request({ url: api.login, method: "get" });
+// project
+export const getProject = () => {
+  return request({ url: `${api.project}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
 };
-
+// ca
+export const getCa = () => {
+  return request({ url: `${api.ca}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
+};
+// ca
+export const getGrants = () => {
+  return request({ url: `${api.grants}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
+};
 // list of staff
 export const listStaff = () => {
   return request({ url: api.listStaff, method: "get" });
@@ -377,9 +384,9 @@ export const listOfProject = (userFilter) => {
 export const updateProject = (id, data) => {
   return request({ url: `${api.project}/${id}`, method: "post", data: data });
 };
-export const getProject = (id) => {
-  return request({ url: `${api.project}/${id}`, method: "get" });
-};
+// export const getProject = (id) => {
+//   return request({ url: `${api.project}/${id}`, method: "get" });
+// };
 export const deleteProject = (id) => {
   return request({ url: `${api.deleteProject}/${id}`, method: "post" });
 };

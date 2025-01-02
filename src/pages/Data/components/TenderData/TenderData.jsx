@@ -270,7 +270,7 @@ const TenderData = () => {
                                       <strong>{index + 1}.</strong>
                                     </td>
                                     <td className="">
-                                      <strong>{tender?.Title}</strong>
+                                      <strong>{tender?.title}</strong>
                                     </td>
                                     <td className="">
                                       <strong>{tender?.Name}</strong>
@@ -281,22 +281,22 @@ const TenderData = () => {
                                     <td className="">{tender?.Email}</td>
                                     <td className="">{tender?.ContactPerson}</td>
     
-                                    <td className="">{tender?.BigRefNo}</td>
-                                    <td className="">{tender?.Description}</td>
+                                    <td className="">{tender?.big_ref_no}</td>
+                                    <td className="">{tender?.description}</td>
                                     <td className="">{tender?.Tendertype}</td>
                                     <td className="">{tender?.TenderNo}</td>
                                     <td className="">{tender?.FundingAgency}</td>
                                     <td className="">{tender?.TenderCompetion}</td>
-                                    <td className="">{tender?.PublishingDate}</td>
-                                    <td className="">{tender?.ClosingDate}</td>
-                                    <td className="">{tender?.Country}</td>
+                                    <td className="">{tender?.published_date}</td>
+                                    <td className="">{tender?.closing_date}</td>
+                                    <td className="">{tender?.country}</td>
                                     <td className="">{tender?.Emd}</td>
                                     <td className="">{tender?.Estimatedcost}</td>
                                     <td className="">{tender?.Documents}</td>
-                                    <td className="">{tender?.Sectors}</td>
-                                    <td className="">{tender?.CpvCode}</td>
+                                    <td className="">{tender?.sectors}</td>
+                                    <td className="">{tender?.cpv_codes}</td>
                                     <td className="">{tender?.Regions}</td>
-                                    <td className="">{tender?.Date}</td>
+                                    <td className="">{tender?.createdAt}</td>
                                     {/* <td>
                                       <div className="truncate">
                                         {script?.DeveloperName}

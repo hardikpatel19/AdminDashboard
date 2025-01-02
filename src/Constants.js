@@ -38,7 +38,11 @@ export const ENTITY_TYPE = [
 
 export const api = {
   login: "/auth/user-login",
-  tender:"/tenders/list"
+  logout: "/logout",
+  tender:"/tenders/list",
+  project:"/projects/list",
+  ca:"/contract-award/list",
+  grants:"/grants/list"
  
   
 };

@@ -20,31 +20,12 @@ export const ProtectRoute = ({ children }) => {
   let location = useLocation();
   const protectRouteList = [
     "/",
-    "/staff",
-    "/setting",
-    "/company-info",
-    "/task-template",
-    "/project-template",
-    "/update/task-template",
-    "/project",
-    "/notification",
-    "/add/project",
-    "/add/project/subtask",
-    "/update/project",
-    "/task",
-    "/add/task",
-    "/update/task",
-    "/add/subtask",
-    "/update/task/subtask",
   ];
   // const protectRouteList = ["/", "/staff", "/company-info", "task-template","project-template","/change-password"];
   const adminRouts = [
 
     "/staff",
-    "/company-info",
-    "/task-template",
-    "/project-template",
-    "/user-activity"
+   
   ];
 
   const routeList = ["/sign-in"];

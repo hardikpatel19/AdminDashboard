@@ -159,10 +159,10 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="title"
-                      {...register("Title", { required: "Title is required" })}
+                      {...register("title", { required: "Title is required" })}
                     />
-                    {errors.Title && (
-                      <div className="error">{errors.Title.message}</div>
+                    {errors.title && (
+                      <div className="error">{errors.title.message}</div>
                     )}
                   </div>
 
@@ -187,10 +187,10 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="project_background"
-                      {...register("Background")}
+                      {...register("project_background")}
                     />
-                    {errors.Background && (
-                      <div className="error">{errors.Background.message}</div>
+                    {errors.project_background && (
+                      <div className="error">{errors.project_background.message}</div>
                     )}
                   </div>
 
@@ -200,10 +200,10 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="project_location"
-                      {...register("Location")}
+                      {...register("project_location")}
                     />
-                    {errors.Location && (
-                      <div className="error">{errors.Location.message}</div>
+                    {errors.project_location && (
+                      <div className="error">{errors.project_location.message}</div>
                     )}
                   </div>
 
@@ -226,10 +226,10 @@ const AddUpdateProjectDetail = () => {
                       type="date"
                       className="form-control"
                       placeholder="Select publishing date"
-                      {...register("PublishDate")}
+                      {...register("project_publishing_date")}
                     />
-                    {errors.PublishDate && (
-                      <div className="error">{errors.PublishDate.message}</div>
+                    {errors.project_publishing_date && (
+                      <div className="error">{errors.project_publishing_date.message}</div>
                     )}
                   </div>
 
@@ -241,11 +241,11 @@ const AddUpdateProjectDetail = () => {
                       type="date"
                       className="form-control"
                       placeholder="Select closing date"
-                      {...register("EstimatedDate")}
+                      {...register("estimated_project_completion_date")}
                     />
-                    {errors.EstimatedDate && (
+                    {errors.estimated_project_completion_date && (
                       <div className="error">
-                        {errors.EstimatedDate.message}
+                        {errors.estimated_project_completion_date.message}
                       </div>
                     )}
                   </div>
@@ -258,12 +258,12 @@ const AddUpdateProjectDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="big_ref_no"
-                      {...register("BigRefNo", {
+                      {...register("big_ref_no", {
                         required: "Number is required",
                       })}
                     />
-                    {errors.BigRefNo && (
-                      <div className="error">{errors.BigRefNo.message}</div>
+                    {errors.big_ref_no && (
+                      <div className="error">{errors.big_ref_no.message}</div>
                     )}
                   </div>
 
@@ -301,10 +301,10 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("Sectors")}
+                      {...register("sectors")}
                     />
-                    {errors.Sectors && (
-                      <div className="error">{errors.Sectors.message}</div>
+                    {errors.sectors && (
+                      <div className="error">{errors.sectors.message}</div>
                     )}
                   </div>
 
@@ -314,10 +314,10 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("Regions")}
+                      {...register("regions")}
                     />
-                    {errors.Regions && (
-                      <div className="error">{errors.Regions.message}</div>
+                    {errors.regions && (
+                      <div className="error">{errors.regions.message}</div>
                     )}
                   </div>
 
@@ -327,10 +327,10 @@ const AddUpdateProjectDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="input here"
-                      {...register("CPVCode")}
+                      {...register("cpv_codes")}
                     />
-                    {errors.CPVCode && (
-                      <div className="error">{errors.CPVCode.message}</div>
+                    {errors.cpv_codes && (
+                      <div className="error">{errors.cpv_codes.message}</div>
                     )}
                   </div>
 

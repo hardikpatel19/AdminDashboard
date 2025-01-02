@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
-import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
@@ -9,6 +8,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import {  caData2 } from "../../../../utils/dummyData";
+import { getCa } from "../../../../apiCall";
+import { toast } from "react-toastify";
 
 const CaData = () => {
     const viewFile = (id) => {
@@ -34,24 +35,23 @@ const CaData = () => {
         navigate(`/update/ca/${id}?status_filter=${searchQuery}`);
       };
       const fetchCaList = async () => {
-        try {
-          const response = await getDocs(collection(db, "caDetail"));
-          const docsData = response.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          if (docsData) {
-            // setCaList(docsData);
-            // setFilteredData(docsData);
-            // setCurrentItems(docsData);
-          } else {
-            toast.error(response?.response?.data?.message);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error); // Log any errors that occur
-          throw error;
-        }
-      };
+         try {
+                  const response = await getCa();
+                  console.log(response)
+                  
+                  if (response?.status === 201) {
+                    console.log(response?.data?.result?.result)
+                    setCaList(response?.data?.result?.result);
+                    setFilteredData(response?.data?.result?.result);
+                    setCurrentItems(response?.data?.result?.result);
+                  } else {
+                    toast.error(response?.response?.data?.message);
+                  }
+                } catch (error) {
+                  console.error("Error fetching data:", error); // Log any errors that occur
+                  throw error;
+                }
+              };
       const { refetch } = useQuery({
         queryKey: ["ca-list"],
         queryFn: () => fetchCaList(),
@@ -70,7 +70,7 @@ const CaData = () => {
       const [funHandler, setFunHandler] = useState();
       const [currentPage, setCurrentPage] = useState();
       const [totalPages, setTotalPages] = useState();
-      const [caList] = useState((caData2));
+      const [caList,setCaList] = useState();
       const [searchQuery, setSearchQuery] = useState("");
     
       const [filteredData, setFilteredData] = useState([]);
@@ -91,8 +91,8 @@ const CaData = () => {
               item.Name.toLowerCase().includes(query.toLowerCase())
             );
           }
-          setFilteredData(filtered);
-          setCurrentItems(filtered);
+        //   setFilteredData(filtered);
+        //   setCurrentItems(filtered);
         },
         [caList] // Add dependencies here
       );
@@ -105,7 +105,7 @@ const CaData = () => {
       useEffect(() => {
         const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
         const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-        setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
+        // setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
         setTotalPages(totalPageCount);
         if (totalPageCount !== 0 && totalPageCount < currentPage) {
           setCurrentPage(totalPageCount);
@@ -131,7 +131,7 @@ const CaData = () => {
             // );
           }
         }
-      }, [caId, filteredData]);
+      }, [ filteredData]);
       return (
         <div id="app-content">
           {/* Container fluid */}
@@ -266,7 +266,7 @@ const CaData = () => {
                                       <strong>{index + 1}.</strong>
                                     </td>
                                     <td className="">
-                                      <strong>{ca?.Title}</strong>
+                                      <strong>{ca?.title}</strong>
                                     </td>
                                     <td className="">
                                       <strong>{ca?.Name}</strong>
@@ -277,18 +277,18 @@ const CaData = () => {
                                     <td className="">{ca?.Email}</td>
                                     <td className="">{ca?.ContactPerson}</td>
     
-                                    <td className="">{ca?.BigRefNo}</td>
+                                    <td className="">{ca?.big_ref_no}</td>
                                     <td className="">{ca?.DocumentNo}</td>
                                     <td className="">{ca?.BiddingType}</td>
-                                    <td className="">{ca?.ProjectLocation}</td>
-                                    <td className="">{ca?.ContractorDetails}</td>
+                                    <td className="">{ca?.project_location}</td>
+                                    <td className="">{ca?.contractor_details}</td>
                                     <td className="">{ca?.TenderNoticeNo}</td>
-                                    <td className="">{ca?.Description}</td>
-                                    <td className="">{ca?.Sectors}</td>
-                                    <td className="">{ca?.AwardsPublishDate}</td>
-                                    <td className="">{ca?.FundingAgency}</td>
-                                    <td className="">{ca?.CPVCode}</td>
-                                    <td className="">{ca?.Regions}</td>
+                                    <td className="">{ca?.description}</td>
+                                    <td className="">{ca?.sectors}</td>
+                                    <td className="">{ca?.awards_publish_date}</td>
+                                    <td className="">{ca?.funding_agency}</td>
+                                    <td className="">{ca?.cpv_codes}</td>
+                                    <td className="">{ca?.regions}</td>
                                     <td className="">{ca?.Date}</td>
                                     
                                     <td>

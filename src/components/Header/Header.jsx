@@ -1,12 +1,21 @@
 import React, {useRef } from "react";
 import "./Header.scss";
 // import { IoMdNotificationsOutline } from "react-icons/io";
-// import { useStateValue } from "../../StateProvider";
+import { useStateValue } from "../../StateProvider";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { Link, useNavigate } from "react-router-dom";
+import { MdLogout } from "react-icons/md";
 
 const Header = ({ toggle }) => {
   const searchInput = useRef(null);
-  // const [{ userInfo }] = useStateValue();
-  
+  const [{ userInfo }, dispatch] = useStateValue();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    sessionStorage.clear();
+    dispatch({ type: "SET_USER_INFO", data: {} });
+    dispatch({ type: "SET_LOGIN_STATUS", status: false });
+    navigate("/sign-in");
+  };
   return (
     <div className="header">
       {/* navbar */}
@@ -42,20 +51,17 @@ const Header = ({ toggle }) => {
                         /></div>
           {/*Navbar nav */}
           <ul className="navbar-nav navbar-right-wrap ms-lg-auto d-flex nav-top-wrap align-items-center ms-0 ms-lg-0">
-            {/* <li className="dropdown stopevent ms-0"> */}
-            {/* <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
-                <img
-                    src="../assets/images/avatar/brightness.png"
-                    className="brightness img-fluid"
-                    alt="Imaged"
-                  />
-              </div> */}
-              {/* <div className="btn btn-ghost btn-icon rounded-circle notification-icon">
-                <IoMdNotificationsOutline size={28} />
-              </div> */}
-            {/* </li> */}
             {/* List */}
             <li className="dropdown ms-2">
+            <div
+                className="rounded-circle"
+                // href="#!"
+                role="button"
+                id="dropdownUser"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
             <img
                       alt="avatar"
                       src="./assets/images/avatar/menu.png"
@@ -96,7 +102,62 @@ const Header = ({ toggle }) => {
                     </>
                   )}
                 </div> */}
-              {/* </div> */}
+              </div>
+              <div
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="dropdownUser"
+              >
+                <div className="px-4 pb-0 pt-2">
+                  <div className="lh-1 ">
+                    <h5 className="mb-1">{userInfo?.user_name}</h5>
+                    {/* <a href="#!" className="text-inherit fs-6">
+                        View my profile
+                      </a> */}
+                  </div>
+                  <div className=" dropdown-divider mt-3 mb-2" />
+                </div>
+                <ul className="list-unstyled">
+                  {/* {userInfo.user_type === "SysAdm" && (
+                    <li>
+                      <Link
+                        style={{ cursor: "pointer" }}
+                        to={`/setting`}
+                        className="dropdown-item d-flex flex-row"
+                      >
+                        {" "}
+                        <div className="me-2">
+                          <IoSettingsOutline size={20} />
+                        </div>
+                        Setting
+                      </Link>
+                    </li>
+                  )} */}
+                  <li>
+                    <Link
+                      to={`/change-password?LoginId=${userInfo?.user_loginid}`}
+                      className="dropdown-item  d-flex flex-row"
+                    >
+                      <div className="me-2">
+                        <RiLockPasswordLine size={20} />
+                      </div>
+                      Change Password
+                    </Link>
+                  </li>
+
+                  <li>
+                    <div
+                      className="dropdown-item d-flex flex-row "
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleLogout()}
+                    >
+                      <div className="me-2">
+                        <MdLogout size={20} />
+                      </div>
+                      Sign Out
+                    </div>
+                  </li>
+                </ul>
+              </div>
              
             </li>
           </ul>
