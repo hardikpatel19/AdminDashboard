@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useForm } from "react-hook-form";
-import { checkSysConfig, getLoginPageDetail, login } from "../../apiCall";
+import {  login } from "../../apiCall";
 
 import { useNavigate } from "react-router-dom";
 import { useStateValue } from "../../StateProvider";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { toast } from "react-toastify";
