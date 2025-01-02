@@ -36,6 +36,7 @@ import AddUpdateGrantsDetail from "./pages/Data/components/AddUpdateGrantsDetail
 import AdminEmail from "./pages/AdminEmail/components/AdminEmail/AdminEmail";
 import AddUpdateAdminEmailDetail from "./pages/AdminEmail/components/AddUpdateAdminEmailDetail/AddUpdateAdminEmailDetail";
 import { ToastContainer } from "react-toastify";
+import { LoadingSpinner } from "./components/LoadingSpinner/LoadingSpinner";
 // import AddUpdateScriptDetail from "./pages/Script/components/AddUpdateScriptDetail/AddUpdateScriptDetail";
 
 function App() {
@@ -59,8 +60,8 @@ function App() {
       className={`${isToggled ? "main-wrapper toggled" : "main-wrapper"}`}
     >
       <BrowserRouter>
-        {/* {isLoading && <LoadingSpinner />}
-        <Toaster /> */}
+        {isLoading && <LoadingSpinner />}
+        {/* <Toaster /> */}
         {/* Main application routes */}
         <Routes>
           <Route path="/sign-in" element={<SignIn />}></Route>
