@@ -53,23 +53,23 @@ const Sidebar = ({ toggle }) => {
       {/* Collapsible Content */}
       {openSection === "script"&& (
         <ul className="pl-6 mt-2">
-          <li className="mb-2">
-            <Link to="/tender" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/tender" className="text-blue-600 ">
               Tender
             </Link>
           </li>
-          <li className="mb-2">
-            <Link to="/project" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/project" className="text-blue-600 ">
               Project
             </Link>
           </li>
-          <li className="mb-2">
-            <Link to="/ca" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/ca" className="text-blue-600 ">
               CA
             </Link>
           </li>
-          <li className="mb-2">
-            <Link to="/grants" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/grants" className="text-blue-600 ">
               Grants
             </Link>
           </li>
@@ -104,23 +104,23 @@ const Sidebar = ({ toggle }) => {
       {/* Collapsible Content */}
       {openSection === "data" && (
         <ul className="pl-6 mt-2">
-          <li className="mb-2">
-            <Link to="/tenderData" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/tenderData" className="text-blue-600 ">
               Tender
             </Link>
           </li>
-          <li className="mb-2">
-            <Link to="/projectData" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/projectData" className="text-blue-600 ">
               Project
             </Link>
           </li>
-          <li className="mb-2">
-            <Link to="/caData" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/caData" className="text-blue-600 ">
               CA
             </Link>
           </li>
-          <li className="mb-2">
-            <Link to="/grantsData" className="text-blue-600 nav-item">
+          <li className="mb-2 nav-item">
+            <Link to="/grantsData" className="text-blue-600 ">
               Grants
             </Link>
           </li>

@@ -25,14 +25,14 @@ import Ca from "./pages/Script/components/CA/Ca";
 import Grants from "./pages/Script/components/Grants/Grants";
 import Developer from "./pages/Developer/components/Developer/Developer";
 import AddUpdateDeveloperdetail from "./pages/Developer/components/AddUpdateDeveloperDetail/AddUpdateDeveloperdetail";
-import TenderData from "./pages/Data/components/TenderData/TenderData";
-import AddUpdateTenderDetail from "./pages/Data/components/AddUpdateTenderDetail/AddUpdateTenderDetail";
-import ProjectData from "./pages/Data/components/ProjectData/ProjectData";
-import AddUpdateProjectDetail from "./pages/Data/components/AddUpdateProjectDetail/AddUpdateProjectDetail";
-import CaData from "./pages/Data/components/CAData/CaData";
-import AddUpdateCaDetail from "./pages/Data/components/AddUpdateCaDetail/AddUpdateCaDetail";
-import GrantsData from "./pages/Data/components/GrantsData/GrantsData";
-import AddUpdateGrantsDetail from "./pages/Data/components/AddUpdateGrantsDetail/AddUpdateGrantsDetail";
+import TenderData from "./pages/Data/components/TenderData/components/TenderData/TenderData";
+import AddUpdateTenderDetail from "./pages/Data/components/TenderData/components/AddUpdateTenderDetail/AddUpdateTenderDetail";
+import ProjectData from "./pages/Data/components/ProjectData/components/ProjectData/ProjectData";
+import AddUpdateProjectDetail from "./pages/Data/components/ProjectData/components/AddUpdateProjectDetail/AddUpdateProjectDetail";
+import CaData from "./pages/Data/components/CAData/components/CAData/CaData";
+import AddUpdateCaDetail from "./pages/Data/components/CAData/components/AddUpdateCaDetail/AddUpdateCaDetail";
+import GrantsData from "./pages/Data/components/GrantsData/components/GrantsData/GrantsData";
+import AddUpdateGrantsDetail from "./pages/Data/components/GrantsData/components/AddUpdateGrantsDetail/AddUpdateGrantsDetail";
 import AdminEmail from "./pages/AdminEmail/components/AdminEmail/AdminEmail";
 import AddUpdateAdminEmailDetail from "./pages/AdminEmail/components/AddUpdateAdminEmailDetail/AddUpdateAdminEmailDetail";
 import { ToastContainer } from "react-toastify";
@@ -139,7 +139,7 @@ function App() {
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>
       </BrowserRouter>
-      <ToastContainer position="top-center"/>
+      <ToastContainer position="top-center" />
     </div>
   );
 }

@@ -147,8 +147,8 @@ const AddUpdateScriptDetail = () => {
     <div id="app-content">
       <div className="app-content-area mb-10">
         <div className="container-fluid">
-          <div className="header px-6">
-            <h1 className="mb-0 h3">{title}</h1>
+          <div className="header px-1">
+            <h1 className="mb-4 h3">{title}</h1>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="card mb-5">
@@ -234,7 +234,7 @@ const AddUpdateScriptDetail = () => {
                     />
                   </div>
 
-                  <div className="mb-4 col-md-6">
+                  <div className="mb-4 col-md-12">
                     <label className="form-label">
                       Big Ref No
                     </label>
@@ -249,6 +249,19 @@ const AddUpdateScriptDetail = () => {
                         {errors.BigRefNo.message}
                       </div>
                     )}
+                  </div>
+                  <div className="mb-4 col-md-6">
+                    <label className="form-label me-3">
+                      Recent Log
+                    </label>
+                    <button type="download" className="btn btn-primary px-4">
+                Download Log
+              </button>
+                    {/* {errors.BigRefNo && (
+                      <div className="error">
+                        {errors.BigRefNo.message}
+                      </div>
+                    )} */}
                   </div>
                 </div>
               </div>

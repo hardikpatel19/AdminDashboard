@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import { useStateValue } from "../../../../StateProvider";
-import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
+import { useStateValue } from "../../../../../../StateProvider";
+import { ConfirmationModal } from "../../../../../../components/Modals/ConfirmationModal";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../../../../firebaseConfig";
+import { auth, db } from "../../../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Firebase Storage
@@ -26,29 +26,29 @@ const uploadFileToStorage = async (file) => {
   }
 };
 
-const AddUpdateProjectDetail = () => {
+const AddUpdateGrantsDetail = () => {
   const [, dispatch] = useStateValue();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
-  const [title, setTitle] = useState("Add Project");
+  const [title, setTitle] = useState("Add Grants");
 
   const navigate = useNavigate();
-  const { projectId } = useParams();
+  const { grantsId } = useParams();
 
-  const navigateToProjectWithId = (Id) => {
+  const navigateToGrantsWithId = (Id) => {
     if (searchFilter) {
-      navigate(`/project?project_id=${Id}&search_filter=${searchFilter}`);
+      navigate(`/grants?grants_id=${Id}&search_filter=${searchFilter}`);
     } else {
-      navigate(`/project?projectt_id=${Id}`);
+      navigate(`/grants?grantst_id=${Id}`);
     }
   };
 
-  const navigateToProject = () => {
+  const navigateToGrants = () => {
     if (searchFilter) {
-      navigate(`/project?search_filter=${searchFilter}`);
+      navigate(`/grants?search_filter=${searchFilter}`);
     } else {
-      navigate(`/project`);
+      navigate(`/grants`);
     }
   };
 
@@ -70,29 +70,29 @@ const AddUpdateProjectDetail = () => {
     try {
       let fileUrl = null;
 
-      if (data.projectFile && data.projectFile[0]) {
-        fileUrl = await uploadFileToStorage(data.projectFile[0]);
+      if (data.grantsFile && data.grantsFile[0]) {
+        fileUrl = await uploadFileToStorage(data.grantsFile[0]);
       }
 
       const documentData = {
         ...data,
-        projectFile: fileUrl,
+        grantsFile: fileUrl,
         userId: auth.currentUser.uid,
         timestamp: new Date(),
       };
 
-      if (projectId) {
-        const docRef = doc(db, "projectDetail", projectId);
+      if (grantsId) {
+        const docRef = doc(db, "grantsDetail", grantsId);
         await updateDoc(docRef, documentData);
         toast.success("Document updated successfully");
-        navigateToProjectWithId(projectId);
+        navigateToGrantsWithId(grantsId);
       } else {
         const docRef = await addDoc(
-          collection(db, "projectDetail"),
+          collection(db, "grantsDetail"),
           documentData
         );
         toast.success("Form submitted successfully!");
-        navigateToProjectWithId(docRef.id);
+        navigateToGrantsWithId(docRef.id);
       }
     } catch (error) {
       console.error("Error saving document:", error);
@@ -103,10 +103,10 @@ const AddUpdateProjectDetail = () => {
   };
 
   // Fetch Data for Edit
-  const fetchprojectDetail = async () => {
+  const fetchgrantsDetail = async () => {
     try {
       dispatch({ type: "SET_LOADING", status: true });
-      const docRef = doc(db, "projectDetail", projectId);
+      const docRef = doc(db, "grantsDetail", grantsId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -124,20 +124,20 @@ const AddUpdateProjectDetail = () => {
   };
 
   useQuery({
-    queryKey: ["project-detail"],
-    queryFn: fetchprojectDetail,
-    enabled: !!projectId,
+    queryKey: ["grants-detail"],
+    queryFn: fetchgrantsDetail,
+    enabled: !!grantsId,
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
 
   useEffect(() => {
-    if (projectId) {
-      setTitle("Update Project");
+    if (grantsId) {
+      setTitle("Update Grants");
     } else {
-      setTitle("Add Project");
+      setTitle("Add Grants");
     }
-  }, [projectId]);
+  }, [grantsId]);
 
   const [confirmationShow, setConfirmationShow] = useState(false);
   const handleConfirmationClose = () => setConfirmationShow(false);
@@ -146,20 +146,76 @@ const AddUpdateProjectDetail = () => {
     <div id="app-content">
       <div className="app-content-area mb-10">
         <div className="container-fluid">
-          <div className="header px-6">
-            <h1 className="mb-0 h3">{title}</h1>
+          <div className="header px-1">
+            <h1 className="mb-4 h3">{title}</h1>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="card mb-5">
               <div className="card-body">
                 <div className="row">
                   <div className="mb-4 col-md-4">
+                    <label className="form-label">
+                      Donor<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="donor"
+                      {...register("Donor", { required: "Donor is required" })}
+                    />
+                    {errors.Donor && (
+                      <div className="error">{errors.Donor.message}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
+                    <label className="form-label">Contact Information</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="contact_information"
+                      {...register("ContactInformation")}
+                    />
+                    {errors.ContactInformation && (
+                      <div className="error">
+                        {errors.ContactInformation.message}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
+                    <label className="form-label">Location</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="location"
+                      {...register("location")}
+                    />
+                    {errors.location && (
+                      <div className="error">{errors.location.message}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
+                    <label className="form-label">Big Ref Number</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="big_ref_no"
+                      {...register("big_ref_no")}
+                    />
+                    {errors.big_ref_no && (
+                      <div className="error">{errors.big_ref_no.message}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
                     <label className="form-label">Title</label>
                     <input
                       type="text"
                       className="form-control"
                       placeholder="title"
-                      {...register("title", { required: "Title is required" })}
+                      {...register("title")}
                     />
                     {errors.title && (
                       <div className="error">{errors.title.message}</div>
@@ -167,52 +223,24 @@ const AddUpdateProjectDetail = () => {
                   </div>
 
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">
-                      Project Name<span className="text-danger">*</span>
-                    </label>
+                    <label className="form-label">Type</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="project_name"
-                      {...register("Name", { required: "Name is required" })}
+                      placeholder="type"
+                      {...register("Type")}
                     />
-                    {errors.Name && (
-                      <div className="error">{errors.Name.message}</div>
+                    {errors.Type && (
+                      <div className="error">{errors.Type.message}</div>
                     )}
                   </div>
 
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">Project Background</label>
+                    <label className="form-label">Status</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="project_background"
-                      {...register("project_background")}
-                    />
-                    {errors.project_background && (
-                      <div className="error">{errors.project_background.message}</div>
-                    )}
-                  </div>
-
-                  <div className="mb-4 col-md-4">
-                    <label className="form-label">Project Location</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="project_location"
-                      {...register("project_location")}
-                    />
-                    {errors.project_location && (
-                      <div className="error">{errors.project_location.message}</div>
-                    )}
-                  </div>
-
-                  <div className="mb-4 col-md-4">
-                    <label className="form-label">Project Status</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="projet_status"
+                      placeholder="status"
                       {...register("Status")}
                     />
                     {errors.Status && (
@@ -221,76 +249,29 @@ const AddUpdateProjectDetail = () => {
                   </div>
 
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">Publishing Date</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      placeholder="Select publishing date"
-                      {...register("project_publishing_date")}
-                    />
-                    {errors.project_publishing_date && (
-                      <div className="error">{errors.project_publishing_date.message}</div>
-                    )}
-                  </div>
-
-                  <div className="mb-4 col-md-4">
-                    <label className="form-label">
-                      Estimate Completion Date
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      placeholder="Select closing date"
-                      {...register("estimated_project_completion_date")}
-                    />
-                    {errors.estimated_project_completion_date && (
-                      <div className="error">
-                        {errors.estimated_project_completion_date.message}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mb-4 col-md-4">
-                    <label className="form-label">
-                      Big Ref Number<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="big_ref_no"
-                      {...register("big_ref_no", {
-                        required: "Number is required",
-                      })}
-                    />
-                    {errors.big_ref_no && (
-                      <div className="error">{errors.big_ref_no.message}</div>
-                    )}
-                  </div>
-
-                  <div className="mb-4 col-md-4">
-                    <label className="form-label">Client Name</label>
+                    <label className="form-label">Value</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="client_name"
-                      {...register("ClientName")}
+                      placeholder="value"
+                      {...register("Value")}
                     />
-                    {errors.ClientName && (
-                      <div className="error">{errors.ClientName.message}</div>
+                    {errors.Value && (
+                      <div className="error">{errors.Value.message}</div>
                     )}
                   </div>
 
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">Client Address</label>
+                    <label className="form-label">Type Of Services</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="client_address"
-                      {...register("ClientAddress")}
+                      placeholder="type_of_services"
+                      {...register("TypeOfServices")}
                     />
-                    {errors.ClientAddress && (
+                    {errors.TypeOfServices && (
                       <div className="error">
-                        {errors.ClientAddress.message}
+                        {errors.TypeOfServices.message}
                       </div>
                     )}
                   </div>
@@ -309,15 +290,28 @@ const AddUpdateProjectDetail = () => {
                   </div>
 
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">Region</label>
+                    <label className="form-label">Deadline</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="input here"
-                      {...register("regions")}
+                      placeholder="deadline"
+                      {...register("deadline")}
                     />
-                    {errors.regions && (
-                      <div className="error">{errors.regions.message}</div>
+                    {errors.deadline && (
+                      <div className="error">{errors.deadline.message}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
+                    <label className="form-label">Duration</label>
+                    <input
+                      type="Number"
+                      className="form-control"
+                      placeholder="duration"
+                      {...register("Duration")}
+                    />
+                    {errors.Duration && (
+                      <div className="error">{errors.Duration.message}</div>
                     )}
                   </div>
 
@@ -340,12 +334,51 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("FundingAgency")}
+                      {...register("funding_agency")}
                     />
-                    {errors.FundingAgency && (
+                    {errors.funding_agency && (
                       <div className="error">
-                        {errors.FundingAgency.message}
+                        {errors.funding_agency.message}
                       </div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
+                    <label className="form-label">Region</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="input here"
+                      {...register("regions")}
+                    />
+                    {errors.regions && (
+                      <div className="error">{errors.regions.message}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
+                    <label className="form-label">Attachment</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="attachment"
+                      {...register("Attachment")}
+                    />
+                    {errors.Attachment && (
+                      <div className="error">{errors.Attachment.message}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-4 col-md-4">
+                    <label className="form-label">Post Date</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      placeholder="Select post date"
+                      {...register("post_date")}
+                    />
+                    {errors.post_date && (
+                      <div className="error">{errors.post_date.message}</div>
                     )}
                   </div>
                 </div>
@@ -355,7 +388,7 @@ const AddUpdateProjectDetail = () => {
               <button
                 type="button"
                 className="btn btn-outline-danger"
-                onClick={() => navigateToProject()}
+                onClick={() => navigateToGrants()}
               >
                 Cancel
               </button>
@@ -374,4 +407,4 @@ const AddUpdateProjectDetail = () => {
   );
 };
 
-export default AddUpdateProjectDetail;
+export default AddUpdateGrantsDetail;

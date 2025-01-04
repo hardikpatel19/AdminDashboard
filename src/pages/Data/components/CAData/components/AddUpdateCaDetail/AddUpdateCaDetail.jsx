@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import { useStateValue } from "../../../../StateProvider";
-import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
+import { useStateValue } from "../../../../../../StateProvider";
+import { ConfirmationModal } from "../../../../../../components/Modals/ConfirmationModal";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../../../../firebaseConfig";
+import { auth, db } from "../../../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Firebase Storage
@@ -87,10 +87,7 @@ const AddUpdateCaDetail = () => {
         toast.success("Document updated successfully");
         navigateToCaWithId(caId);
       } else {
-        const docRef = await addDoc(
-          collection(db, "caDetail"),
-          documentData
-        );
+        const docRef = await addDoc(collection(db, "caDetail"), documentData);
         toast.success("Form submitted successfully!");
         navigateToCaWithId(docRef.id);
       }
@@ -146,15 +143,17 @@ const AddUpdateCaDetail = () => {
     <div id="app-content">
       <div className="app-content-area mb-10">
         <div className="container-fluid">
-          <div className="header px-6">
-            <h1 className="mb-0 h3">{title}</h1>
+          <div className="header px-1">
+            <h1 className="mb-4 h3">{title}</h1>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="card mb-5">
               <div className="card-body">
                 <div className="row">
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">Title<span className="text-danger">*</span></label>
+                    <label className="form-label">
+                      Title<span className="text-danger">*</span>
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -346,9 +345,7 @@ const AddUpdateCaDetail = () => {
                   </div>
 
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">
-                      Publish Date
-                    </label>
+                    <label className="form-label">Publish Date</label>
                     <input
                       type="date"
                       className="form-control"
@@ -415,8 +412,6 @@ const AddUpdateCaDetail = () => {
                       <div className="error">{errors.regions.message}</div>
                     )}
                   </div>
-
-
                 </div>
               </div>
             </div>
