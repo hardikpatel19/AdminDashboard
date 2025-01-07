@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../../../firebaseConfig";
 import { tenderData2 } from "../../../../../../utils/dummyData";
-import { getTender } from "../../../../../../apiCall";
+import { deleteTenderDetail, getTender } from "../../../../../../apiCall";
 import { toast } from "react-toastify";
 
 const TenderData = () => {
@@ -133,6 +133,17 @@ const TenderData = () => {
       }
     }
   }, [filteredData]);
+
+  const deleteTender = async (tenderId) => {
+    const response = await deleteTenderDetail(tenderId);
+    console.log(response);
+    if (response?.status === 201) {
+      refetch()
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.response.data.message);
+    }
+  };
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -320,7 +331,9 @@ const TenderData = () => {
                                   <div
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="editOne"
-                                    onClick={() => editTTenderDetail(tender._id)}
+                                    onClick={() =>
+                                      editTTenderDetail(tender._id)
+                                    }
                                   >
                                     <FaRegEdit
                                       size={20}
@@ -335,13 +348,7 @@ const TenderData = () => {
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="trashOne"
                                     onClick={() => {
-                                      handleConfirmationShow();
-                                      removeSelection();
-                                      setFunHandler({
-                                        fun: deleteData,
-                                        id: tender.id,
-                                        title: "delete task",
-                                      });
+                                      deleteTender(tender._id);
                                     }}
                                   >
                                     <MdOutlineDelete

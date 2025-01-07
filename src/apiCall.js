@@ -29,6 +29,10 @@ export const updateTenderDetail = (data) => {
   return request({ url: `${api.tenderDetail}`, method: "put",data:data });
 };
 
+export const deleteTenderDetail = (tenderId) => {
+  return request({ url: `${api.tenderDetail}?_id=${tenderId}`, method: "delete" });
+};
+
 // project
 export const getProject = () => {
   return request({ url: `${api.project}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
