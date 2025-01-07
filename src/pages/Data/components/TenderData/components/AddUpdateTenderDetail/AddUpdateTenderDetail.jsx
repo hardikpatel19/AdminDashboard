@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useStateValue } from "../../../../../../StateProvider";
 import { ConfirmationModal } from "../../../../../../components/Modals/ConfirmationModal";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getTenderDetail, updateTenderDetail } from "../../../../../../apiCall";
+import { addTenderDetail, getTenderDetail, updateTenderDetail } from "../../../../../../apiCall";
+import { toast } from "react-toastify";
 
 // Firebase Storage
 const storage = getStorage();
@@ -72,9 +72,27 @@ const AddUpdateTenderDetail = () => {
       if (tenderId) {
         data._id = tenderId;
         const response = await updateTenderDetail(data);
-        console.log(response)
+        console.log(response);
+        if (response?.status === 201) {
+          toast.success(response.data.message);
+          navigate("/tenderData");
+        }
+        else{
+          toast.error(response.response.data.message);
+
+        }
       } else {
-        toast.success("Form submitted successfully!");
+        
+        const response = await addTenderDetail(data);
+        console.log(response);
+        if (response?.status === 201) {
+          toast.success(response.data.message);
+          navigate("/tenderData");
+        }
+        else{
+          toast.error(response.response.data.message);
+
+        }
       }
     } catch (error) {
       console.error("Error saving document:", error);
@@ -155,10 +173,14 @@ const AddUpdateTenderDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter Authority Name"
-                      {...register("authority_name", { required: "Authority Name is required" })}
+                      {...register("authority_name", {
+                        required: "Authority Name is required",
+                      })}
                     />
                     {errors.authority_name && (
-                      <div className="error">{errors.authority_name.message}</div>
+                      <div className="error">
+                        {errors.authority_name.message}
+                      </div>
                     )}
                   </div>
 
@@ -168,10 +190,10 @@ const AddUpdateTenderDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="address"
-                      {...register("Address")}
+                      {...register("address")}
                     />
-                    {errors.Address && (
-                      <div className="error">{errors.Address.message}</div>
+                    {errors.address && (
+                      <div className="error">{errors.address.message}</div>
                     )}
                   </div>
 
@@ -181,10 +203,10 @@ const AddUpdateTenderDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="telephone"
-                      {...register("Mobile")}
+                      {...register("telephone")}
                     />
-                    {errors.Mobile && (
-                      <div className="error">{errors.Mobile.message}</div>
+                    {errors.telephone && (
+                      <div className="error">{errors.telephone.message}</div>
                     )}
                   </div>
 
@@ -194,10 +216,10 @@ const AddUpdateTenderDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="fax_number"
-                      {...register("FaxNumber")}
+                      {...register("fax_number")}
                     />
-                    {errors.FaxNumber && (
-                      <div className="error">{errors.FaxNumber.message}</div>
+                    {errors.fax_number && (
+                      <div className="error">{errors.fax_number.message}</div>
                     )}
                   </div>
 
@@ -207,10 +229,10 @@ const AddUpdateTenderDetail = () => {
                       type="email"
                       className="form-control"
                       placeholder="email"
-                      {...register("Email")}
+                      {...register("email")}
                     />
-                    {errors.Email && (
-                      <div className="error">{errors.Email.message}</div>
+                    {errors.email && (
+                      <div className="error">{errors.email.message}</div>
                     )}
                   </div>
 
@@ -220,11 +242,11 @@ const AddUpdateTenderDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="contact_person"
-                      {...register("ContactPerson")}
+                      {...register("contact_person")}
                     />
-                    {errors.ContactPerson && (
+                    {errors.contact_person && (
                       <div className="error">
-                        {errors.ContactPerson.message}
+                        {errors.contact_person.message}
                       </div>
                     )}
                   </div>
@@ -238,7 +260,7 @@ const AddUpdateTenderDetail = () => {
                       className="form-control"
                       placeholder="big_ref_no"
                       {...register("big_ref_no", {
-                        required: "Number is required",
+                        required: "big_ref_no is required",
                       })}
                     />
                     {errors.big_ref_no && (
@@ -261,7 +283,7 @@ const AddUpdateTenderDetail = () => {
 
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Tender Type</label>
-                    <select className="form-select" {...register("Tendertype")}>
+                    <select className="form-select" {...register("country")}>
                       <option value="">Select a country</option>
                       <option value="Live">Live</option>
                       {/* <option value="Canada">Canada</option>
@@ -276,11 +298,11 @@ const AddUpdateTenderDetail = () => {
                     <input
                       type="number"
                       className="form-control"
-                      placeholder="tender_no"
-                      {...register("TenderNo")}
+                      placeholder="Tender No"
+                      {...register("tender_no")}
                     />
                     {errors.TenderNo && (
-                      <div className="error">{errors.TenderNo.message}</div>
+                      <div className="error">{errors.tender_no.message}</div>
                     )}
                   </div>
 
@@ -290,11 +312,11 @@ const AddUpdateTenderDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("FundingAgency")}
+                      {...register("funding_agency")}
                     />
-                    {errors.FundingAgency && (
+                    {errors.funding_agency && (
                       <div className="error">
-                        {errors.FundingAgency.message}
+                        {errors.funding_agency.message}
                       </div>
                     )}
                   </div>
@@ -303,7 +325,7 @@ const AddUpdateTenderDetail = () => {
                     <label className="form-label">Tender Compition</label>
                     <select
                       className="form-select"
-                      {...register("TenderCompetion")}
+                      {...register("tender_competition")}
                     >
                       <option value="">Select a Tender Competion</option>
                       <option value="Live">Domestic</option>
@@ -362,10 +384,10 @@ const AddUpdateTenderDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="emd"
-                      {...register("Emd")}
+                      {...register("emd")}
                     />
-                    {errors.Emd && (
-                      <div className="error">{errors.Emd.message}</div>
+                    {errors.emd && (
+                      <div className="error">{errors.emd.message}</div>
                     )}
                   </div>
 
@@ -375,11 +397,11 @@ const AddUpdateTenderDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="estimated_cost"
-                      {...register("Estimatedcost")}
+                      {...register("estimated_cost")}
                     />
-                    {errors.Estimatedcost && (
+                    {errors.estimated_cost && (
                       <div className="error">
-                        {errors.Estimatedcost.message}
+                        {errors.estimated_cost.message}
                       </div>
                     )}
                   </div>
@@ -387,13 +409,13 @@ const AddUpdateTenderDetail = () => {
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Documents</label>
                     <input
-                      type="file"
+                      type="text"
                       className="form-control"
                       placeholder="documents"
-                      {...register("Documents")}
+                      {...register("documents")}
                     />
-                    {errors.Documents && (
-                      <div className="error">{errors.Documents.message}</div>
+                    {errors.documents && (
+                      <div className="error">{errors.documents.message}</div>
                     )}
                   </div>
 

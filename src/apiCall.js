@@ -22,6 +22,9 @@ export const getTender = () => {
 export const getTenderDetail = (tenderId) => {
   return request({ url: `${api.tenderDetail}?_id=${tenderId}`, method: "get" });
 };
+export const addTenderDetail = (data) => {
+  return request({ url: `${api.tenderDetail}`, method: "post",data:data });
+};
 export const updateTenderDetail = (data) => {
   return request({ url: `${api.tenderDetail}`, method: "put",data:data });
 };
