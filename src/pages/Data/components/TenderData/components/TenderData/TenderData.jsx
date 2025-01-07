@@ -33,7 +33,7 @@ const TenderData = () => {
     }
   };
   const editTTenderDetail = (id) => {
-    navigate(`/update/tender/${id}?status_filter=${searchQuery}`);
+    navigate(`/update/tender/${id}`);
   };
   const fetchTenderList = async () => {
     try {
@@ -320,7 +320,7 @@ const TenderData = () => {
                                   <div
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="editOne"
-                                    onClick={() => editTTenderDetail(tender.id)}
+                                    onClick={() => editTTenderDetail(tender._id)}
                                   >
                                     <FaRegEdit
                                       size={20}

@@ -8,6 +8,7 @@ import { ConfirmationModal } from "../../../../../../components/Modals/Confirmat
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getTenderDetail, updateTenderDetail } from "../../../../../../apiCall";
 
 // Firebase Storage
 const storage = getStorage();
@@ -68,31 +69,12 @@ const AddUpdateTenderDetail = () => {
     dispatch({ type: "SET_LOADING", status: true });
 
     try {
-      let fileUrl = null;
-
-      if (data.tenderFile && data.tenderFile[0]) {
-        fileUrl = await uploadFileToStorage(data.tenderFile[0]);
-      }
-
-      const documentData = {
-        ...data,
-        tenderFile: fileUrl,
-        userId: auth.currentUser.uid,
-        timestamp: new Date(),
-      };
-
       if (tenderId) {
-        const docRef = doc(db, "tenderDetail", tenderId);
-        await updateDoc(docRef, documentData);
-        toast.success("Document updated successfully");
-        navigateToTenderWithId(tenderId);
+        data._id = tenderId;
+        const response = await updateTenderDetail(data);
+        console.log(response)
       } else {
-        const docRef = await addDoc(
-          collection(db, "tenderDetail"),
-          documentData
-        );
         toast.success("Form submitted successfully!");
-        navigateToTenderWithId(docRef.id);
       }
     } catch (error) {
       console.error("Error saving document:", error);
@@ -102,31 +84,30 @@ const AddUpdateTenderDetail = () => {
     dispatch({ type: "SET_LOADING", status: false });
   };
 
-  // Fetch Data for Edit
+  // ************************************************* Fetch Data for Edit *******************************************
   const fetchtenderDetail = async () => {
     try {
       dispatch({ type: "SET_LOADING", status: true });
-      const docRef = doc(db, "tenderDetail", tenderId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setValue("Name", data?.Name);
-        setValue("DeveloperName", data?.DeveloperName);
-        setValue("Country", data?.Country);
-        setValue("Status", data?.Status);
-      } else {
-        toast.error("No such document!");
+      const response = await getTenderDetail(tenderId);
+      console.log(response);
+
+      if (response?.status === 201) {
+        setValue("title", response?.data?.result?.title);
+      } else if (response?.response) {
+        toast.error(response.response.data.message);
       }
+
       dispatch({ type: "SET_LOADING", status: false });
+      return response;
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error); // Log any errors that occur
     }
   };
 
   useQuery({
     queryKey: ["tender-detail"],
     queryFn: fetchtenderDetail,
-    enabled: !!tenderId,
+    enabled: tenderId ? true : false,
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
@@ -174,10 +155,10 @@ const AddUpdateTenderDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter Authority Name"
-                      {...register("Name", { required: "Name is required" })}
+                      {...register("authority_name", { required: "Authority Name is required" })}
                     />
-                    {errors.Name && (
-                      <div className="error">{errors.Name.message}</div>
+                    {errors.authority_name && (
+                      <div className="error">{errors.authority_name.message}</div>
                     )}
                   </div>
 
@@ -441,12 +422,12 @@ const AddUpdateTenderDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("Regions", {
+                      {...register("regions", {
                         required: "Region is required",
                       })}
                     />
-                    {errors.Regions && (
-                      <div className="error">{errors.Regions.message}</div>
+                    {errors.regions && (
+                      <div className="error">{errors.regions.message}</div>
                     )}
                   </div>
 

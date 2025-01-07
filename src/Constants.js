@@ -40,6 +40,7 @@ export const api = {
   login: "/auth/user-login",
   logout: "/logout",
   tender:"/tenders/list",
+  tenderDetail:"/tenders",
   project:"/projects/list",
   ca:"/contract-award/list",
   grants:"/grants/list"
