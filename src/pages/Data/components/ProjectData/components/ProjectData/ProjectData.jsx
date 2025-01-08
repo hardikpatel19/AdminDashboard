@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../../../firebaseConfig";
 import { projectData2 } from "../../../../../../utils/dummyData";
-import { getProject } from "../../../../../../apiCall";
+import { deleteProjectDetail, getProject } from "../../../../../../apiCall";
 import { toast } from "react-toastify";
 
 const ProjectData = () => {
@@ -32,7 +32,7 @@ const ProjectData = () => {
     }
   };
   const editTProjectDetail = (id) => {
-    navigate(`/update/project/${id}?status_filter=${searchQuery}`);
+    navigate(`/update/project/${id}`);
   };
   const fetchProjectList = async () => {
     try {
@@ -132,6 +132,18 @@ const ProjectData = () => {
       }
     }
   }, [filteredData]);
+
+  const deleteProject = async (projectId) => {
+      const response = await deleteProjectDetail(projectId);
+      console.log(response);
+      if (response?.status === 201) {
+        refetch()
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.response.data.message);
+      }
+    };
+
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -261,7 +273,11 @@ const ProjectData = () => {
                                 <td>
                                   <strong>{index + 1}.</strong>
                                 </td>
-                                <td className="">
+                                <td className=""style={{
+                                      maxWidth: "350px",
+                                      minWidth: "220px",
+                                      textWrap: "wrap",
+                                    }}>
                                   <strong>{project?.title}</strong>
                                 </td>
                                 <td className="">
@@ -308,7 +324,7 @@ const ProjectData = () => {
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="editOne"
                                     onClick={() =>
-                                      editTProjectDetail(project.id)
+                                      editTProjectDetail(project._id)
                                     }
                                   >
                                     <FaRegEdit
@@ -324,13 +340,7 @@ const ProjectData = () => {
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="trashOne"
                                     onClick={() => {
-                                      handleConfirmationShow();
-                                      removeSelection();
-                                      setFunHandler({
-                                        fun: deleteData,
-                                        id: project.id,
-                                        title: "delete task",
-                                      });
+                                      deleteProject(project._id)
                                     }}
                                   >
                                     <MdOutlineDelete

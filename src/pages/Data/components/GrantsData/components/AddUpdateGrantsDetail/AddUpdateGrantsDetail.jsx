@@ -8,6 +8,7 @@ import { ConfirmationModal } from "../../../../../../components/Modals/Confirmat
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { addGrantsDetail, getGrantsDetail, updateGrantsDetail } from "../../../../../../apiCall";
 
 // Firebase Storage
 const storage = getStorage();
@@ -48,7 +49,7 @@ const AddUpdateGrantsDetail = () => {
     if (searchFilter) {
       navigate(`/grants?search_filter=${searchFilter}`);
     } else {
-      navigate(`/grants`);
+      navigate(`/grantsData`);
     }
   };
 
@@ -64,69 +65,84 @@ const AddUpdateGrantsDetail = () => {
 
   // Form Submission
   const onSubmit = async (data) => {
-    console.log(data);
-    dispatch({ type: "SET_LOADING", status: true });
-
-    try {
-      let fileUrl = null;
-
-      if (data.grantsFile && data.grantsFile[0]) {
-        fileUrl = await uploadFileToStorage(data.grantsFile[0]);
-      }
-
-      const documentData = {
-        ...data,
-        grantsFile: fileUrl,
-        userId: auth.currentUser.uid,
-        timestamp: new Date(),
+        console.log(data);
+        dispatch({ type: "SET_LOADING", status: true });
+    
+        try {
+          if (grantsId) {
+            data._id = grantsId;
+            const response = await updateGrantsDetail(data);
+            console.log(response);
+            if (response?.status === 201) {
+              toast.success(response.data.message);
+              navigate("/grantsData");
+            }
+            else{
+              toast.error(response.response.data.message);
+    
+            }
+          } else {
+            
+            const response = await addGrantsDetail(data);
+            console.log(response);
+            if (response?.status === 201) {
+              toast.success(response.data.message);
+              navigate("/grantsData");
+            }
+            else{
+              toast.error(response.response.data.message);
+    
+            }
+          }
+        } catch (error) {
+          console.error("Error saving document:", error);
+          toast.error("Error submitting the form. Please try again.");
+        }
+    
+        dispatch({ type: "SET_LOADING", status: false });
       };
-
-      if (grantsId) {
-        const docRef = doc(db, "grantsDetail", grantsId);
-        await updateDoc(docRef, documentData);
-        toast.success("Document updated successfully");
-        navigateToGrantsWithId(grantsId);
-      } else {
-        const docRef = await addDoc(
-          collection(db, "grantsDetail"),
-          documentData
-        );
-        toast.success("Form submitted successfully!");
-        navigateToGrantsWithId(docRef.id);
-      }
-    } catch (error) {
-      console.error("Error saving document:", error);
-      toast.error("Error submitting the form. Please try again.");
-    }
-
-    dispatch({ type: "SET_LOADING", status: false });
-  };
-
-  // Fetch Data for Edit
-  const fetchgrantsDetail = async () => {
-    try {
-      dispatch({ type: "SET_LOADING", status: true });
-      const docRef = doc(db, "grantsDetail", grantsId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setValue("Name", data?.Name);
-        setValue("DeveloperName", data?.DeveloperName);
-        setValue("Country", data?.Country);
-        setValue("Status", data?.Status);
-      } else {
-        toast.error("No such document!");
-      }
-      dispatch({ type: "SET_LOADING", status: false });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+    
+      // ************************************************* Fetch Data for Edit *******************************************
+      const fetchgrantsDetail = async () => {
+        try {
+          dispatch({ type: "SET_LOADING", status: true });
+          const response = await getGrantsDetail(grantsId);
+          console.log(response);
+    
+          if (response?.status === 201) {
+            setValue("donor", response?.data?.result?.donor);
+            setValue("contact_information", response?.data?.result?.contact_information);
+            setValue("location", response?.data?.result?.location);
+            setValue("big_ref_no", response?.data?.result?.big_ref_no);
+            setValue("title", response?.data?.result?.title);
+            setValue("type", response?.data?.result?.type);
+            setValue("status", response?.data?.result?.status);
+            setValue("value", response?.data?.result?.value);
+            setValue("type_of_services", response?.data?.result?.type_of_services);
+            setValue("sectors", response?.data?.result?.sectors);
+            setValue("deadline", response?.data?.result?.deadline);
+            setValue("duration", response?.data?.result?.duration);
+            setValue("cpv_codes", response?.data?.result?.cpv_codes);
+            setValue("funding_agency", response?.data?.result?.funding_agency);
+            setValue("regions", response?.data?.result?.regions);
+            setValue("attachment", response?.data?.result?.attachment);
+            setValue("post_date", response?.data?.result?.post_date);
+            // setValue("project_background", response?.data?.result?.project_background);
+          } else if (response?.response) {
+            toast.error(response.response.data.message);
+          }
+    
+          dispatch({ type: "SET_LOADING", status: false });
+          return response;
+        } catch (error) {
+          console.error("Error fetching data:", error); // Log any errors that occur
+        }
+      };
 
   useQuery({
     queryKey: ["grants-detail"],
     queryFn: fetchgrantsDetail,
-    enabled: !!grantsId,
+    enabled: grantsId? true : false,
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
@@ -161,10 +177,10 @@ const AddUpdateGrantsDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="donor"
-                      {...register("Donor", { required: "Donor is required" })}
+                      {...register("donor", { required: "Donor is required" })}
                     />
-                    {errors.Donor && (
-                      <div className="error">{errors.Donor.message}</div>
+                    {errors.donor && (
+                      <div className="error">{errors.donor.message}</div>
                     )}
                   </div>
 
@@ -174,11 +190,11 @@ const AddUpdateGrantsDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="contact_information"
-                      {...register("ContactInformation")}
+                      {...register("contact_information")}
                     />
-                    {errors.ContactInformation && (
+                    {errors.contact_information && (
                       <div className="error">
-                        {errors.ContactInformation.message}
+                        {errors.contact_information.message}
                       </div>
                     )}
                   </div>
@@ -228,10 +244,10 @@ const AddUpdateGrantsDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="type"
-                      {...register("Type")}
+                      {...register("type")}
                     />
-                    {errors.Type && (
-                      <div className="error">{errors.Type.message}</div>
+                    {errors.type && (
+                      <div className="error">{errors.type.message}</div>
                     )}
                   </div>
 
@@ -241,10 +257,10 @@ const AddUpdateGrantsDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="status"
-                      {...register("Status")}
+                      {...register("status")}
                     />
-                    {errors.Status && (
-                      <div className="error">{errors.Status.message}</div>
+                    {errors.status && (
+                      <div className="error">{errors.status.message}</div>
                     )}
                   </div>
 
@@ -254,10 +270,10 @@ const AddUpdateGrantsDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="value"
-                      {...register("Value")}
+                      {...register("value")}
                     />
-                    {errors.Value && (
-                      <div className="error">{errors.Value.message}</div>
+                    {errors.value && (
+                      <div className="error">{errors.value.message}</div>
                     )}
                   </div>
 
@@ -267,11 +283,11 @@ const AddUpdateGrantsDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="type_of_services"
-                      {...register("TypeOfServices")}
+                      {...register("type_of_services")}
                     />
-                    {errors.TypeOfServices && (
+                    {errors.type_of_services && (
                       <div className="error">
-                        {errors.TypeOfServices.message}
+                        {errors.type_of_services.message}
                       </div>
                     )}
                   </div>
@@ -308,10 +324,10 @@ const AddUpdateGrantsDetail = () => {
                       type="Number"
                       className="form-control"
                       placeholder="duration"
-                      {...register("Duration")}
+                      {...register("duration")}
                     />
-                    {errors.Duration && (
-                      <div className="error">{errors.Duration.message}</div>
+                    {errors.duration && (
+                      <div className="error">{errors.duration.message}</div>
                     )}
                   </div>
 
@@ -362,10 +378,10 @@ const AddUpdateGrantsDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="attachment"
-                      {...register("Attachment")}
+                      {...register("attachment")}
                     />
-                    {errors.Attachment && (
-                      <div className="error">{errors.Attachment.message}</div>
+                    {errors.attachment && (
+                      <div className="error">{errors.attachment.message}</div>
                     )}
                   </div>
 

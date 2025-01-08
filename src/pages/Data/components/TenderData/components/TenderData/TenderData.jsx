@@ -13,6 +13,17 @@ import { deleteTenderDetail, getTender } from "../../../../../../apiCall";
 import { toast } from "react-toastify";
 
 const TenderData = () => {
+  const [confirmationShow, setConfirmationShow] = useState(false);
+  const [funHandler, setFunHandler] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [tenderList, setTenderList] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
+  const [pageNumber,setPageNumber]=useState(1);
+  const navigate = useNavigate();
+
   const viewFile = (id) => {
     console.log("View file with ID:", id);
     // Add logic to view the file, such as opening a modal or navigating to another page
@@ -35,9 +46,9 @@ const TenderData = () => {
   const editTTenderDetail = (id) => {
     navigate(`/update/tender/${id}`);
   };
-  const fetchTenderList = async () => {
+  const fetchTenderList = async (pageNumber) => {
     try {
-      const response = await getTender();
+      const response = await getTender(pageNumber);
       console.log(response);
 
       if (response?.status === 201) {
@@ -54,8 +65,8 @@ const TenderData = () => {
     }
   };
   const { refetch } = useQuery({
-    queryKey: ["tender-list"],
-    queryFn: () => fetchTenderList(),
+    queryKey: ["tender-list",pageNumber],
+    queryFn: () => fetchTenderList(pageNumber),
     onSuccess: (Re) => {
       console.log(Re);
     },
@@ -67,16 +78,7 @@ const TenderData = () => {
     const query = searchInput.current.value.toLowerCase();
     setSearchQuery(query);
   };
-  const [confirmationShow, setConfirmationShow] = useState(false);
-  const [funHandler, setFunHandler] = useState();
-  const [currentPage, setCurrentPage] = useState();
-  const [totalPages, setTotalPages] = useState();
-  const [tenderList, setTenderList] = useState();
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const [filteredData, setFilteredData] = useState([]);
-  const [currentItems, setCurrentItems] = useState([]);
-  const navigate = useNavigate();
+ 
 
   const handleConfirmationClose = () => {
     setConfirmationShow(false);
@@ -280,7 +282,11 @@ const TenderData = () => {
                                 <td>
                                   <strong>{index + 1}.</strong>
                                 </td>
-                                <td className="">
+                                <td className="" style={{
+                                      maxWidth: "400px",
+                                      minWidth: "220px",
+                                      textWrap: "wrap",
+                                    }}>
                                   <strong>{tender?.title}</strong>
                                 </td>
                                 <td className="">
@@ -293,7 +299,11 @@ const TenderData = () => {
                                 <td className="">{tender?.ContactPerson}</td>
 
                                 <td className="">{tender?.big_ref_no}</td>
-                                <td className="">{tender?.description}</td>
+                                <td className=""style={{
+                                      maxWidth: "400px",
+                                      minWidth: "220px",
+                                      textWrap: "wrap",
+                                    }}>{tender?.description}</td>
                                 <td className="">{tender?.Tendertype}</td>
                                 <td className="">{tender?.TenderNo}</td>
                                 <td className="">{tender?.FundingAgency}</td>
@@ -401,7 +411,7 @@ const TenderData = () => {
                           </li>
                           {Array(totalPages ? totalPages : 0)
                             .fill()
-                            .map((item, index) => (
+                            .map((_, index) => (
                               <li
                                 style={{ cursor: "pointer" }}
                                 className={`${

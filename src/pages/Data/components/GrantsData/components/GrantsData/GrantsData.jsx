@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../../../firebaseConfig";
 import { grantsData2 } from "../../../../../../utils/dummyData";
-import { getGrants } from "../../../../../../apiCall";
+import { deleteGrantsDetail, getGrants } from "../../../../../../apiCall";
 import { toast } from "react-toastify";
 
 const GrantsData = () => {
@@ -32,7 +32,7 @@ const GrantsData = () => {
     }
   };
   const editTGrantsDetail = (id) => {
-    navigate(`/update/grants/${id}?status_filter=${searchQuery}`);
+    navigate(`/update/grants/${id}`);
   };
   const fetchGrantsList = async () => {
     try {
@@ -132,6 +132,18 @@ const GrantsData = () => {
       }
     }
   }, [filteredData]);
+
+    const deleteGrants = async (grantsId) => {
+        const response = await deleteGrantsDetail(grantsId);
+        console.log(response);
+        if (response?.status === 201) {
+          refetch()
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.response.data.message);
+        }
+      };
+
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -303,7 +315,7 @@ const GrantsData = () => {
                                   <div
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="editOne"
-                                    onClick={() => editTGrantsDetail(grants.id)}
+                                    onClick={() => editTGrantsDetail(grants._id)}
                                   >
                                     <FaRegEdit
                                       size={20}
@@ -318,13 +330,7 @@ const GrantsData = () => {
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="trashOne"
                                     onClick={() => {
-                                      handleConfirmationShow();
-                                      removeSelection();
-                                      setFunHandler({
-                                        fun: deleteData,
-                                        id: grants.id,
-                                        title: "delete task",
-                                      });
+                                      deleteGrants(grants._id)
                                     }}
                                   >
                                     <MdOutlineDelete

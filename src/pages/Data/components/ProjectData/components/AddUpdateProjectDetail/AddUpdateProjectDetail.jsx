@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useStateValue } from "../../../../../../StateProvider";
 import { ConfirmationModal } from "../../../../../../components/Modals/ConfirmationModal";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { addProjectDetail, getProjectDetail, updateProjectDetail } from "../../../../../../apiCall";
+import { toast } from "react-toastify";
 
 // Firebase Storage
 const storage = getStorage();
@@ -48,7 +50,7 @@ const AddUpdateProjectDetail = () => {
     if (searchFilter) {
       navigate(`/project?search_filter=${searchFilter}`);
     } else {
-      navigate(`/project`);
+      navigate(`/projectData`);
     }
   };
 
@@ -64,69 +66,79 @@ const AddUpdateProjectDetail = () => {
 
   // Form Submission
   const onSubmit = async (data) => {
-    console.log(data);
-    dispatch({ type: "SET_LOADING", status: true });
-
-    try {
-      let fileUrl = null;
-
-      if (data.projectFile && data.projectFile[0]) {
-        fileUrl = await uploadFileToStorage(data.projectFile[0]);
-      }
-
-      const documentData = {
-        ...data,
-        projectFile: fileUrl,
-        userId: auth.currentUser.uid,
-        timestamp: new Date(),
-      };
-
-      if (projectId) {
-        const docRef = doc(db, "projectDetail", projectId);
-        await updateDoc(docRef, documentData);
-        toast.success("Document updated successfully");
-        navigateToProjectWithId(projectId);
-      } else {
-        const docRef = await addDoc(
-          collection(db, "projectDetail"),
-          documentData
-        );
-        toast.success("Form submitted successfully!");
-        navigateToProjectWithId(docRef.id);
-      }
-    } catch (error) {
-      console.error("Error saving document:", error);
-      toast.error("Error submitting the form. Please try again.");
-    }
-
-    dispatch({ type: "SET_LOADING", status: false });
-  };
-
-  // Fetch Data for Edit
-  const fetchprojectDetail = async () => {
-    try {
+      console.log(data);
       dispatch({ type: "SET_LOADING", status: true });
-      const docRef = doc(db, "projectDetail", projectId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setValue("Name", data?.Name);
-        setValue("DeveloperName", data?.DeveloperName);
-        setValue("Country", data?.Country);
-        setValue("Status", data?.Status);
-      } else {
-        toast.error("No such document!");
+  
+      try {
+        if (projectId) {
+          data._id = projectId;
+          const response = await updateProjectDetail(data);
+          console.log(response);
+          if (response?.status === 201) {
+            toast.success(response.data.message);
+            navigate("/projectData");
+          }
+          else{
+            toast.error(response.response.data.message);
+  
+          }
+        } else {
+          
+          const response = await addProjectDetail(data);
+          console.log(response);
+          if (response?.status === 201) {
+            toast.success(response.data.message);
+            navigate("/projectData");
+          }
+          else{
+            toast.error(response.response.data.message);
+  
+          }
+        }
+      } catch (error) {
+        console.error("Error saving document:", error);
+        toast.error("Error submitting the form. Please try again.");
       }
+  
       dispatch({ type: "SET_LOADING", status: false });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
+    };
+  
+    // ************************************************* Fetch Data for Edit *******************************************
+    const fetchprojectDetail = async () => {
+      try {
+        dispatch({ type: "SET_LOADING", status: true });
+        const response = await getProjectDetail(projectId);
+        console.log(response);
+  
+        if (response?.status === 201) {
+          setValue("title", response?.data?.result?.title);
+          setValue("project_background", response?.data?.result?.project_background);
+          setValue("project_name", response?.data?.result?.project_name);
+          setValue("project_location", response?.data?.result?.project_location);
+          setValue("projet_status", response?.data?.result?.projet_status);
+          setValue("project_publishing_date", response?.data?.result?.project_publishing_date);
+          setValue("estimated_project_completion_date", response?.data?.result?.estimated_project_completion_date);
+          setValue("big_ref_no", response?.data?.result?.big_ref_no);
+          setValue("client_name", response?.data?.result?.client_name);
+          setValue("client_address", response?.data?.result?.client_address);
+          setValue("sectors", response?.data?.result?.sectors);
+          setValue("regions", response?.data?.result?.regions);
+          setValue("cpv_codes", response?.data?.result?.cpv_codes);
+          setValue("funding_agency", response?.data?.result?.funding_agency);
+        } else if (response?.response) {
+          toast.error(response.response.data.message);
+        }
+  
+        dispatch({ type: "SET_LOADING", status: false });
+        return response;
+      } catch (error) {
+        console.error("Error fetching data:", error); // Log any errors that occur
+      }
+    };
   useQuery({
     queryKey: ["project-detail"],
     queryFn: fetchprojectDetail,
-    enabled: !!projectId,
+    enabled: projectId? true : false,
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
@@ -154,7 +166,9 @@ const AddUpdateProjectDetail = () => {
               <div className="card-body">
                 <div className="row">
                   <div className="mb-4 col-md-4">
-                    <label className="form-label">Title</label>
+                    <label className="form-label">
+                      Title<span className="text-danger">*</span>
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -174,10 +188,10 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="project_name"
-                      {...register("Name", { required: "Name is required" })}
+                      {...register("project_name", { required: "project_name is required" })}
                     />
-                    {errors.Name && (
-                      <div className="error">{errors.Name.message}</div>
+                    {errors.project_name && (
+                      <div className="error">{errors.project_name.message}</div>
                     )}
                   </div>
 
@@ -211,18 +225,18 @@ const AddUpdateProjectDetail = () => {
                     )}
                   </div>
 
-                  <div className="mb-4 col-md-4">
+                  {/* <div className="mb-4 col-md-4">
                     <label className="form-label">Project Status</label>
                     <input
                       type="text"
                       className="form-control"
                       placeholder="projet_status"
-                      {...register("Status")}
+                      {...register("projet_status")}
                     />
-                    {errors.Status && (
-                      <div className="error">{errors.Status.message}</div>
+                    {errors.projet_status && (
+                      <div className="error">{errors.projet_status.message}</div>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Publishing Date</label>
@@ -279,10 +293,10 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="client_name"
-                      {...register("ClientName")}
+                      {...register("client_name")}
                     />
-                    {errors.ClientName && (
-                      <div className="error">{errors.ClientName.message}</div>
+                    {errors.client_name && (
+                      <div className="error">{errors.client_name.message}</div>
                     )}
                   </div>
 
@@ -292,11 +306,11 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="client_address"
-                      {...register("ClientAddress")}
+                      {...register("client_address")}
                     />
-                    {errors.ClientAddress && (
+                    {errors.client_address && (
                       <div className="error">
-                        {errors.ClientAddress.message}
+                        {errors.client_address.message}
                       </div>
                     )}
                   </div>
@@ -346,11 +360,11 @@ const AddUpdateProjectDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="input here"
-                      {...register("FundingAgency")}
+                      {...register("funding_agency")}
                     />
-                    {errors.FundingAgency && (
+                    {errors.funding_agency && (
                       <div className="error">
-                        {errors.FundingAgency.message}
+                        {errors.funding_agency.message}
                       </div>
                     )}
                   </div>

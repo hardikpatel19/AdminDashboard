@@ -8,6 +8,7 @@ import { ConfirmationModal } from "../../../../../../components/Modals/Confirmat
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { addCaDetail, getCaDetail, updateCaDetail } from "../../../../../../apiCall";
 
 // Firebase Storage
 const storage = getStorage();
@@ -48,7 +49,7 @@ const AddUpdateCaDetail = () => {
     if (searchFilter) {
       navigate(`/ca?search_filter=${searchFilter}`);
     } else {
-      navigate(`/ca`);
+      navigate(`/caData`);
     }
   };
 
@@ -63,67 +64,86 @@ const AddUpdateCaDetail = () => {
   });
 
   // Form Submission
-  const onSubmit = async (data) => {
-    console.log(data);
-    dispatch({ type: "SET_LOADING", status: true });
-
-    try {
-      let fileUrl = null;
-
-      if (data.caFile && data.caFile[0]) {
-        fileUrl = await uploadFileToStorage(data.caFile[0]);
-      }
-
-      const documentData = {
-        ...data,
-        caFile: fileUrl,
-        userId: auth.currentUser.uid,
-        timestamp: new Date(),
+   const onSubmit = async (data) => {
+        console.log(data);
+        dispatch({ type: "SET_LOADING", status: true });
+    
+        try {
+          if (caId) {
+            data._id = caId;
+            const response = await updateCaDetail(data);
+            console.log(response);
+            if (response?.status === 201) {
+              toast.success(response.data.message);
+              navigate("/caData");
+            }
+            else{
+              toast.error(response.response.data.message);
+    
+            }
+          } else {
+            
+            const response = await addCaDetail(data);
+            console.log(response);
+            if (response?.status === 201) {
+              toast.success(response.data.message);
+              navigate("/caData");
+            }
+            else{
+              toast.error(response.response.data.message);
+    
+            }
+          }
+        } catch (error) {
+          console.error("Error saving document:", error);
+          toast.error("Error submitting the form. Please try again.");
+        }
+    
+        dispatch({ type: "SET_LOADING", status: false });
       };
-
-      if (caId) {
-        const docRef = doc(db, "caDetail", caId);
-        await updateDoc(docRef, documentData);
-        toast.success("Document updated successfully");
-        navigateToCaWithId(caId);
-      } else {
-        const docRef = await addDoc(collection(db, "caDetail"), documentData);
-        toast.success("Form submitted successfully!");
-        navigateToCaWithId(docRef.id);
-      }
-    } catch (error) {
-      console.error("Error saving document:", error);
-      toast.error("Error submitting the form. Please try again.");
-    }
-
-    dispatch({ type: "SET_LOADING", status: false });
-  };
-
-  // Fetch Data for Edit
-  const fetchcaDetail = async () => {
-    try {
-      dispatch({ type: "SET_LOADING", status: true });
-      const docRef = doc(db, "caDetail", caId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setValue("Name", data?.Name);
-        setValue("DeveloperName", data?.DeveloperName);
-        setValue("Country", data?.Country);
-        setValue("Status", data?.Status);
-      } else {
-        toast.error("No such document!");
-      }
-      dispatch({ type: "SET_LOADING", status: false });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+    
+      // ************************************************* Fetch Data for Edit *******************************************
+      const fetchcaDetail = async () => {
+        try {
+          dispatch({ type: "SET_LOADING", status: true });
+          const response = await getCaDetail(caId);
+          console.log(response);
+    
+          if (response?.status === 201) {
+            setValue("title", response?.data?.result?.title);
+            setValue("org_name", response?.data?.result?.org_name);
+            setValue("org_address", response?.data?.result?.org_address);
+            setValue("telephone_no", response?.data?.result?.telephone_no);
+            setValue("fax_number", response?.data?.result?.fax_number);
+            setValue("email", response?.data?.result?.email);
+            setValue("contact_person", response?.data?.result?.contact_person);
+            setValue("big_ref_no", response?.data?.result?.big_ref_no);
+            setValue("document_no", response?.data?.result?.document_no);
+            setValue("bidding_type", response?.data?.result?.bidding_type);
+            setValue("project_location", response?.data?.result?.project_location);
+            setValue("contractor_details", response?.data?.result?.contractor_details);
+            setValue("tender_notice_no", response?.data?.result?.tender_notice_no);
+            setValue("description", response?.data?.result?.description);
+            setValue("awards_publish_date", response?.data?.result?.awards_publish_date);
+            setValue("cpv_codes", response?.data?.result?.cpv_codes);
+            setValue("sectors", response?.data?.result?.sectors);
+            setValue("funding_agency", response?.data?.result?.funding_agency);
+            setValue("regions", response?.data?.result?.regions);
+          } else if (response?.response) {
+            toast.error(response.response.data.message);
+          }
+    
+          dispatch({ type: "SET_LOADING", status: false });
+          return response;
+        } catch (error) {
+          console.error("Error fetching data:", error); // Log any errors that occur
+        }
+      };
 
   useQuery({
     queryKey: ["ca-detail"],
     queryFn: fetchcaDetail,
-    enabled: !!caId,
+    enabled: caId? true : false,
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
@@ -173,10 +193,10 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="org_name"
-                      {...register("Name", { required: "Name is required" })}
+                      {...register("org_name", { required: "org_name is required" })}
                     />
-                    {errors.Name && (
-                      <div className="error">{errors.Name.message}</div>
+                    {errors.org_name && (
+                      <div className="error">{errors.org_name.message}</div>
                     )}
                   </div>
 
@@ -186,10 +206,10 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="org_address"
-                      {...register("OrgAddress")}
+                      {...register("org_address")}
                     />
-                    {errors.OrgAddress && (
-                      <div className="error">{errors.OrgAddress.message}</div>
+                    {errors.org_address && (
+                      <div className="error">{errors.org_address.message}</div>
                     )}
                   </div>
 
@@ -199,10 +219,10 @@ const AddUpdateCaDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="telephone_no"
-                      {...register("Phone")}
+                      {...register("telephone_no")}
                     />
-                    {errors.Phone && (
-                      <div className="error">{errors.Phone.message}</div>
+                    {errors.telephone_no && (
+                      <div className="error">{errors.telephone_no.message}</div>
                     )}
                   </div>
 
@@ -212,10 +232,10 @@ const AddUpdateCaDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="fax_number"
-                      {...register("FaxNumber")}
+                      {...register("fax_number")}
                     />
-                    {errors.FaxNumber && (
-                      <div className="error">{errors.FaxNumber.message}</div>
+                    {errors.fax_number && (
+                      <div className="error">{errors.fax_number.message}</div>
                     )}
                   </div>
 
@@ -225,10 +245,10 @@ const AddUpdateCaDetail = () => {
                       type="email"
                       className="form-control"
                       placeholder="email"
-                      {...register("Email")}
+                      {...register("email")}
                     />
-                    {errors.Email && (
-                      <div className="error">{errors.Email.message}</div>
+                    {errors.email && (
+                      <div className="error">{errors.email.message}</div>
                     )}
                   </div>
 
@@ -238,11 +258,11 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="contact_person"
-                      {...register("ContactPerson")}
+                      {...register("contact_person")}
                     />
-                    {errors.ContactPerson && (
+                    {errors.contact_person && (
                       <div className="error">
-                        {errors.ContactPerson.message}
+                        {errors.contact_person.message}
                       </div>
                     )}
                   </div>
@@ -266,10 +286,10 @@ const AddUpdateCaDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="document_no"
-                      {...register("DocumentNo")}
+                      {...register("document_no")}
                     />
-                    {errors.DocumentNo && (
-                      <div className="error">{errors.DocumentNo.message}</div>
+                    {errors.document_no && (
+                      <div className="error">{errors.document_no.message}</div>
                     )}
                   </div>
 
@@ -279,10 +299,10 @@ const AddUpdateCaDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="bidding_type"
-                      {...register("BiddingType")}
+                      {...register("bidding_type")}
                     />
-                    {errors.BiddingType && (
-                      <div className="error">{errors.BiddingType.message}</div>
+                    {errors.bidding_type && (
+                      <div className="error">{errors.bidding_type.message}</div>
                     )}
                   </div>
 
@@ -322,11 +342,11 @@ const AddUpdateCaDetail = () => {
                       type="number"
                       className="form-control"
                       placeholder="tender_notice_no"
-                      {...register("TenderNoticeNo")}
+                      {...register("tender_notice_no")}
                     />
-                    {errors.TenderNoticeNo && (
+                    {errors.tender_notice_no && (
                       <div className="error">
-                        {errors.TenderNoticeNo.message}
+                        {errors.tender_notice_no.message}
                       </div>
                     )}
                   </div>

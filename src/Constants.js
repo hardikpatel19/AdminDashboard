@@ -42,8 +42,11 @@ export const api = {
   tender:"/tenders/list",
   tenderDetail:"/tenders",
   project:"/projects/list",
+  projectDetail:"/projects",
   ca:"/contract-award/list",
-  grants:"/grants/list"
- 
+  caDetail:"/contract-award",
+  caDetails:"/grants",
+  grants:"/grants/list",
+  grantsDetail:"/grants",
   
 };

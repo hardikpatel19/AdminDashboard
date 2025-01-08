@@ -49,7 +49,7 @@ const AddUpdateTenderDetail = () => {
     if (searchFilter) {
       navigate(`/tender?search_filter=${searchFilter}`);
     } else {
-      navigate(`/tender`);
+      navigate(`/tenderData`);
     }
   };
 
@@ -66,9 +66,9 @@ const AddUpdateTenderDetail = () => {
   // Form Submission
   const onSubmit = async (data) => {
     console.log(data);
-    dispatch({ type: "SET_LOADING", status: true });
-
+    
     try {
+      dispatch({ type: "SET_LOADING", status: true });
       if (tenderId) {
         data._id = tenderId;
         const response = await updateTenderDetail(data);
@@ -82,7 +82,7 @@ const AddUpdateTenderDetail = () => {
 
         }
       } else {
-        
+      dispatch({ type: "SET_LOADING", status: true });
         const response = await addTenderDetail(data);
         console.log(response);
         if (response?.status === 201) {
@@ -111,6 +111,27 @@ const AddUpdateTenderDetail = () => {
 
       if (response?.status === 201) {
         setValue("title", response?.data?.result?.title);
+        setValue("authority_name", response?.data?.result?.authority_name);
+        setValue("address", response?.data?.result?.address);
+        setValue("telephone", response?.data?.result?.telephone);
+        setValue("fax_number", response?.data?.result?.fax_number);
+        setValue("email", response?.data?.result?.email);
+        setValue("contact_person", response?.data?.result?.contact_person);
+        setValue("big_ref_no", response?.data?.result?.big_ref_no);
+        setValue("description", response?.data?.result?.description);
+        setValue("country", response?.data?.result?.country);
+        setValue("tender_no", response?.data?.result?.tender_no);
+        setValue("funding_agency", response?.data?.result?.funding_agency);
+        setValue("tender_competition", response?.data?.result?.tender_competition);
+        setValue("published_date", response?.data?.result?.published_date);
+        setValue("closing_date", response?.data?.result?.closing_date);
+        setValue("country", response?.data?.result?.country);
+        setValue("emd", response?.data?.result?.emd);
+        setValue("estimated_cost", response?.data?.result?.estimated_cost);
+        setValue("documents", response?.data?.result?.documents);
+        setValue("sectors", response?.data?.result?.sectors);
+        setValue("regions", response?.data?.result?.regions);
+        setValue("cpv_codes", response?.data?.result?.cpv_codes);
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }

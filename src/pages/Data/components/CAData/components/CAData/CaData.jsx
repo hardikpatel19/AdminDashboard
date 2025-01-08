@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../../../../../firebaseConfig";
 import { caData2 } from "../../../../../../utils/dummyData";
-import { getCa } from "../../../../../../apiCall";
+import { deleteCaDetail, getCa } from "../../../../../../apiCall";
 import { toast } from "react-toastify";
 
 const CaData = () => {
@@ -32,7 +32,7 @@ const CaData = () => {
     }
   };
   const editTCaDetail = (id) => {
-    navigate(`/update/ca/${id}?status_filter=${searchQuery}`);
+    navigate(`/update/ca/${id}`);
   };
   const fetchCaList = async () => {
     try {
@@ -132,6 +132,18 @@ const CaData = () => {
       }
     }
   }, [filteredData]);
+
+  const deleteCa = async (caId) => {
+        const response = await deleteCaDetail(caId);
+        console.log(response);
+        if (response?.status === 201) {
+          refetch()
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.response.data.message);
+        }
+      };
+
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -264,7 +276,11 @@ const CaData = () => {
                                 <td>
                                   <strong>{index + 1}.</strong>
                                 </td>
-                                <td className="">
+                                <td className=""style={{
+                                      maxWidth: "250px",
+                                      minWidth: "220px",
+                                      textWrap: "wrap",
+                                    }}>
                                   <strong>{ca?.title}</strong>
                                 </td>
                                 <td className="">
@@ -280,7 +296,11 @@ const CaData = () => {
                                 <td className="">{ca?.DocumentNo}</td>
                                 <td className="">{ca?.BiddingType}</td>
                                 <td className="">{ca?.project_location}</td>
-                                <td className="">{ca?.contractor_details}</td>
+                                <td className=""style={{
+                                      maxWidth: "250px",
+                                      minWidth: "220px",
+                                      textWrap: "wrap",
+                                    }}>{ca?.contractor_details}</td>
                                 <td className="">{ca?.TenderNoticeNo}</td>
                                 <td className="">{ca?.description}</td>
                                 <td className="">{ca?.sectors}</td>
@@ -307,7 +327,7 @@ const CaData = () => {
                                   <div
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="editOne"
-                                    onClick={() => editTCaDetail(ca.id)}
+                                    onClick={() => editTCaDetail(ca._id)}
                                   >
                                     <FaRegEdit
                                       size={20}
@@ -322,13 +342,7 @@ const CaData = () => {
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="trashOne"
                                     onClick={() => {
-                                      handleConfirmationShow();
-                                      removeSelection();
-                                      setFunHandler({
-                                        fun: deleteData,
-                                        id: ca.id,
-                                        title: "delete task",
-                                      });
+                                      deleteCa(ca._id)
                                     }}
                                   >
                                     <MdOutlineDelete
