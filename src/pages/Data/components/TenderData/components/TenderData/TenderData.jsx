@@ -17,6 +17,7 @@ const TenderData = () => {
   const [funHandler, setFunHandler] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [tenderList, setTenderList] = useState();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
@@ -52,7 +53,9 @@ const TenderData = () => {
       console.log(response);
 
       if (response?.status === 201) {
-        console.log(response?.data?.result?.result);
+        // console.log(Math.ceil(response?.data?.result.count/10));
+        setTotalRecords(response?.data?.result.count)
+        setTotalPages(Math.ceil(response?.data?.result.count/10))
         setTenderList(response?.data?.result?.result);
         setFilteredData(response?.data?.result?.result);
         setCurrentItems(response?.data?.result?.result);
@@ -65,8 +68,8 @@ const TenderData = () => {
     }
   };
   const { refetch } = useQuery({
-    queryKey: ["tender-list",pageNumber],
-    queryFn: () => fetchTenderList(pageNumber),
+    queryKey: ["tender-list",currentPage],
+    queryFn: () => fetchTenderList(currentPage),
     onSuccess: (Re) => {
       console.log(Re);
     },
@@ -102,23 +105,17 @@ const TenderData = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const removeSelection = () => {
-    navigate("/tender");
-  };
+
   useEffect(() => {
     const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
     const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-    // setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
-    setTotalPages(totalPageCount);
+
     if (totalPageCount !== 0 && totalPageCount < currentPage) {
-      setCurrentPage(totalPageCount);
+      // setCurrentPage(totalPageCount);
     }
   }, [currentPage, filteredData]);
 
-  useEffect(() => {
-    filterData(searchQuery);
-    setCurrentPage(1);
-  }, [searchQuery, filterData]);
+
 
   useEffect(() => {
     console.log(tenderId, filteredData);
@@ -128,7 +125,7 @@ const TenderData = () => {
       );
       if (targetIndex !== -1) {
         const pageNumber = Math.floor(targetIndex / ITEMS_PER_PAGE) + 1;
-        setCurrentPage(pageNumber);
+        // setCurrentPage(pageNumber);
         // setCurrentItems(
         //   filteredData.slice(targetIndex, targetIndex + Number(sysConfig["Rows in MultiLine List"]))
         // );
@@ -280,7 +277,7 @@ const TenderData = () => {
                                 }`}
                               >
                                 <td>
-                                  <strong>{index + 1}.</strong>
+                                  <strong>{(index + 1)*currentPage}.</strong>
                                 </td>
                                 <td className="" style={{
                                       maxWidth: "400px",
@@ -393,7 +390,7 @@ const TenderData = () => {
                         {currentPage * ITEMS_PER_PAGE >= filteredData.length
                           ? filteredData.length
                           : currentPage * ITEMS_PER_PAGE}{" "}
-                        of {filteredData.length} entries
+                        of {totalRecords} entries
                       </span>
                       <nav className="mt-2 mt-md-0">
                         <ul className="pagination mb-0 ">
@@ -403,7 +400,7 @@ const TenderData = () => {
                             onClick={() => {
                               if (currentPage > 1) {
                                 handlePageChange(currentPage - 1);
-                                removeSelection();
+                           
                               }
                             }}
                           >
@@ -421,7 +418,7 @@ const TenderData = () => {
                                 }`}
                                 onClick={() => {
                                   handlePageChange(index + 1);
-                                  removeSelection();
+                                  
                                 }}
                               >
                                 <div className="page-link">{index + 1}</div>
@@ -434,7 +431,7 @@ const TenderData = () => {
                               className="page-link"
                               onClick={() => {
                                 if (totalPages > currentPage) {
-                                  removeSelection();
+                                 
                                   handlePageChange(currentPage + 1);
                                 }
                               }}
