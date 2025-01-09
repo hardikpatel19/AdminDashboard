@@ -90,46 +90,66 @@ border-radius: 6px;
   
 }
 @media (min-width:845px) and (max-width:991px){
-  .find{
-    margin-left: -300px;
-  }
+
   .container-fluid .component{
     width: 107%;
   }
 }
 @media (min-width:745px) and (max-width:844px){
-  .find{
-    margin-left: -200px;
-  }
+
   .container-fluid .component{
     width: 108%;
   }
 }
 @media (min-width:600px) and (max-width:744px){
-  .find{
-    margin-left: -100px;
-  }
+
   .container-fluid .component{
     width: 108%;
   }
 }
 @media (min-width:476px) and (max-width:599px){
+
+.find{
+  width: 75%;
+}
   .container-fluid .component{
     width: 109%;
   }
 }
-@media (min-width:270px) and (max-width:475px) {
+@media (min-width:390px) and (max-width:476px) {
+
   .find{
-    margin-left: -20px;
+    width:60%;
   }
+}
+@media (min-width:374px) and (max-width:390px) {
+
+  .find{
+    width:55%;
+    margin-left: -4px;
+  }
+  .menu{
+margin-left: 5px;
+  }
+}
+@media (min-width:300px) and (max-width:374px) {
+
+  .find{
+    width:51%;
+    margin-left: -19px;
+  }
+  .menu{
+margin-left: 5px;
+  }
+}
+@media (min-width:270px) and (max-width:475px) {
+
   .container-fluid .component{
     width: 118%;
   }
 }
 @media (min-width:200px) and (max-width:270px) {
-  .find{
-    margin-left: -5px;
-  }
+
   .container-fluid .component{
     width: 125%;
   }

@@ -12,6 +12,17 @@ import { deleteProjectDetail, getProject } from "../../../../../../apiCall";
 import { toast } from "react-toastify";
 
 const ProjectData = () => {
+  const [confirmationShow, setConfirmationShow] = useState(false);
+  const [funHandler, setFunHandler] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [projectList, setProjectList] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
+  const navigate = useNavigate();
+
   const viewFile = (id) => {
     console.log("View file with ID:", id);
     // Add logic to view the file, such as opening a modal or navigating to another page
@@ -34,13 +45,15 @@ const ProjectData = () => {
   const editTProjectDetail = (id) => {
     navigate(`/update/project/${id}`);
   };
-  const fetchProjectList = async () => {
+  const fetchProjectList = async (pageNumber) => {
     try {
-      const response = await getProject();
+      const response = await getProject(pageNumber);
       console.log(response);
 
       if (response?.status === 201) {
         console.log(response?.data?.result?.result);
+        setTotalRecords(response?.data?.result.count);
+        setTotalPages(Math.ceil(response?.data?.result.count / 10));
         setProjectList(response?.data?.result?.result);
         setFilteredData(response?.data?.result?.result);
         setCurrentItems(response?.data?.result?.result);
@@ -53,8 +66,8 @@ const ProjectData = () => {
     }
   };
   const { refetch } = useQuery({
-    queryKey: ["project-list"],
-    queryFn: () => fetchProjectList(),
+    queryKey: ["project-list", currentPage],
+    queryFn: () => fetchProjectList(currentPage),
     onSuccess: (Re) => {
       console.log(Re);
     },
@@ -66,16 +79,6 @@ const ProjectData = () => {
     const query = searchInput.current.value.toLowerCase();
     setSearchQuery(query);
   };
-  const [confirmationShow, setConfirmationShow] = useState(false);
-  const [funHandler, setFunHandler] = useState();
-  const [currentPage, setCurrentPage] = useState();
-  const [totalPages, setTotalPages] = useState();
-  const [projectList, setProjectList] = useState();
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const [filteredData, setFilteredData] = useState([]);
-  const [currentItems, setCurrentItems] = useState([]);
-  const navigate = useNavigate();
 
   const handleConfirmationClose = () => {
     setConfirmationShow(false);
@@ -99,23 +102,15 @@ const ProjectData = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const removeSelection = () => {
-    navigate("/project");
-  };
+
   useEffect(() => {
     const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
     const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-    // setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
-    setTotalPages(totalPageCount);
+
     if (totalPageCount !== 0 && totalPageCount < currentPage) {
-      setCurrentPage(totalPageCount);
+      // setCurrentPage(totalPageCount);
     }
   }, [currentPage, filteredData]);
-
-  useEffect(() => {
-    filterData(searchQuery);
-    setCurrentPage(1);
-  }, [searchQuery, filterData]);
 
   useEffect(() => {
     console.log(projectId, filteredData);
@@ -125,7 +120,7 @@ const ProjectData = () => {
       );
       if (targetIndex !== -1) {
         const pageNumber = Math.floor(targetIndex / ITEMS_PER_PAGE) + 1;
-        setCurrentPage(pageNumber);
+        // setCurrentPage(pageNumber);
         // setCurrentItems(
         //   filteredData.slice(targetIndex, targetIndex + Number(sysConfig["Rows in MultiLine List"]))
         // );
@@ -134,15 +129,15 @@ const ProjectData = () => {
   }, [filteredData]);
 
   const deleteProject = async (projectId) => {
-      const response = await deleteProjectDetail(projectId);
-      console.log(response);
-      if (response?.status === 201) {
-        refetch()
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.response.data.message);
-      }
-    };
+    const response = await deleteProjectDetail(projectId);
+    console.log(response);
+    if (response?.status === 201) {
+      refetch();
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.response.data.message);
+    }
+  };
 
   return (
     <div id="app-content">
@@ -271,13 +266,20 @@ const ProjectData = () => {
                                 }`}
                               >
                                 <td>
-                                  <strong>{index + 1}.</strong>
+                                  <strong>
+                                    {(currentPage - 1) * ITEMS_PER_PAGE +
+                                      (index + 1)}
+                                    .
+                                  </strong>
                                 </td>
-                                <td className=""style={{
-                                      maxWidth: "350px",
-                                      minWidth: "220px",
-                                      textWrap: "wrap",
-                                    }}>
+                                <td
+                                  className=""
+                                  style={{
+                                    maxWidth: "350px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}
+                                >
                                   <strong>{project?.title}</strong>
                                 </td>
                                 <td className="">
@@ -340,7 +342,7 @@ const ProjectData = () => {
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="trashOne"
                                     onClick={() => {
-                                      deleteProject(project._id)
+                                      deleteProject(project._id);
                                     }}
                                   >
                                     <MdOutlineDelete
@@ -370,59 +372,50 @@ const ProjectData = () => {
                   {filteredData.length > 0 && (
                     <div className="card-footer d-md-flex justify-content-between align-items-center">
                       <span>
-                        Showing{" "}
-                        {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
-                        {currentPage * ITEMS_PER_PAGE >= filteredData.length
-                          ? filteredData.length
-                          : currentPage * ITEMS_PER_PAGE}{" "}
-                        of {filteredData.length} entries
+                        Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
+                        {Math.min(currentPage * ITEMS_PER_PAGE, totalRecords)}{" "}
+                        of {totalRecords} entries
                       </span>
                       <nav className="mt-2 mt-md-0">
-                        <ul className="pagination mb-0 ">
+                        <ul className="pagination mb-0">
                           <li
-                            className="page-item "
-                            style={{ cursor: "pointer" }}
+                            className={`page-item ${
+                              currentPage === 1 ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === 1 ? "not-allowed" : "pointer",
+                            }}
                             onClick={() => {
                               if (currentPage > 1) {
                                 handlePageChange(currentPage - 1);
-                                removeSelection();
                               }
                             }}
                           >
                             <div className="page-link">Previous</div>
                           </li>
-                          {Array(totalPages ? totalPages : 0)
-                            .fill()
-                            .map((item, index) => (
-                              <li
-                                style={{ cursor: "pointer" }}
-                                className={`${
-                                  currentPage === index + 1
-                                    ? "page-item active"
-                                    : "page-item"
-                                }`}
-                                onClick={() => {
-                                  handlePageChange(index + 1);
-                                  removeSelection();
-                                }}
-                              >
-                                <div className="page-link">{index + 1}</div>
-                              </li>
-                            ))}
 
-                          <li className="page-item">
-                            <div
-                              style={{ cursor: "pointer" }}
-                              className="page-link"
-                              onClick={() => {
-                                if (totalPages > currentPage) {
-                                  removeSelection();
-                                  handlePageChange(currentPage + 1);
-                                }
-                              }}
-                            >
-                              Next
-                            </div>
+                          <li className="page-item active">
+                            <div className="page-link">{currentPage}</div>
+                          </li>
+
+                          <li
+                            className={`page-item ${
+                              currentPage === totalPages ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === totalPages
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                            onClick={() => {
+                              if (currentPage < totalPages) {
+                                handlePageChange(currentPage + 1);
+                              }
+                            }}
+                          >
+                            <div className="page-link">Next</div>
                           </li>
                         </ul>
                       </nav>

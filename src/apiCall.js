@@ -66,8 +66,8 @@ export const deleteProjectDetail = (projectId) => {
 };
 
 // calist
-export const getCa = () => {
-  return request({ url: `${api.ca}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
+export const getCa = (pageNumber) => {
+  return request({ url: `${api.ca}?pageNo=${pageNumber}&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
 };
 
 // get calist
@@ -91,8 +91,8 @@ export const deleteCaDetail = (caId) => {
 };
 
 // grantslist
-export const getGrants = () => {
-  return request({ url: `${api.grants}?pageNo=0&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
+export const getGrants = (pageNumber) => {
+  return request({ url: `${api.grants}?pageNo=${pageNumber}&limit=10&sortBy=1&sortField=createdAt&keywords=`, method: "get" });
 };
 
 // get grantslist

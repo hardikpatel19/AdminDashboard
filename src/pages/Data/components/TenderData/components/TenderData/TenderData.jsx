@@ -22,7 +22,6 @@ const TenderData = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [currentItems, setCurrentItems] = useState([]);
-  const [pageNumber,setPageNumber]=useState(1);
   const navigate = useNavigate();
 
   const viewFile = (id) => {
@@ -54,8 +53,8 @@ const TenderData = () => {
 
       if (response?.status === 201) {
         // console.log(Math.ceil(response?.data?.result.count/10));
-        setTotalRecords(response?.data?.result.count)
-        setTotalPages(Math.ceil(response?.data?.result.count/10))
+        setTotalRecords(response?.data?.result.count);
+        setTotalPages(Math.ceil(response?.data?.result.count / 10));
         setTenderList(response?.data?.result?.result);
         setFilteredData(response?.data?.result?.result);
         setCurrentItems(response?.data?.result?.result);
@@ -68,7 +67,7 @@ const TenderData = () => {
     }
   };
   const { refetch } = useQuery({
-    queryKey: ["tender-list",currentPage],
+    queryKey: ["tender-list", currentPage],
     queryFn: () => fetchTenderList(currentPage),
     onSuccess: (Re) => {
       console.log(Re);
@@ -81,7 +80,6 @@ const TenderData = () => {
     const query = searchInput.current.value.toLowerCase();
     setSearchQuery(query);
   };
- 
 
   const handleConfirmationClose = () => {
     setConfirmationShow(false);
@@ -115,8 +113,6 @@ const TenderData = () => {
     }
   }, [currentPage, filteredData]);
 
-
-
   useEffect(() => {
     console.log(tenderId, filteredData);
     if (tenderId && filteredData.length > 0) {
@@ -137,7 +133,7 @@ const TenderData = () => {
     const response = await deleteTenderDetail(tenderId);
     console.log(response);
     if (response?.status === 201) {
-      refetch()
+      refetch();
       toast.success(response.data.message);
     } else {
       toast.error(response.response.data.message);
@@ -277,13 +273,20 @@ const TenderData = () => {
                                 }`}
                               >
                                 <td>
-                                  <strong>{(index + 1)*currentPage}.</strong>
+                                  <strong>
+                                    {(currentPage - 1) * ITEMS_PER_PAGE +
+                                      (index + 1)}
+                                    .
+                                  </strong>
                                 </td>
-                                <td className="" style={{
-                                      maxWidth: "400px",
-                                      minWidth: "220px",
-                                      textWrap: "wrap",
-                                    }}>
+                                <td
+                                  className=""
+                                  style={{
+                                    maxWidth: "400px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}
+                                >
                                   <strong>{tender?.title}</strong>
                                 </td>
                                 <td className="">
@@ -296,11 +299,16 @@ const TenderData = () => {
                                 <td className="">{tender?.ContactPerson}</td>
 
                                 <td className="">{tender?.big_ref_no}</td>
-                                <td className=""style={{
-                                      maxWidth: "400px",
-                                      minWidth: "220px",
-                                      textWrap: "wrap",
-                                    }}>{tender?.description}</td>
+                                <td
+                                  className=""
+                                  style={{
+                                    maxWidth: "400px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}
+                                >
+                                  {tender?.description}
+                                </td>
                                 <td className="">{tender?.Tendertype}</td>
                                 <td className="">{tender?.TenderNo}</td>
                                 <td className="">{tender?.FundingAgency}</td>
@@ -385,59 +393,51 @@ const TenderData = () => {
                   {filteredData.length > 0 && (
                     <div className="card-footer d-md-flex justify-content-between align-items-center">
                       <span>
-                        Showing{" "}
-                        {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
-                        {currentPage * ITEMS_PER_PAGE >= filteredData.length
-                          ? filteredData.length
-                          : currentPage * ITEMS_PER_PAGE}{" "}
+                        Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
+                        {Math.min(currentPage * ITEMS_PER_PAGE, totalRecords)}{" "}
                         of {totalRecords} entries
                       </span>
                       <nav className="mt-2 mt-md-0">
-                        <ul className="pagination mb-0 ">
+                        <ul className="pagination mb-0">
+
                           <li
-                            className="page-item "
-                            style={{ cursor: "pointer" }}
+                            className={`page-item ${
+                              currentPage === 1 ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === 1 ? "not-allowed" : "pointer",
+                            }}
                             onClick={() => {
                               if (currentPage > 1) {
                                 handlePageChange(currentPage - 1);
-                           
                               }
                             }}
                           >
                             <div className="page-link">Previous</div>
                           </li>
-                          {Array(totalPages ? totalPages : 0)
-                            .fill()
-                            .map((_, index) => (
-                              <li
-                                style={{ cursor: "pointer" }}
-                                className={`${
-                                  currentPage === index + 1
-                                    ? "page-item active"
-                                    : "page-item"
-                                }`}
-                                onClick={() => {
-                                  handlePageChange(index + 1);
-                                  
-                                }}
-                              >
-                                <div className="page-link">{index + 1}</div>
-                              </li>
-                            ))}
 
-                          <li className="page-item">
-                            <div
-                              style={{ cursor: "pointer" }}
-                              className="page-link"
-                              onClick={() => {
-                                if (totalPages > currentPage) {
-                                 
-                                  handlePageChange(currentPage + 1);
-                                }
-                              }}
-                            >
-                              Next
-                            </div>
+                          <li className="page-item active">
+                            <div className="page-link">{currentPage}</div>
+                          </li>
+
+                          <li
+                            className={`page-item ${
+                              currentPage === totalPages ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === totalPages
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                            onClick={() => {
+                              if (currentPage < totalPages) {
+                                handlePageChange(currentPage + 1);
+                              }
+                            }}
+                          >
+                            <div className="page-link">Next</div>
                           </li>
                         </ul>
                       </nav>
