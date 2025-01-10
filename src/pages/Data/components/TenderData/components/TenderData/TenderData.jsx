@@ -289,14 +289,24 @@ const TenderData = () => {
                                 >
                                   <strong>{tender?.title}</strong>
                                 </td>
-                                <td className="">
-                                  <strong>{tender?.Name}</strong>
+                                <td className=""
+                                style={{
+                                    maxWidth: "400px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}>
+                                  <strong>{tender?.authority_name}</strong>
                                 </td>
-                                <td className="">{tender?.Address}</td>
-                                <td className="">{tender?.Mobile}</td>
-                                <td className="">{tender?.FaxNumber}</td>
-                                <td className="">{tender?.Email}</td>
-                                <td className="">{tender?.ContactPerson}</td>
+                                <td className=""
+                                style={{
+                                    maxWidth: "400px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}>{tender?.address}</td>
+                                <td className="">{tender?.telephone}</td>
+                                <td className="">{tender?.fax_number}</td>
+                                <td className="">{tender?.email}</td>
+                                <td className="">{tender?.contact_person}</td>
 
                                 <td className="">{tender?.big_ref_no}</td>
                                 <td
@@ -309,19 +319,24 @@ const TenderData = () => {
                                 >
                                   {tender?.description}
                                 </td>
-                                <td className="">{tender?.Tendertype}</td>
-                                <td className="">{tender?.TenderNo}</td>
-                                <td className="">{tender?.FundingAgency}</td>
-                                <td className="">{tender?.TenderCompetion}</td>
+                                <td className="">{tender?.tender_type}</td>
+                                <td className="">{tender?.tender_no}</td>
+                                <td className="">{tender?.funding_agency}</td>
+                                <td className="">{tender?.tender_competition}</td>
                                 <td className="">{tender?.published_date}</td>
                                 <td className="">{tender?.closing_date}</td>
                                 <td className="">{tender?.country}</td>
-                                <td className="">{tender?.Emd}</td>
-                                <td className="">{tender?.Estimatedcost}</td>
-                                <td className="">{tender?.Documents}</td>
+                                <td className="">{tender?.emd}</td>
+                                <td className="">{tender?.estimated_cost}</td>
+                                <td className=""
+                                style={{
+                                    maxWidth: "400px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}>{tender?.documents}</td>
                                 <td className="">{tender?.sectors}</td>
                                 <td className="">{tender?.cpv_codes}</td>
-                                <td className="">{tender?.Regions}</td>
+                                <td className="">{tender?.regions}</td>
                                 <td className="">{tender?.createdAt}</td>
                                 {/* <td>
                                       <div className="truncate">

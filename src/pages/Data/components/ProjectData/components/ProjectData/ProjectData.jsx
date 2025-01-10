@@ -283,7 +283,7 @@ const ProjectData = () => {
                                   <strong>{project?.title}</strong>
                                 </td>
                                 <td className="">
-                                  <strong>{project?.Name}</strong>
+                                  <strong>{project?.project_name}</strong>
                                 </td>
                                 <td className="">
                                   {project?.project_background}
@@ -291,7 +291,7 @@ const ProjectData = () => {
                                 <td className="">
                                   {project?.project_location}
                                 </td>
-                                <td className="">{project?.Status}</td>
+                                <td className="">{project?.project_status}</td>
                                 <td className="">
                                   {project?.project_publishing_date}
                                 </td>
@@ -300,11 +300,11 @@ const ProjectData = () => {
                                 </td>
 
                                 <td className="">{project?.big_ref_no}</td>
-                                <td className="">{project?.ClientName}</td>
-                                <td className="">{project?.ClientAddress}</td>
+                                <td className="">{project?.client_name}</td>
+                                <td className="">{project?.client_address}</td>
                                 <td className="">{project?.sectors}</td>
                                 <td className="">{project?.cpv_codes}</td>
-                                <td className="">{project?.FundingAgency}</td>
+                                <td className="">{project?.funding_agency}</td>
                                 <td className="">{project?.regions}</td>
                                 <td className="">{project?.Date}</td>
 

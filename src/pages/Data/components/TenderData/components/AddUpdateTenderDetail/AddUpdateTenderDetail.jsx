@@ -234,7 +234,7 @@ const AddUpdateTenderDetail = () => {
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Fax Number</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="fax_number"
                       {...register("fax_number")}
@@ -277,7 +277,7 @@ const AddUpdateTenderDetail = () => {
                       Big Ref Number<span className="text-danger">*</span>
                     </label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="big_ref_no"
                       {...register("big_ref_no", {
@@ -304,9 +304,9 @@ const AddUpdateTenderDetail = () => {
 
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Tender Type</label>
-                    <select className="form-select" {...register("country")}>
-                      <option value="">Select a country</option>
-                      <option value="Live">Live</option>
+                    <select className="form-select" {...register("tender_type")}>
+                      <option value="">Select a Tender</option>
+                      <option value="Defense Forces">Defense Forces</option>
                       {/* <option value="Canada">Canada</option>
                         <option value="UK">United Kingdom</option>
                         <option value="India">India</option>
@@ -402,7 +402,7 @@ const AddUpdateTenderDetail = () => {
                   <div className="mb-4 col-md-4">
                     <label className="form-label">EMD</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="emd"
                       {...register("emd")}
@@ -415,7 +415,7 @@ const AddUpdateTenderDetail = () => {
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Estimated Cost</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="estimated_cost"
                       {...register("estimated_cost")}
@@ -479,7 +479,7 @@ const AddUpdateTenderDetail = () => {
                       CPV Code<span className="text-danger">*</span>
                     </label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="input here"
                       {...register("cpv_codes", {

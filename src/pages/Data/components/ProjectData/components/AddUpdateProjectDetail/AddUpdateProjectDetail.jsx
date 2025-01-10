@@ -275,7 +275,7 @@ const AddUpdateProjectDetail = () => {
                       Big Ref Number<span className="text-danger">*</span>
                     </label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="big_ref_no"
                       {...register("big_ref_no", {

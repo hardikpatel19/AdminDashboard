@@ -270,7 +270,7 @@ const AddUpdateCaDetail = () => {
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Big Ref Number</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="big_ref_no"
                       {...register("big_ref_no")}
@@ -382,7 +382,7 @@ const AddUpdateCaDetail = () => {
                   <div className="mb-4 col-md-4">
                     <label className="form-label">CPV Code</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="input here"
                       {...register("cpv_codes")}

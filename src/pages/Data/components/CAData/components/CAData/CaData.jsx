@@ -279,18 +279,33 @@ const CaData = () => {
                                 >
                                   <strong>{ca?.title}</strong>
                                 </td>
-                                <td className="">
-                                  <strong>{ca?.Name}</strong>
+                                <td className=""
+                                 style={{
+                                    maxWidth: "250px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}>
+                                  <strong>{ca?.org_name}</strong>
                                 </td>
-                                <td className="">{ca?.OrgAddress}</td>
-                                <td className="">{ca?.Phone}</td>
-                                <td className="">{ca?.FaxNumber}</td>
-                                <td className="">{ca?.Email}</td>
-                                <td className="">{ca?.ContactPerson}</td>
+                                <td className="" 
+                                style={{
+                                    maxWidth: "250px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}>{ca?.org_address}</td>
+                                <td className="">{ca?.telephone_no}</td>
+                                <td className="">{ca?.fax_number}</td>
+                                <td className="">{ca?.email}</td>
+                                <td className="" 
+                                style={{
+                                    maxWidth: "250px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}>{ca?.contact_person}</td>
 
                                 <td className="">{ca?.big_ref_no}</td>
-                                <td className="">{ca?.DocumentNo}</td>
-                                <td className="">{ca?.BiddingType}</td>
+                                <td className="">{ca?.document_no}</td>
+                                <td className="">{ca?.bidding_type}</td>
                                 <td className="">{ca?.project_location}</td>
                                 <td
                                   className=""
@@ -302,8 +317,13 @@ const CaData = () => {
                                 >
                                   {ca?.contractor_details}
                                 </td>
-                                <td className="">{ca?.TenderNoticeNo}</td>
-                                <td className="">{ca?.description}</td>
+                                <td className="">{ca?.tender_notice_no}</td>
+                                <td className="" 
+                                style={{
+                                    maxWidth: "250px",
+                                    minWidth: "220px",
+                                    textWrap: "wrap",
+                                  }}>{ca?.description}</td>
                                 <td className="">{ca?.sectors}</td>
                                 <td className="">{ca?.awards_publish_date}</td>
                                 <td className="">{ca?.funding_agency}</td>

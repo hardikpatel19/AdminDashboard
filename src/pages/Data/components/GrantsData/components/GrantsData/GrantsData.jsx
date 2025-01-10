@@ -269,23 +269,23 @@ const GrantsData = () => {
                                   </strong>
                                 </td>
                                 <td className="">
-                                  <strong>{grants?.Donor}</strong>
+                                  <strong>{grants?.donor}</strong>
                                 </td>
                                 <td className="">
-                                  <strong>{grants?.ContactInformation}</strong>
+                                  <strong>{grants?.contact_information}</strong>
                                 </td>
                                 <td className="">{grants?.location}</td>
                                 <td className="">{grants?.big_ref_no}</td>
                                 <td className="">{grants?.title}</td>
-                                <td className="">{grants?.Type}</td>
-                                <td className="">{grants?.Status}</td>
+                                <td className="">{grants?.type}</td>
+                                <td className="">{grants?.status}</td>
 
-                                <td className="">{grants?.Value}</td>
-                                <td className="">{grants?.TypeOfServices}</td>
+                                <td className="">{grants?.value}</td>
+                                <td className="">{grants?.type_of_services}</td>
                                 <td className="">{grants?.sectors}</td>
                                 <td className="">{grants?.deadline}</td>
-                                <td className="">{grants?.Duration}</td>
-                                <td className="">{grants?.Attachment}</td>
+                                <td className="">{grants?.duration}</td>
+                                <td className="">{grants?.attachment}</td>
                                 <td className="">{grants?.post_date}</td>
                                 <td className="">{grants?.funding_agency}</td>
                                 <td className="">{grants?.cpv_codes}</td>
