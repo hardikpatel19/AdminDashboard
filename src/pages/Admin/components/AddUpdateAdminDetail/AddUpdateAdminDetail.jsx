@@ -83,7 +83,7 @@ const AddUpdateAdminDetail = () => {
          dispatch({ type: "SET_LOADING", status: true });
            const response = await addAdminDetail(data);
            console.log(response);
-           if (response?.status === 200) {
+           if (response?.status === 201) {
              toast.success(response.data.message);
              navigate("/admin");
            }

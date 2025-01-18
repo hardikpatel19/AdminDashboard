@@ -86,7 +86,7 @@ const AddUpdateScriptDetail = () => {
          dispatch({ type: "SET_LOADING", status: true });
            const response = await addScriptDetail(data);
            console.log(response);
-           if (response?.status === 200) {
+           if (response?.status === 201) {
              toast.success(response.data.message);
              navigate("/scriptList");
            }
