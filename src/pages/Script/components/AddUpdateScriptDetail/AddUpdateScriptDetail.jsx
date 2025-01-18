@@ -71,8 +71,8 @@ const AddUpdateScriptDetail = () => {
    try {
          dispatch({ type: "SET_LOADING", status: true });
          if (scriptId) {
-           data._id = scriptId;
-           const response = await updateScriptDetail(data);
+          //  data._id = scriptId;
+           const response = await updateScriptDetail(data,scriptId);
            console.log(response);
            if (response?.status === 200) {
              toast.success(response.data.message);
@@ -115,6 +115,8 @@ const AddUpdateScriptDetail = () => {
             setValue("development_date", response?.data?.data?.development_date);
             setValue("country", response?.data?.data?.country);
             setValue("script_status", response?.data?.data?.script_status);
+            setValue("bigref_no", response?.data?.data?.bigref_no);
+            setValue("script_type", response?.data?.data?.script_type);
           } else if (response?.response) {
             toast.error(response.response.data.message);
           }

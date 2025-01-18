@@ -107,14 +107,22 @@ const AddUpdateDeveloperdetail = () => {
       console.log(response);
 
       if (response?.status === 200) {
-        setValue("name", response?.data?.name);
-        setValue("joining_date", response?.data?.joining_date);
+        setValue("name", response?.data?.data?.name);
+        setValue("joining_date", response?.data?.data?.joining_date);
         setValue("email", response?.data?.data?.email);
         setValue("phone_number", response?.data?.data?.phone_number);
         setValue("address", response?.data?.data?.address);
         setValue(
           "total_script_count",
           response?.data?.data?.total_script_count
+        );
+        setValue(
+          "active_script_count",
+          response?.data?.data?.active_script_count
+        );
+        setValue(
+          "maintain_script_count",
+          response?.data?.data?.maintain_script_count
         );
         setValue("status", response?.data?.data?.status);
       } else if (response?.response) {
@@ -174,14 +182,14 @@ const AddUpdateDeveloperdetail = () => {
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                      Development Date<span className="text-danger">*</span>
+                      Joining Date<span className="text-danger">*</span>
                     </label>
                     <input
                       type="date"
                       className="form-control"
-                      placeholder="Select development date"
+                      placeholder="Select joining date"
                       {...register("joining_date", {
-                        required: "Development Date is required",
+                        required: "Joining Date is required",
                       })}
                     />
                     {errors.joining_date && (
