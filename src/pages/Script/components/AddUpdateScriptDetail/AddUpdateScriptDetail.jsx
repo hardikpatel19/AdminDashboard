@@ -80,7 +80,7 @@ const AddUpdateScriptDetail = () => {
         console.log(response);
         if (response?.status === 200) {
           toast.success(response.data.message);
-          navigate("/scriptList");
+          navigate("/script");
         } else {
           toast.error(response.response.data.message);
         }
@@ -90,7 +90,7 @@ const AddUpdateScriptDetail = () => {
         console.log(response);
         if (response?.status === 201) {
           toast.success(response.data.message);
-          navigate("/scriptList");
+          navigate("/script");
         } else {
           toast.error(response.response.data.message);
         }
@@ -117,6 +117,7 @@ const AddUpdateScriptDetail = () => {
         setValue("script_status", response?.data?.data?.script_status);
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
+        setValue("file", response?.data?.data?.file);
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }
@@ -185,7 +186,7 @@ const AddUpdateScriptDetail = () => {
                       })}
                     >
                       <option value="">Select a Developer</option>
-                      <option value="Jane Doe">Jane Doe</option>
+                      <option value="678ba1ae2fc1b3fd32e5a904">678ba1ae2fc1b3fd32e5a904</option>
                     </select>
                   </div>
                   <div className="mb-4 col-md-6">
@@ -243,14 +244,15 @@ const AddUpdateScriptDetail = () => {
                     <label className="form-label">Script File</label>
                     <input
                       type="file"
+                      id="fileInput"
                       className="form-control"
-                      {...register("script_file_path", {
+                      {...register("file", {
                         required: "Please upload a script file.", // Validation rule
                       })}
                     />
-                    {errors.script_file_path && (
+                    {errors.file && (
                       <p className="text-danger">
-                        {errors.script_file_path.message}
+                        {errors.file.message}
                       </p>
                     )}
                   </div>

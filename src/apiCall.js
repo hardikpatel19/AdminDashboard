@@ -107,18 +107,23 @@ export const addScriptDetail = (data) => {
   const formData = new FormData();
 
   Object.entries(data).forEach(([key, value]) => {
+    const fileInput = document.querySelector('#fileInput');
+    if (fileInput.files[0]) {
+      formData.append('file', fileInput.files[0]);
+    }
     if (key === "file" && value instanceof File) {
+      // If a single file is provided, append it
       formData.append(key, value, value.name);
-    } else if (key === "file" && !value) {
-      // Add an empty value for the file if it's required
-      formData.append(key, "");
     } else if (typeof value === "boolean") {
+      // Convert boolean values to strings if needed
       formData.append(key, value.toString());
     } else if (key === "script_status") {
+      // Convert "Active"/"Inactive" to "true"/"false"
       const booleanValue =
         value === "Active" ? "true" : value === "Inactive" ? "false" : String(value);
       formData.append(key, booleanValue);
     } else {
+      // Append other fields as-is
       formData.append(key, value);
     }
   });
@@ -134,6 +139,7 @@ export const addScriptDetail = (data) => {
 };
 
 
+
 // update scriptlist
 export const updateScriptDetail = (data, scriptId) => {
   // Create a FormData object
@@ -141,6 +147,10 @@ export const updateScriptDetail = (data, scriptId) => {
 
   // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
+    const fileInput = document.querySelector('#fileInput');
+    if (fileInput.files[0]) {
+      formData.append('file', fileInput.files[0]);
+    }
     if (key === "file" && value instanceof File) {
       // Handle file input if provided
       formData.append(key, value, value.name);
