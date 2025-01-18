@@ -128,26 +128,31 @@ export const addScriptDetail = (data) => {
   });
 };
 
-
-
 // update scriptlist
 export const updateScriptDetail = (data,scriptId) => {
+  // Create a FormData object
   const formData = new FormData();
 
-  // Append each key-value pair to FormData
+  // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
-    formData.append(key, value);
+    if (key === "file" && value instanceof File) {
+      formData.append(key, value, value.name); // Handle file input if provided
+    } else {
+      formData.append(key, value);
+    }
   });
 
+  // Make the API call
   return request({
-    url: `${scriptDomainName}${api.scriptDetail}/${scriptId}`,
-    method: "PUT", // HTTP PUT for updating existing data
+    url: `${scriptDomainName}${api.scriptDetail}/${scriptId}`, // Append script ID to the endpoint
+    method: "PUT", // HTTP PUT for updating data
     data: formData, // Pass FormData as the payload
     headers: {
       "Content-Type": "multipart/form-data", // Ensure the correct content type
     },
   });
 };
+
 
 // delete scriptlist
 export const deleteScriptDetail = (scriptId) => {
