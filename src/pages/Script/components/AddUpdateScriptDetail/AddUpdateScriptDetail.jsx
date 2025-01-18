@@ -8,7 +8,11 @@ import { ConfirmationModal } from "../../../../components/Modals/ConfirmationMod
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { addScriptDetail, getScriptDetail, updateScriptDetail } from "../../../../apiCall";
+import {
+  addScriptDetail,
+  getScriptDetail,
+  updateScriptDetail,
+} from "../../../../apiCall";
 
 // Firebase Storage
 const storage = getStorage();
@@ -67,66 +71,62 @@ const AddUpdateScriptDetail = () => {
   // Form Submission
   const onSubmit = async (data) => {
     console.log(data);
-    
-   try {
-         dispatch({ type: "SET_LOADING", status: true });
-         if (scriptId) {
-          //  data._id = scriptId;
-           const response = await updateScriptDetail(data,scriptId);
-           console.log(response);
-           if (response?.status === 200) {
-             toast.success(response.data.message);
-             navigate("/scriptList");
-           }
-           else{
-             toast.error(response.response.data.message);
-   
-           }
-         } else {
-         dispatch({ type: "SET_LOADING", status: true });
-           const response = await addScriptDetail(data);
-           console.log(response);
-           if (response?.status === 201) {
-             toast.success(response.data.message);
-             navigate("/scriptList");
-           }
-           else{
-             toast.error(response.response.data.message);
-   
-           }
-         }
-       } catch (error) {
-         console.error("Error saving document:", error);
-         toast.error("Error submitting the form. Please try again.");
-       }
-   
-       dispatch({ type: "SET_LOADING", status: false });
-     };
+
+    try {
+      dispatch({ type: "SET_LOADING", status: true });
+      if (scriptId) {
+        //  data._id = scriptId;
+        const response = await updateScriptDetail(data, scriptId);
+        console.log(response);
+        if (response?.status === 200) {
+          toast.success(response.data.message);
+          navigate("/scriptList");
+        } else {
+          toast.error(response.response.data.message);
+        }
+      } else {
+        dispatch({ type: "SET_LOADING", status: true });
+        const response = await addScriptDetail(data);
+        console.log(response);
+        if (response?.status === 201) {
+          toast.success(response.data.message);
+          navigate("/scriptList");
+        } else {
+          toast.error(response.response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error("Error saving document:", error);
+      toast.error("Error submitting the form. Please try again.");
+    }
+
+    dispatch({ type: "SET_LOADING", status: false });
+  };
   // Fetch Data for Edit
   const fetchscriptDetail = async () => {
-     try {
-          dispatch({ type: "SET_LOADING", status: true });
-          const response = await getScriptDetail(scriptId);
-          console.log(response);
-    
-          if (response?.status === 200) {
-            setValue("script_name", response?.data?.data?.script_name);
-            setValue("developer_id", response?.data?.data?.developer_id);
-            setValue("development_date", response?.data?.data?.development_date);
-            setValue("country", response?.data?.data?.country);
-            setValue("script_status", response?.data?.data?.script_status);
-            setValue("bigref_no", response?.data?.data?.bigref_no);
-            setValue("script_type", response?.data?.data?.script_type);
-          } else if (response?.response) {
-            toast.error(response.response.data.message);
-          }
-    
-          dispatch({ type: "SET_LOADING", status: false });
-          return response;
-        } catch (error) {
-          console.error("Error fetching data:", error); // Log any errors that occur
-        }
-      };
+    try {
+      dispatch({ type: "SET_LOADING", status: true });
+      const response = await getScriptDetail(scriptId);
+      console.log(response);
+
+      if (response?.status === 200) {
+        setValue("script_name", response?.data?.data?.script_name);
+        setValue("developer_id", response?.data?.data?.developer_id);
+        setValue("development_date", response?.data?.data?.development_date);
+        setValue("country", response?.data?.data?.country);
+        setValue("script_status", response?.data?.data?.script_status);
+        setValue("bigref_no", response?.data?.data?.bigref_no);
+        setValue("script_type", response?.data?.data?.script_type);
+      } else if (response?.response) {
+        toast.error(response.response.data.message);
+      }
+
+      dispatch({ type: "SET_LOADING", status: false });
+      return response;
+    } catch (error) {
+      console.error("Error fetching data:", error); // Log any errors that occur
+    }
+  };
 
   useQuery({
     queryKey: ["script-detail"],
@@ -166,7 +166,9 @@ const AddUpdateScriptDetail = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter Script Name"
-                      {...register("script_name", { required: "Name is required" })}
+                      {...register("script_name", {
+                        required: "Name is required",
+                      })}
                     />
                     {errors.script_name && (
                       <div className="error">{errors.script_name.message}</div>
@@ -174,21 +176,17 @@ const AddUpdateScriptDetail = () => {
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                      Developer Name<span className="text-danger">*</span>
+                     Developer Name<span className="text-danger">*</span>
                     </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter developer name"
+                    <select
+                      className="form-select"
                       {...register("developer_id", {
-                        required: "Developer Name is required",
+                        required: "country is required",
                       })}
-                    />
-                    {errors.developer_id && (
-                      <div className="error">
-                        {errors.developer_id.message}
-                      </div>
-                    )}
+                    >
+                      <option value="">Select a Developer</option>
+                      <option value="Jane Doe">Jane Doe</option>
+                    </select>
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
@@ -209,10 +207,15 @@ const AddUpdateScriptDetail = () => {
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
-                    <label className="form-label">Country<span className="text-danger">*</span></label>
-                    <select className="form-select" {...register("country", {
+                    <label className="form-label">
+                      Country<span className="text-danger">*</span>
+                    </label>
+                    <select
+                      className="form-select"
+                      {...register("country", {
                         required: "country is required",
-                      })}>
+                      })}
+                    >
                       <option value="">Select a country</option>
                       <option value="USA">United States</option>
                       <option value="Canada">Canada</option>
@@ -222,15 +225,18 @@ const AddUpdateScriptDetail = () => {
                     </select>
                   </div>
                   <div className="mb-4 col-md-6">
-                    <label className="form-label">Status<span className="text-danger">*</span></label>
-                    <select className="form-select" {...register("script_status", {
+                    <label className="form-label">
+                      Status<span className="text-danger">*</span>
+                    </label>
+                    <select
+                      className="form-select"
+                      {...register("script_status", {
                         required: "Status is required",
-                      })}>
+                      })}
+                    >
                       <option value="">Select a status</option>
                       <option value="Active">Active</option>
                       <option value="Inactive">Inactive</option>
-                      <option value="Pending">Pending</option>
-                      <option value="Completed">Completed</option>
                     </select>
                   </div>
                   <div className="mb-4">
@@ -238,14 +244,19 @@ const AddUpdateScriptDetail = () => {
                     <input
                       type="file"
                       className="form-control"
-                      {...register("script_file_path")}
+                      {...register("script_file_path", {
+                        required: "Please upload a script file.", // Validation rule
+                      })}
                     />
+                    {errors.script_file_path && (
+                      <p className="text-danger">
+                        {errors.script_file_path.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4 col-md-6">
-                    <label className="form-label">
-                      Big Ref No
-                    </label>
+                    <label className="form-label">Big Ref No</label>
                     <input
                       type="number"
                       className="form-control"
@@ -253,16 +264,19 @@ const AddUpdateScriptDetail = () => {
                       {...register("bigref_no")}
                     />
                     {errors.bigref_no && (
-                      <div className="error">
-                        {errors.bigref_no.message}
-                      </div>
+                      <div className="error">{errors.bigref_no.message}</div>
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
-                    <label className="form-label">Script Type<span className="text-danger">*</span></label>
-                    <select className="form-select" {...register("script_type", {
+                    <label className="form-label">
+                      Script Type<span className="text-danger">*</span>
+                    </label>
+                    <select
+                      className="form-select"
+                      {...register("script_type", {
                         required: "Script Type is required",
-                      })}>
+                      })}
+                    >
                       <option value="">Select a status</option>
                       <option value="Tender">Tender</option>
                       <option value="Project">Project</option>
@@ -272,12 +286,10 @@ const AddUpdateScriptDetail = () => {
                     </select>
                   </div>
                   <div className="mb-4 col-md-6">
-                    <label className="form-label me-3">
-                      Recent Log
-                    </label>
+                    <label className="form-label me-3">Recent Log</label>
                     <button type="download" className="btn btn-primary px-4">
-                Download Log
-              </button>
+                      Download Log
+                    </button>
                     {/* {errors.BigRefNo && (
                       <div className="error">
                         {errors.BigRefNo.message}

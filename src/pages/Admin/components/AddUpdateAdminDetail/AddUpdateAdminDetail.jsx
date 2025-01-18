@@ -70,7 +70,7 @@ const AddUpdateAdminDetail = () => {
          if (adminId) {
           //  data.id = adminId;
            const response = await updateAdminDetail(data,adminId);
-           console.log(response);
+           console.log(response,"##############");
            if (response?.status === 200) {
              toast.success(response.data.message);
              navigate("/admin");

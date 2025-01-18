@@ -104,39 +104,53 @@ export const getScriptDetail = (scriptId) => {
 
 // add scriptlist
 export const addScriptDetail = (data) => {
-  // Create a FormData object
   const formData = new FormData();
 
-  // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
-    // Handle file input separately if it's provided
     if (key === "file" && value instanceof File) {
       formData.append(key, value, value.name);
+    } else if (key === "file" && !value) {
+      // Add an empty value for the file if it's required
+      formData.append(key, "");
+    } else if (typeof value === "boolean") {
+      formData.append(key, value.toString());
+    } else if (key === "script_status") {
+      const booleanValue =
+        value === "Active" ? "true" : value === "Inactive" ? "false" : String(value);
+      formData.append(key, booleanValue);
     } else {
       formData.append(key, value);
     }
   });
 
-  // Make the API call
   return request({
-    url: `${scriptDomainName}${api.scriptDetail}`, // Adjust the endpoint as necessary
-    method: "post",
-    data: formData, // Pass FormData as the payload
+    url: `${scriptDomainName}${api.scriptDetail}`,
+    method: "POST",
+    data: formData,
     headers: {
-      "Content-Type": "multipart/form-data", // Ensure the correct content type
+      "Content-Type": "multipart/form-data",
     },
   });
 };
 
+
 // update scriptlist
-export const updateScriptDetail = (data,scriptId) => {
+export const updateScriptDetail = (data, scriptId) => {
   // Create a FormData object
   const formData = new FormData();
 
   // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
     if (key === "file" && value instanceof File) {
-      formData.append(key, value, value.name); // Handle file input if provided
+      // Handle file input if provided
+      formData.append(key, value, value.name);
+    } else if (key === "script_status") {
+      // Convert "Active"/"Inactive" to boolean
+      const booleanValue = value === "Active" ? true : value === "Inactive" ? false : value;
+      formData.append(key, booleanValue);
+    } else if (typeof value === "boolean") {
+      // Append boolean values directly
+      formData.append(key, value);
     } else {
       formData.append(key, value);
     }
@@ -180,19 +194,35 @@ export const getAdminDetail = (adminId) => {
 
 // add adminlist
 export const addAdminDetail = (data) => {
+  const payload = {
+    ...data,
+    status: data.status === "Active" ? true : false,
+  };
   return request({
     url: `${scriptDomainName}${api.adminDetail}`,
     method: "post",
-    data: data,
+    data: JSON.stringify(payload), // Send JSON payload
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
   });
 };
 
 // update adminlist
 export const updateAdminDetail = (data,adminId) => {
+  const payload = {
+    ...data,
+    status: data.status === "Active" ? true : false,
+  };
   return request({
     url: `${scriptDomainName}${api.adminDetail}/${adminId}`,
     method: "put",
-    data: data,
+    data: JSON.stringify(payload), // Send JSON payload
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
   });
 };
 
