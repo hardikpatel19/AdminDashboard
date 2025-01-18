@@ -47,11 +47,11 @@ const Developer = () => {
 
       if (response?.status === 200) {
         // console.log(Math.ceil(response?.data?.result.count/10));
-        setTotalRecords(response?.data?.data.length);
-        setTotalPages(Math.ceil(response?.data?.data.length/ 10));
-        setDeveloperList(response?.data?.data);
-        setFilteredData(response?.data?.data);
-        setCurrentItems(response?.data?.data);
+        setTotalRecords(response?.data?.data.count);
+        setTotalPages(Math.ceil(response?.data?.data.count/ 10));
+        setDeveloperList(response?.data?.data?.data);
+        setFilteredData(response?.data?.data?.data);
+        setCurrentItems(response?.data?.data?.data);
       } else {
         toast.error(response?.response?.data?.message);
       }

@@ -107,11 +107,11 @@ export const addScriptDetail = (data) => {
   // Create a FormData object
   const formData = new FormData();
 
-  // Append each key-value pair to FormData
+  // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
+    // Handle file input separately if it's provided
     if (key === "file" && value instanceof File) {
-      // Handle file upload specifically
-      formData.append(key, value);
+      formData.append(key, value, value.name);
     } else {
       formData.append(key, value);
     }
@@ -119,14 +119,15 @@ export const addScriptDetail = (data) => {
 
   // Make the API call
   return request({
-    url: `${scriptDomainName}${api.scriptDetail}`,
-    method: "post", // HTTP POST for adding new data
+    url: `${scriptDomainName}${api.scriptDetail}`, // Adjust the endpoint as necessary
+    method: "post",
     data: formData, // Pass FormData as the payload
     headers: {
       "Content-Type": "multipart/form-data", // Ensure the correct content type
     },
   });
 };
+
 
 
 // update scriptlist
@@ -167,7 +168,7 @@ export const getAdmin = (pageNumber) => {
 // get adminlist
 export const getAdminDetail = (adminId) => {
   return request({
-    url: `${scriptDomainName}${api.adminDetail}?id=${adminId}`,
+    url: `${scriptDomainName}${api.adminDetail}/${adminId}`,
     method: "get",
   });
 };
@@ -182,9 +183,9 @@ export const addAdminDetail = (data) => {
 };
 
 // update adminlist
-export const updateAdminDetail = (data) => {
+export const updateAdminDetail = (data,adminId) => {
   return request({
-    url: `${scriptDomainName}${api.adminDetail}`,
+    url: `${scriptDomainName}${api.adminDetail}/${adminId}`,
     method: "put",
     data: data,
   });
@@ -193,7 +194,7 @@ export const updateAdminDetail = (data) => {
 // delete adminlist
 export const deleteAdminDetail = (adminId) => {
   return request({
-    url: `${scriptDomainName}${api.adminDetail}?id=${adminId}`,
+    url: `${scriptDomainName}${api.adminDetail}/${adminId}`,
     method: "delete",
   });
 };

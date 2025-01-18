@@ -68,8 +68,8 @@ const AddUpdateAdminDetail = () => {
        try {
          dispatch({ type: "SET_LOADING", status: true });
          if (adminId) {
-           data.id = adminId;
-           const response = await updateAdminDetail(data);
+          //  data.id = adminId;
+           const response = await updateAdminDetail(data,adminId);
            console.log(response);
            if (response?.status === 200) {
              toast.success(response.data.message);
@@ -108,7 +108,7 @@ const AddUpdateAdminDetail = () => {
           console.log(response);
     
           if (response?.status === 200) {
-            setValue("user_name", response?.data?.user_name);
+            setValue("user_name", response?.data?.data?.user_name);
             setValue("email", response?.data?.data?.email);
             setValue("role", response?.data?.data?.role);
             setValue("status", response?.data?.data?.status);
