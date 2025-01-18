@@ -1,16 +1,26 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { MdOutlineDelete,MdOutlineVisibility } from "react-icons/md";
-import toast from "react-hot-toast";
+import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
+import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
 import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import { db } from "../../../../firebaseConfig";
-import { scriptListData1 } from "../../../../utils/dummyData";
+import { deleteScriptDetail, getScript } from "../../../../apiCall";
 
 const ScriptList = () => {
+  const [confirmationShow, setConfirmationShow] = useState(false);
+  const [funHandler, setFunHandler] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [scriptList, setScriptList] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
+  const navigate = useNavigate();
+
   const searchInput = useRef(null);
   const location = useLocation();
   const viewFile = (id) => {
@@ -19,31 +29,33 @@ const ScriptList = () => {
   };
   const searchParams = new URLSearchParams(location.search);
   const scriptId = searchParams.get("Script_id");
-  const deleteData = async (docId) => {
-    try {
-      const docRef = doc(db, "scriptDetail", docId);
-      const re = await deleteDoc(docRef);
-      console.log(re);
-      refetch();
-      toast.success("Document deleted successfully");
-    } catch (error) {
-      toast.error("Error deleting document: ", error);
-    }
-  };
+  // const deleteData = async (docId) => {
+  //   try {
+  //     const docRef = doc(db, "scriptDetail", docId);
+  //     const re = await deleteDoc(docRef);
+  //     console.log(re);
+  //     refetch();
+  //     toast.success("Document deleted successfully");
+  //   } catch (error) {
+  //     toast.error("Error deleting document: ", error);
+  //   }
+  // };
   const editTScriptDetail = (id) => {
-    navigate(`/update/script/${id}?status_filter=${searchQuery}`);
+    navigate(`/update/script/${id}`);
   };
-  const fetchScriptList = async () => {
+  const fetchScriptList = async (pageNumber) => {
     try {
-      const response = await getDocs(collection(db, "scriptDetail"));
-      const docsData = response.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      if (docsData) {
-        // setScriptList(docsData);
-        // setFilteredData(docsData);
-        // setCurrentItems(docsData);
+      const response = await getScript(pageNumber);
+      console.log(response);
+
+      if (response?.status === 200) {
+        console.log(response?.data?.data);
+        // console.log(Math.ceil(response?.data?.data.length/ 10));
+        setTotalRecords(response?.data?.data.length);
+        setTotalPages(Math.ceil(response?.data?.data.length/ 10));
+        setScriptList(response?.data?.data);
+        setFilteredData(response?.data?.data);
+        setCurrentItems(response?.data?.data);
       } else {
         toast.error(response?.response?.data?.message);
       }
@@ -53,8 +65,8 @@ const ScriptList = () => {
     }
   };
   const { refetch } = useQuery({
-    queryKey: ["script-list"],
-    queryFn: () => fetchScriptList(),
+    queryKey: ["script-list", currentPage],
+    queryFn: () => fetchScriptList(currentPage),
     onSuccess: (Re) => {
       console.log(Re);
     },
@@ -66,16 +78,6 @@ const ScriptList = () => {
     const query = searchInput.current.value.toLowerCase();
     setSearchQuery(query);
   };
-  const [confirmationShow, setConfirmationShow] = useState(false);
-  const [funHandler, setFunHandler] = useState();
-  const [currentPage, setCurrentPage] = useState();
-  const [totalPages, setTotalPages] = useState();
-  const [scriptList] = useState(scriptListData1);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const [filteredData, setFilteredData] = useState([]);
-  const [currentItems, setCurrentItems] = useState([]);
-  const navigate = useNavigate();
 
   const handleConfirmationClose = () => {
     setConfirmationShow(false);
@@ -91,8 +93,8 @@ const ScriptList = () => {
           item.Name.toLowerCase().includes(query.toLowerCase())
         );
       }
-      setFilteredData(filtered);
-      setCurrentItems(filtered);
+      // setFilteredData(filtered);
+      // setCurrentItems(filtered);
     },
     [scriptList] // Add dependencies here
   );
@@ -105,17 +107,11 @@ const ScriptList = () => {
   useEffect(() => {
     const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
     const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-    setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
-    setTotalPages(totalPageCount);
+
     if (totalPageCount !== 0 && totalPageCount < currentPage) {
-      setCurrentPage(totalPageCount);
+      // setCurrentPage(totalPageCount);
     }
   }, [currentPage, filteredData]);
-
-  useEffect(() => {
-    filterData(searchQuery);
-    setCurrentPage(1);
-  }, [searchQuery, filterData]);
 
   useEffect(() => {
     console.log(scriptId, filteredData);
@@ -131,7 +127,19 @@ const ScriptList = () => {
         // );
       }
     }
-  }, [scriptId, filteredData]);
+  }, [filteredData]);
+
+  const deleteScript = async (scriptId) => {
+    const response = await deleteScriptDetail(scriptId);
+    console.log(response);
+    if (response?.status === 200) {
+      refetch();
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.response.data.message);
+    }
+  };
+
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -186,179 +194,169 @@ const ScriptList = () => {
                   </>
                 </div>
                 {/* {!isLoading ? ( */}
-                  <>
-                    <div className="card-body">
-                      <div className="table-responsive table-card">
-                        {currentItems.length > 0 ? (
-                          <table className="table text-nowrap mb-0 table-centered table-hover">
-                            <thead className="table-light ">
-                              <tr className="text-center">
-                                <th>No</th>
-                                <th>Script Name</th>
-                                <th>Country</th>
-                                <th>Development Date</th>
-                                <th>Developer Name</th>
-                                <th>Big Ref No</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                              </tr>
-                            </thead>
+                <>
+                  <div className="card-body">
+                    <div className="table-responsive table-card">
+                      {currentItems.length > 0 ? (
+                        <table className="table text-nowrap mb-0 table-centered table-hover">
+                          <thead className="table-light ">
+                            <tr className="text-center">
+                              <th>No</th>
+                              <th>Script Name</th>
+                              <th>Country</th>
+                              <th>Development Date</th>
+                              <th>Developer Name</th>
+                              <th>Big Ref No</th>
+                              <th>Status</th>
+                              <th>Script type</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
 
-                            <tbody>
-                              {currentItems.map((script, index) => (
-                                <tr
-                                  id={`user-${index}`}
-                                  className={`${
-                                    scriptId === script?.id
-                                      ? "table-primary"
-                                      : ""
-                                  }`}
-                                >
-                                  <td>
-                                    <strong>{index + 1}.</strong>
-                                  </td>
-
-                                  <td className="">
-                                  <strong>{script?.Name}</strong>
-                                </td>
-                                  <td className="">{script?.Country}</td>
-                                  <td className="">{script?.DevelopmentDate}</td>
-                                  <td className="">{script?.BigRefNo}</td>
-                                  <td>
-                                    <div className="truncate">
-                                      {script?.DeveloperName}
-                                    </div>
-                                  </td>
-                                  <td className="">{script?.Status}</td>
-                                  <td>
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="viewOne"
-                                      onClick={() => viewFile(script.id)}
-                                    >
-                                      <MdOutlineVisibility
-                                        size={22}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div id="viewOne" className="d-none">
-                                        <span>View</span>
-                                      </div>
-                                    </div>
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="editOne"
-                                      onClick={() =>
-                                        editTScriptDetail(script.id)
-                                      }
-                                    >
-                                      <FaRegEdit
-                                        size={20}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div id="editOne" className="d-none">
-                                        <span>Edit</span>
-                                      </div>
-                                    </div>
-
-                                    <div
-                                      className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
-                                      data-template="trashOne"
-                                      onClick={() => {
-                                        handleConfirmationShow();
-                                        removeSelection();
-                                        setFunHandler({
-                                          fun: deleteData,
-                                          id: script.id,
-                                          title: "delete task",
-                                        });
-                                      }}
-                                    >
-                                      <MdOutlineDelete
-                                        size={22}
-                                        style={{ fill: "#94a3b8" }}
-                                      />
-                                      <div
-                                        id="trashOne"
-                                        className="d-none"
-                                        // onClick={() => deleteTask(task.ID)}
-                                      >
-                                        <span>Delete</span>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <div className="m-5 fs-3">
-                            <strong>No records found.!</strong>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    {filteredData.length > 0 && (
-                      <div className="card-footer d-md-flex justify-content-between align-items-center">
-                        <span>
-                          Showing{" "}
-                          {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
-                          {currentPage * ITEMS_PER_PAGE >= filteredData.length
-                            ? filteredData.length
-                            : currentPage * ITEMS_PER_PAGE}{" "}
-                          of {filteredData.length} entries
-                        </span>
-                        <nav className="mt-2 mt-md-0">
-                          <ul className="pagination mb-0 ">
-                            <li
-                              className="page-item "
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                if (currentPage > 1) {
-                                  handlePageChange(currentPage - 1);
-                                  removeSelection();
-                                }
-                              }}
-                            >
-                              <div className="page-link">Previous</div>
-                            </li>
-                            {Array(totalPages ? totalPages : 0)
-                              .fill()
-                              .map((item, index) => (
-                                <li
-                                  style={{ cursor: "pointer" }}
-                                  className={`${
-                                    currentPage === index + 1
-                                      ? "page-item active"
-                                      : "page-item"
-                                  }`}
-                                  onClick={() => {
-                                    handlePageChange(index + 1);
-                                    removeSelection();
-                                  }}
-                                >
-                                  <div className="page-link">{index + 1}</div>
-                                </li>
-                              ))}
-
-                            <li className="page-item">
-                              <div
-                                style={{ cursor: "pointer" }}
-                                className="page-link"
-                                onClick={() => {
-                                  if (totalPages > currentPage) {
-                                    removeSelection();
-                                    handlePageChange(currentPage + 1);
-                                  }
-                                }}
+                          <tbody>
+                            {currentItems.map((script, index) => (
+                              <tr
+                                id={`user-${index}`}
+                                className={`${
+                                  scriptId === script?.id ? "table-primary" : ""
+                                }`}
                               >
-                                Next
-                              </div>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
-                    )}
-                  </>
+                                <td>
+                                  <strong>
+                                    {(currentPage - 1) * ITEMS_PER_PAGE +
+                                      (index + 1)}
+                                    .
+                                  </strong>
+                                </td>
+
+                                <td className="">
+                                  <strong>{script?.script_name}</strong>
+                                </td>
+                                <td className="">{script?.country}</td>
+                                <td className="">{script?.development_date}</td>
+                                <td className="">{script?.bigref_no}</td>
+                                <td>
+                                  <div className="truncate">
+                                    {script?.developer_id}
+                                  </div>
+                                </td>
+                                <td className="">{script?.script_status}</td>
+                                <td className="">{script?.script_type}</td>
+
+                                <td>
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="viewOne"
+                                    onClick={() => viewFile(script.id)}
+                                  >
+                                    <MdOutlineVisibility
+                                      size={22}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div id="viewOne" className="d-none">
+                                      <span>View</span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="editOne"
+                                    onClick={() =>
+                                      editTScriptDetail(script._id)
+                                    }
+                                  >
+                                    <FaRegEdit
+                                      size={20}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div id="editOne" className="d-none">
+                                      <span>Edit</span>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
+                                    data-template="trashOne"
+                                    onClick={() => {
+                                      deleteScript(script._id);
+                                    }}
+                                  >
+                                    <MdOutlineDelete
+                                      size={22}
+                                      style={{ fill: "#94a3b8" }}
+                                    />
+                                    <div
+                                      id="trashOne"
+                                      className="d-none"
+                                      // onClick={() => deleteTask(task.ID)}
+                                    >
+                                      <span>Delete</span>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div className="m-5 fs-3">
+                          <strong>No records found.!</strong>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {filteredData.length > 0 && (
+                    <div className="card-footer d-md-flex justify-content-between align-items-center">
+                      <span>
+                        Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
+                        {Math.min(currentPage * ITEMS_PER_PAGE, totalRecords)}{" "}
+                        of {totalRecords} entries
+                      </span>
+                      <nav className="mt-2 mt-md-0">
+                        <ul className="pagination mb-0 ">
+                          <li
+                            className={`page-item ${
+                              currentPage === 1 ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === 1 ? "not-allowed" : "pointer",
+                            }}
+                            onClick={() => {
+                              if (currentPage > 1) {
+                                handlePageChange(currentPage - 1);
+                              }
+                            }}
+                          >
+                            <div className="page-link">Previous</div>
+                          </li>
+
+                          <li className="page-item active">
+                            <div className="page-link">{currentPage}</div>
+                          </li>
+
+                          <li
+                            className={`page-item ${
+                              currentPage === totalPages ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === totalPages
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                            onClick={() => {
+                              if (currentPage < totalPages) {
+                                handlePageChange(currentPage + 1);
+                              }
+                            }}
+                          >
+                            <div className="page-link">Next</div>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
+                  )}
+                </>
                 {/* ) : (
                   <div className="m-5 fs-3">
                     <strong>Fetching records..</strong>

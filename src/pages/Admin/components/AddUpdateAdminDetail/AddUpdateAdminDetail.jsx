@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { useStateValue } from "../../../../StateProvider";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { addAdminDetail, getAdminDetail, updateAdminDetail } from "../../../../apiCall";
 
 // Firebase Storage
 const storage = getStorage();
@@ -26,29 +25,29 @@ const uploadFileToStorage = async (file) => {
   }
 };
 
-const AddUpdateAdminEmailDetail = () => {
+const AddUpdateAdminDetail = () => {
     const [, dispatch] = useStateValue();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const searchFilter = searchParams.get("search_filter");
-    const [title, setTitle] = useState("Add Patient");
+    const [title, setTitle] = useState("Add Admin");
   
     const navigate = useNavigate();
-    const { adminEmailId } = useParams();
+    const { adminId } = useParams();
   
-    const navigateToAdminEmailWithId = (Id) => {
+    const navigateToAdminWithId = (Id) => {
       if (searchFilter) {
-        navigate(`/adminEmail?adminEmail_id=${Id}&search_filter=${searchFilter}`);
+        navigate(`/admin?admin_id=${Id}&search_filter=${searchFilter}`);
       } else {
-        navigate(`/adminEmail?adminEmailt_id=${Id}`);
+        navigate(`/admin?admint_id=${Id}`);
       }
     };
   
-    const navigateToAdminEmail = () => {
+    const navigateToAdmin = () => {
       if (searchFilter) {
-        navigate(`/adminEmail?search_filter=${searchFilter}`);
+        navigate(`/admin?search_filter=${searchFilter}`);
       } else {
-        navigate(`/adminEmail`);
+        navigate(`/admin`);
       }
     };
   
@@ -62,82 +61,83 @@ const AddUpdateAdminEmailDetail = () => {
       defaultValues: {},
     });
   
-    // Form Submission
-    const onSubmit = async (data) => {
-      console.log(data);
-      dispatch({ type: "SET_LOADING", status: true });
-  
-      try {
-        let fileUrl = null;
-  
-        if (data.adminEmailFile && data.adminEmailFile[0]) {
-          fileUrl = await uploadFileToStorage(data.adminEmailFile[0]);
+   // Form Submission
+     const onSubmit = async (data) => {
+       console.log(data);
+       
+       try {
+         dispatch({ type: "SET_LOADING", status: true });
+         if (adminId) {
+           data.id = adminId;
+           const response = await updateAdminDetail(data);
+           console.log(response);
+           if (response?.status === 200) {
+             toast.success(response.data.message);
+             navigate("/admin");
+           }
+           else{
+             toast.error(response.response.data.message);
+   
+           }
+         } else {
+         dispatch({ type: "SET_LOADING", status: true });
+           const response = await addAdminDetail(data);
+           console.log(response);
+           if (response?.status === 200) {
+             toast.success(response.data.message);
+             navigate("/admin");
+           }
+           else{
+             toast.error(response.response.data.message);
+   
+           }
+         }
+       } catch (error) {
+         console.error("Error saving document:", error);
+         toast.error("Error submitting the form. Please try again.");
+       }
+   
+       dispatch({ type: "SET_LOADING", status: false });
+     };
+
+    // ************************************************* Fetch Data for Edit *******************************************
+      const fetchadminDetail = async () => {
+        try {
+          dispatch({ type: "SET_LOADING", status: true });
+          const response = await getAdminDetail(adminId);
+          console.log(response);
+    
+          if (response?.status === 200) {
+            setValue("user_name", response?.data?.user_name);
+            setValue("email", response?.data?.data?.email);
+            setValue("role", response?.data?.data?.role);
+            setValue("status", response?.data?.data?.status);
+          } else if (response?.response) {
+            toast.error(response.response.data.message);
+          }
+    
+          dispatch({ type: "SET_LOADING", status: false });
+          return response;
+        } catch (error) {
+          console.error("Error fetching data:", error); // Log any errors that occur
         }
-  
-        const documentData = {
-          ...data,
-          adminEmailFile: fileUrl,
-          userId: auth.currentUser.uid,
-          timestamp: new Date(),
-        };
-  
-        if (adminEmailId) {
-          const docRef = doc(db, "adminEmailDetail", adminEmailId);
-          await updateDoc(docRef, documentData);
-          toast.success("Document updated successfully");
-          navigateToAdminEmailWithId(adminEmailId);
-        } else {
-          const docRef = await addDoc(
-            collection(db, "adminEmailDetail"),
-            documentData
-          );
-          toast.success("Form submitted successfully!");
-          navigateToAdminEmailWithId(docRef.id);
-        }
-      } catch (error) {
-        console.error("Error saving document:", error);
-        toast.error("Error submitting the form. Please try again.");
-      }
-  
-      dispatch({ type: "SET_LOADING", status: false });
-    };
-  
-    // Fetch Data for Edit
-    const fetchadminEmailDetail = async () => {
-      try {
-        dispatch({ type: "SET_LOADING", status: true });
-        const docRef = doc(db, "adminEmailDetail", adminEmailId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setValue("Name", data?.Name);
-          setValue("DeveloperName", data?.DeveloperName);
-          setValue("Country", data?.Country);
-          setValue("Status", data?.Status);
-        } else {
-          toast.error("No such document!");
-        }
-        dispatch({ type: "SET_LOADING", status: false });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+      };
   
     useQuery({
-      queryKey: ["adminEmail-detail"],
-      queryFn: fetchadminEmailDetail,
-      enabled: !!adminEmailId,
+      queryKey: ["admin-detail"],
+      queryFn: fetchadminDetail,
+      enabled: adminId ? true : false,
       onSuccess: (Re) => console.log(Re),
       onError: (e) => console.error(e),
     });
   
     useEffect(() => {
-      if (adminEmailId) {
-        setTitle("Update AdminEmail");
+      if (adminId) {
+        setTitle("Update Admin");
       } else {
-        setTitle("Add AdminEmail");
+        setTitle("Add Admin");
       }
-    }, [adminEmailId]);
+    }, [adminId]);
   
     const [confirmationShow, setConfirmationShow] = useState(false);
     const handleConfirmationClose = () => setConfirmationShow(false);
@@ -163,10 +163,10 @@ const AddUpdateAdminEmailDetail = () => {
                         type="text"
                         className="form-control"
                         placeholder="Enter User Name"
-                        {...register("UserName", { required: "UserName is required" })}
+                        {...register("user_name", { required: "UserName is required" })}
                       />
-                      {errors.UserName && (
-                        <div className="error">{errors.UserName.message}</div>
+                      {errors.user_name && (
+                        <div className="error">{errors.user_name.message}</div>
                       )}
                     </div>
 
@@ -178,34 +178,30 @@ const AddUpdateAdminEmailDetail = () => {
                         type="email"
                         className="form-control"
                         placeholder="email"
-                        {...register("Email")}
+                        {...register("email")}
                       />
-                      {errors.Email && (
-                        <div className="error">{errors.Email.message}</div>
+                      {errors.email && (
+                        <div className="error">{errors.email.message}</div>
                       )}
                     </div>
 
                     
                     <div className="mb-4 col-md-6">
                       <label className="form-label">User Type</label>
-                      <select className="form-select" {...register("UserType")}>
+                      <select className="form-select" {...register("role")}>
                         <option value="">Select a UserType</option>
-                        <option value="meet">meet</option>
-                        {/* <option value="Canada">Canada</option>
-                        <option value="UK">United Kingdom</option>
-                        <option value="India">India</option>
-                        <option value="Australia">Australia</option> */}
+                        <option value="Admin">Admin</option>
+                        <option value="Super Admin">Super Admin</option>
+                        <option value="User">User</option>
                       </select>
                     </div> 
 
                     <div className="mb-4 col-md-6">
                       <label className="form-label">Status</label>
-                      <select className="form-select" {...register("Status")}>
+                      <select className="form-select" {...register("status")}>
                         <option value="">Select a status</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Completed">Completed</option>
                       </select>
                     </div>
                   </div>
@@ -215,7 +211,7 @@ const AddUpdateAdminEmailDetail = () => {
                 <button
                   type="button"
                   className="btn btn-outline-danger"
-                  onClick={() => navigateToAdminEmail()}
+                  onClick={() => navigateToAdmin()}
                 >
                   Cancel
                 </button>
@@ -235,4 +231,4 @@ const AddUpdateAdminEmailDetail = () => {
   };
   
 
-export default AddUpdateAdminEmailDetail
+export default AddUpdateAdminDetail

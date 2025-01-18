@@ -1,7 +1,7 @@
 import axios from "axios";
-import { domainName } from "../Constants";
+import { domainName,scriptDomainName } from "../Constants";
 
-const client = axios.create({ baseURL: domainName });
+const client = axios.create();
 axios.defaults.withCredentials = true;
 
 export const request = ({ ...options }) => {

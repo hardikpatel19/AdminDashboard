@@ -1,45 +1,56 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { MdOutlineDelete } from "react-icons/md";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
 import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import { db } from "../../../../firebaseConfig";
-import { developerData } from "../../../../utils/dummyData";
+import { deleteDeveloperDetail, getDeveloper } from "../../../../apiCall";
 
 const Developer = () => {
+  const [confirmationShow, setConfirmationShow] = useState(false);
+  const [funHandler, setFunHandler] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [developerList, setDeveloperList] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
+  const navigate = useNavigate();
+
   const searchInput = useRef(null);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const developerId = searchParams.get("Developer_id");
-  const deleteData = async (docId) => {
-    try {
-      const docRef = doc(db, "developerDetail", docId);
-      const re = await deleteDoc(docRef);
-      console.log(re);
-      refetch();
-      toast.success("Document deleted successfully");
-    } catch (error) {
-      toast.error("Error deleting document: ", error);
-    }
-  };
+  // const deleteData = async (docId) => {
+  //   try {
+  //     const docRef = doc(db, "developerDetail", docId);
+  //     const re = await deleteDoc(docRef);
+  //     console.log(re);
+  //     refetch();
+  //     toast.success("Document deleted successfully");
+  //   } catch (error) {
+  //     toast.error("Error deleting document: ", error);
+  //   }
+  // };
   const editTDeveloperDetail = (id) => {
-    navigate(`/update/developer/${id}?status_filter=${searchQuery}`);
+    navigate(`/update/developer/${id}`);
   };
-  const fetchDeveloperList = async () => {
+  const fetchDeveloperList = async (pageNumber) => {
     try {
-      const response = await getDocs(collection(db, "developerDetail"));
-      const docsData = response.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      if (docsData) {
-        // setDeveloperList(docsData);
-        // setFilteredData(docsData);
-        // setCurrentItems(docsData);
+      const response = await getDeveloper(pageNumber);
+      console.log(response,"***************");
+
+      if (response?.status === 200) {
+        // console.log(Math.ceil(response?.data?.result.count/10));
+        setTotalRecords(response?.data?.data.length);
+        setTotalPages(Math.ceil(response?.data?.data.length/ 10));
+        setDeveloperList(response?.data?.data);
+        setFilteredData(response?.data?.data);
+        setCurrentItems(response?.data?.data);
       } else {
         toast.error(response?.response?.data?.message);
       }
@@ -48,9 +59,10 @@ const Developer = () => {
       throw error;
     }
   };
+
   const { refetch } = useQuery({
-    queryKey: ["developer-list"],
-    queryFn: () => fetchDeveloperList(),
+    queryKey: ["developer-list", currentPage],
+    queryFn: () => fetchDeveloperList(currentPage),
     onSuccess: (Re) => {
       console.log(Re);
     },
@@ -62,16 +74,6 @@ const Developer = () => {
     const query = searchInput.current.value.toLowerCase();
     setSearchQuery(query);
   };
-  const [confirmationShow, setConfirmationShow] = useState(false);
-  const [funHandler, setFunHandler] = useState();
-  const [currentPage, setCurrentPage] = useState();
-  const [totalPages, setTotalPages] = useState();
-  const [developerList] = useState(developerData);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const [filteredData, setFilteredData] = useState([]);
-  const [currentItems, setCurrentItems] = useState([]);
-  const navigate = useNavigate();
 
   const handleConfirmationClose = () => {
     setConfirmationShow(false);
@@ -87,31 +89,22 @@ const Developer = () => {
           item.Name.toLowerCase().includes(query.toLowerCase())
         );
       }
-      setFilteredData(filtered);
-      setCurrentItems(filtered);
+      // setFilteredData(filtered);
+      // setCurrentItems(filtered);
     },
     [developerList] // Add dependencies here
   );
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const removeSelection = () => {
-    navigate("/developer");
-  };
+
   useEffect(() => {
     const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
     const totalPageCount = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-    setCurrentItems(filteredData.slice(startIdx, startIdx + ITEMS_PER_PAGE));
-    setTotalPages(totalPageCount);
     if (totalPageCount !== 0 && totalPageCount < currentPage) {
-      setCurrentPage(totalPageCount);
+      // setCurrentPage(totalPageCount);
     }
   }, [currentPage, filteredData]);
-
-  useEffect(() => {
-    filterData(searchQuery);
-    setCurrentPage(1);
-  }, [searchQuery, filterData]);
 
   useEffect(() => {
     console.log(developerId, filteredData);
@@ -121,13 +114,24 @@ const Developer = () => {
       );
       if (targetIndex !== -1) {
         const pageNumber = Math.floor(targetIndex / ITEMS_PER_PAGE) + 1;
-        setCurrentPage(pageNumber);
+        // setCurrentPage(pageNumber);
         // setCurrentItems(
         //   filteredData.slice(targetIndex, targetIndex + Number(sysConfig["Rows in MultiLine List"]))
         // );
       }
     }
-  }, [developerId, filteredData]);
+  }, [filteredData]);
+
+  const deleteDeveloper = async (developerId) => {
+    const response = await deleteDeveloperDetail(developerId);
+    console.log(response);
+    if (response?.status === 200) {
+      refetch();
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.response.data.message);
+    }
+  };
   return (
     <div id="app-content">
       {/* Container fluid */}
@@ -216,7 +220,9 @@ const Developer = () => {
                               <th className="">Phone</th>
                               <th className="">Email</th>
                               <th className="">Location</th>
-                              <th className="">Script Count </th>
+                              <th className="">Total Script Count </th>
+                              <th className="">Active Script Count </th>
+                              <th className="">Maintain Script Count </th>
                               <th className="">Create Date</th>
                               <th>Status</th>
                               <th>Action</th>
@@ -234,18 +240,30 @@ const Developer = () => {
                                 }`}
                               >
                                 <td>
-                                  <strong>{index + 1}.</strong>
+                                  <strong>
+                                    {(currentPage - 1) * ITEMS_PER_PAGE +
+                                      (index + 1)}
+                                    .
+                                  </strong>
                                 </td>
 
                                 <td className="">
-                                  <strong>{developer?.Name}</strong>
+                                  <strong>{developer?.name}</strong>
                                 </td>
-                                <td className="">{developer?.mobile}</td>
-                                <td className="">{developer?.Email}</td>
+                                <td className="">{developer?.phone_number}</td>
+                                <td className="">{developer?.email}</td>
                                 <td className="">{developer?.address}</td>
-                                <td className="">{developer?.ScriptCount}</td>
-                                <td className="">{developer?.CreateDate}</td>
-                                <td className="">{developer?.Status}</td>
+                                <td className="">
+                                  {developer?.total_script_count}
+                                </td>
+                                <td className="">
+                                  {developer?.active_script_count}
+                                </td>
+                                <td className="">
+                                  {developer?.maintain_script_count}
+                                </td>
+                                <td className="">{developer?.joining_date}</td>
+                                <td className="">{developer?.status}</td>
                                 <td>
                                   <div
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
@@ -267,13 +285,7 @@ const Developer = () => {
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="trashOne"
                                     onClick={() => {
-                                      handleConfirmationShow();
-                                      removeSelection();
-                                      setFunHandler({
-                                        fun: deleteData,
-                                        id: developer.id,
-                                        title: "delete task",
-                                      });
+                                      deleteDeveloper(developer.id);
                                     }}
                                   >
                                     <MdOutlineDelete
@@ -303,59 +315,50 @@ const Developer = () => {
                   {filteredData.length > 0 && (
                     <div className="card-footer d-md-flex justify-content-between align-items-center">
                       <span>
-                        Showing{" "}
-                        {currentPage * ITEMS_PER_PAGE - ITEMS_PER_PAGE + 1} to{" "}
-                        {currentPage * ITEMS_PER_PAGE >= filteredData.length
-                          ? filteredData.length
-                          : currentPage * ITEMS_PER_PAGE}{" "}
-                        of {filteredData.length} entries
+                        Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
+                        {Math.min(currentPage * ITEMS_PER_PAGE, totalRecords)}{" "}
+                        of {totalRecords} entries
                       </span>
                       <nav className="mt-2 mt-md-0">
                         <ul className="pagination mb-0 ">
-                          <li
-                            className="page-item "
-                            style={{ cursor: "pointer" }}
+                        <li
+                            className={`page-item ${
+                              currentPage === 1 ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === 1 ? "not-allowed" : "pointer",
+                            }}
                             onClick={() => {
                               if (currentPage > 1) {
                                 handlePageChange(currentPage - 1);
-                                removeSelection();
                               }
                             }}
                           >
                             <div className="page-link">Previous</div>
                           </li>
-                          {Array(totalPages ? totalPages : 0)
-                            .fill()
-                            .map((item, index) => (
-                              <li
-                                style={{ cursor: "pointer" }}
-                                className={`${
-                                  currentPage === index + 1
-                                    ? "page-item active"
-                                    : "page-item"
-                                }`}
-                                onClick={() => {
-                                  handlePageChange(index + 1);
-                                  removeSelection();
-                                }}
-                              >
-                                <div className="page-link">{index + 1}</div>
-                              </li>
-                            ))}
 
-                          <li className="page-item">
-                            <div
-                              style={{ cursor: "pointer" }}
-                              className="page-link"
-                              onClick={() => {
-                                if (totalPages > currentPage) {
-                                  removeSelection();
-                                  handlePageChange(currentPage + 1);
-                                }
-                              }}
-                            >
-                              Next
-                            </div>
+                          <li className="page-item active">
+                            <div className="page-link">{currentPage}</div>
+                          </li>
+
+                          <li
+                            className={`page-item ${
+                              currentPage === totalPages ? "disabled" : ""
+                            }`}
+                            style={{
+                              cursor:
+                                currentPage === totalPages
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                            onClick={() => {
+                              if (currentPage < totalPages) {
+                                handlePageChange(currentPage + 1);
+                              }
+                            }}
+                          >
+                            <div className="page-link">Next</div>
                           </li>
                         </ul>
                       </nav>

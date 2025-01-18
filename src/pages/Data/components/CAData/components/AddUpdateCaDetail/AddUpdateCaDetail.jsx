@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { useStateValue } from "../../../../../../StateProvider";
 import { ConfirmationModal } from "../../../../../../components/Modals/ConfirmationModal";

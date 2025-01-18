@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
-
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
 import { ConfirmationModal } from "../../../../../../components/Modals/ConfirmationModal";

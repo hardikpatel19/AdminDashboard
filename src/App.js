@@ -33,10 +33,12 @@ import CaData from "./pages/Data/components/CAData/components/CAData/CaData";
 import AddUpdateCaDetail from "./pages/Data/components/CAData/components/AddUpdateCaDetail/AddUpdateCaDetail";
 import GrantsData from "./pages/Data/components/GrantsData/components/GrantsData/GrantsData";
 import AddUpdateGrantsDetail from "./pages/Data/components/GrantsData/components/AddUpdateGrantsDetail/AddUpdateGrantsDetail";
-import AdminEmail from "./pages/AdminEmail/components/AdminEmail/AdminEmail";
-import AddUpdateAdminEmailDetail from "./pages/AdminEmail/components/AddUpdateAdminEmailDetail/AddUpdateAdminEmailDetail";
+// import AdminEmail from "./pages/AdminEmail/components/AdminEmail/AdminEmail";
+// import AddUpdateAdminEmailDetail from "./pages/AdminEmail/components/AddUpdateAdminEmailDetail/AddUpdateAdminEmailDetail";
 import { ToastContainer } from "react-toastify";
 import { LoadingSpinner } from "./components/LoadingSpinner/LoadingSpinner";
+import Admin from "./pages/Admin/components/Admin/Admin";
+import AddUpdateAdminDetail from "./pages/Admin/components/AddUpdateAdminDetail/AddUpdateAdminDetail";
 // import AddUpdateScriptDetail from "./pages/Script/components/AddUpdateScriptDetail/AddUpdateScriptDetail";
 
 function App() {
@@ -123,14 +125,14 @@ function App() {
               path="/update/grants/:grantsId"
               element={<AddUpdateGrantsDetail />}
             />
-            <Route path="/adminEmail" element={<AdminEmail />} />
+            <Route path="/admin" element={<Admin />} />
             <Route
-              path="/add/adminEmail"
-              element={<AddUpdateAdminEmailDetail />}
+              path="/add/admin"
+              element={<AddUpdateAdminDetail />}
             />
             <Route
-              path="/update/adminEmail/:adminEmailId"
-              element={<AddUpdateAdminEmailDetail />}
+              path="/update/admin/:adminId"
+              element={<AddUpdateAdminDetail />}
             />
           </Route>
           <Route path="*" element={<Navigate to="/sign-in" />} />

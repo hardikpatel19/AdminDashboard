@@ -32,7 +32,7 @@ const AddUpdateTenderDetail = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
-  const [title, setTitle] = useState("Add Patient");
+  const [title, setTitle] = useState("Add Tender");
 
   const navigate = useNavigate();
   const { tenderId } = useParams();

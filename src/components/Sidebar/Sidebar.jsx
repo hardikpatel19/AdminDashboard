@@ -132,13 +132,13 @@ const Sidebar = ({ toggle }) => {
      <li className="nav-item mb-3 d-flex align-items-center ">
      <FaFolderPlus size={18} />
           <Link
-                to="/adminEmail"
+                to="/admin"
                 className={`nav-link has-arrow${
-                  pathname === "/adminEmail" ? "active" : ""
+                  pathname === "/admin" ? "active" : ""
                 } `}
                 onClick={toggle}
               >
-                Admin Email
+                Admin
               </Link>
         </li>
       </ul>

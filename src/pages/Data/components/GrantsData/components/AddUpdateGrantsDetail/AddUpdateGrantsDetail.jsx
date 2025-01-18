@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { useStateValue } from "../../../../../../StateProvider";
 import { ConfirmationModal } from "../../../../../../components/Modals/ConfirmationModal";
@@ -215,7 +215,7 @@ const AddUpdateGrantsDetail = () => {
                   <div className="mb-4 col-md-4">
                     <label className="form-label">Big Ref Number</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="big_ref_no"
                       {...register("big_ref_no")}
