@@ -6,7 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useStateValue } from "../../../../StateProvider";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { addDeveloperDetail, getDeveloperDetail, updateDeveloperDetail } from "../../../../apiCall";
+import {
+  addDeveloperDetail,
+  getDeveloperDetail,
+  updateDeveloperDetail,
+} from "../../../../apiCall";
 
 // Firebase Storage
 const storage = getStorage();
@@ -63,69 +67,67 @@ const AddUpdateDeveloperdetail = () => {
 
   // Form Submission
   const onSubmit = async (data) => {
-    console.log(data);
-   
     try {
-          dispatch({ type: "SET_LOADING", status: true });
-          if (developerId) {
-            data.id = developerId;
-            const response = await updateDeveloperDetail(data);
-            console.log(response,"##############");
-            if (response?.status === 200) {
-              toast.success(response.data.message);
-              navigate("/developer");
-            }
-            else{
-              toast.error(response.response.data.message);
-    
-            }
-          } else {
-          dispatch({ type: "SET_LOADING", status: true });
-            const response = await addDeveloperDetail(data);
-            console.log(response);
-            if (response?.status === 200) {
-              toast.success(response.data.message);
-              navigate("/developer");
-            }
-            else{
-              toast.error(response.response.data.message);
-    
-            }
-          }
-        } catch (error) {
-          console.error("Error saving document:", error);
-          toast.error("Error submitting the form. Please try again.");
+      console.log(data);
+      dispatch({ type: "SET_LOADING", status: true });
+      if (developerId) {
+        // data.id = developerId;
+        const response = await updateDeveloperDetail(data,developerId);
+        console.log(response, "##############");
+        if (response?.status === 200) {
+          toast.success(response.data.message);
+          navigate("/developer");
+        } else {
+          toast.error(response.response.data.message);
         }
-    
-        dispatch({ type: "SET_LOADING", status: false });
-      };
+      } else {
+        dispatch({ type: "SET_LOADING", status: true });
+        const response = await addDeveloperDetail(data);
+        console.log(response);
+        if (response?.status === 201) {
+          toast.success(response?.data?.message);
+          navigate("/developer");
+        } else {
+          toast.error(response?.response?.data?.message);
+        }
+      }
+    } catch (error) {
+      console.error("Error saving document:", error);
+      toast.error("Error submitting the form. Please try again.");
+    }
+
+    dispatch({ type: "SET_LOADING", status: false });
+  };
 
   // Fetch Data for Edit
   const fetchdeveloperDetail = async () => {
-     try {
-          dispatch({ type: "SET_LOADING", status: true });
-          const response = await getDeveloperDetail(developerId);
-          console.log(response);
-    
-          if (response?.status === 200) {
-            setValue("name", response?.data?.name);
-            setValue("joining_date", response?.data?.joining_date);
-            setValue("email", response?.data?.data?.email);
-            setValue("phone_number", response?.data?.data?.phone_number);
-            setValue("address", response?.data?.data?.address);
-            setValue("total_script_count", response?.data?.data?.total_script_count);
-            setValue("status", response?.data?.data?.status);
-          } else if (response?.response) {
-            toast.error(response.response.data.message);
-          }
-    
-          dispatch({ type: "SET_LOADING", status: false });
-          return response;
-        } catch (error) {
-          console.error("Error fetching data:", error); // Log any errors that occur
-        }
-      };
-    
+    try {
+      dispatch({ type: "SET_LOADING", status: true });
+      const response = await getDeveloperDetail(developerId);
+      console.log(response);
+
+      if (response?.status === 200) {
+        setValue("name", response?.data?.name);
+        setValue("joining_date", response?.data?.joining_date);
+        setValue("email", response?.data?.data?.email);
+        setValue("phone_number", response?.data?.data?.phone_number);
+        setValue("address", response?.data?.data?.address);
+        setValue(
+          "total_script_count",
+          response?.data?.data?.total_script_count
+        );
+        setValue("status", response?.data?.data?.status);
+      } else if (response?.response) {
+        toast.error(response.response.data.message);
+      }
+
+      dispatch({ type: "SET_LOADING", status: false });
+      return response;
+    } catch (error) {
+      console.error("Error fetching data:", error); // Log any errors that occur
+    }
+  };
+
   useQuery({
     queryKey: ["developer-detail"],
     queryFn: fetchdeveloperDetail,
@@ -183,9 +185,7 @@ const AddUpdateDeveloperdetail = () => {
                       })}
                     />
                     {errors.joining_date && (
-                      <div className="error">
-                        {errors.joining_date.message}
-                      </div>
+                      <div className="error">{errors.joining_date.message}</div>
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
@@ -258,12 +258,14 @@ const AddUpdateDeveloperdetail = () => {
                       })}
                     />
                     {errors.total_script_count && (
-                      <div className="error">{errors.total_script_count.message}</div>
+                      <div className="error">
+                        {errors.total_script_count.message}
+                      </div>
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                     Active Script Count<span className="text-danger">*</span>
+                      Active Script Count<span className="text-danger">*</span>
                     </label>
                     <input
                       type="number"
@@ -274,12 +276,15 @@ const AddUpdateDeveloperdetail = () => {
                       })}
                     />
                     {errors.active_script_count && (
-                      <div className="error">{errors.active_script_count.message}</div>
+                      <div className="error">
+                        {errors.active_script_count.message}
+                      </div>
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                     Maintain Script Count<span className="text-danger">*</span>
+                      Maintain Script Count
+                      <span className="text-danger">*</span>
                     </label>
                     <input
                       type="number"
@@ -290,11 +295,15 @@ const AddUpdateDeveloperdetail = () => {
                       })}
                     />
                     {errors.maintain_script_count && (
-                      <div className="error">{errors.maintain_script_count.message}</div>
+                      <div className="error">
+                        {errors.maintain_script_count.message}
+                      </div>
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
-                    <label className="form-label">Status<span className="text-danger">*</span></label>
+                    <label className="form-label">
+                      Status<span className="text-danger">*</span>
+                    </label>
                     <select className="form-select" {...register("status")}>
                       <option value="">Select a status</option>
                       <option value="Active">Active</option>

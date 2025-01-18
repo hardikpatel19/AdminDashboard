@@ -41,6 +41,7 @@ const Developer = () => {
   };
   const fetchDeveloperList = async (pageNumber) => {
     try {
+      console.log("dfsdf")
       const response = await getDeveloper(pageNumber);
       console.log(response,"***************");
 
@@ -70,6 +71,7 @@ const Developer = () => {
       console.log(e);
     },
   });
+
   const handleSearch = () => {
     const query = searchInput.current.value.toLowerCase();
     setSearchQuery(query);

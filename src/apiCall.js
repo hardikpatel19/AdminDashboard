@@ -51,7 +51,7 @@ export const addDeveloperDetail = (data) => {
 // export const updateDeveloperDetail = (data) => {
 //   return request({ url: `${scriptDomainName}${api.developerDetail}`, method: "put", data:data });
 // };
-export const updateDeveloperDetail = (data) => {
+export const updateDeveloperDetail = (data,developerId) => {
   // Create a FormData object
   const formData = new FormData();
 
@@ -62,8 +62,8 @@ export const updateDeveloperDetail = (data) => {
 
   // Make the API call
   return request({
-    url: `${scriptDomainName}${api.developerDetail}`,
-    method: "put", // HTTP PUT for updating existing data
+    url: `${scriptDomainName}${api.developerDetail}/${developerId}`,
+    method: "PUT", // HTTP PUT for updating existing data
     data: formData, // Pass FormData as the payload
     headers: {
       "Content-Type": "multipart/form-data", // Ensure the correct content type
@@ -77,17 +77,13 @@ export const updateDeveloperDetail = (data) => {
 // };
 export const deleteDeveloperDetail = (developerId) => {
   // Create a FormData object
-  const formData = new FormData();
-  formData.append("id", developerId);
+
 
   // Make the API call
   return request({
-    url: `${scriptDomainName}${api.developerDetail}?id=${developerId}`,
+    url: `${scriptDomainName}${api.developerDetail}/${developerId}`,
     method: "delete", // HTTP DELETE method
-    data: formData, // Pass FormData as the payload
-    headers: {
-      "Content-Type": "multipart/form-data", // Ensure the correct content type
-    },
+   
   });
 };
 
