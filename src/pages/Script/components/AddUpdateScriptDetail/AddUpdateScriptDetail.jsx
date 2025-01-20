@@ -207,6 +207,23 @@ const AddUpdateScriptDetail = () => {
       console.error("Error downloading file:", error);
     }
   };
+  const fetchScriptList = async (pageNumber) => {
+      try {
+        const response = await getDeveloper(pageNumber);
+        console.log(response);
+  
+        if (response?.status === 200) {
+          console.log(response?.data?.data);
+          
+          setDeveloperList(response?.data?.data?.data);
+        } else {
+          toast.error(response?.response?.data?.message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error); // Log any errors that occur
+        throw error;
+      }
+    };
 
   return (
     <div id="app-content">
