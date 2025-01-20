@@ -127,8 +127,12 @@ const AddUpdateScriptDetail = () => {
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
         setValue("file", response?.data?.data?.file);
-        setLogFilePath(response?.data?.data?.recent_log_file.split("/").pop());
-        getLog(response?.data?.data?.recent_log_file.split("/").pop());
+        if (response?.data?.data?.recent_log_file) {
+          setLogFilePath(
+            response?.data?.data?.recent_log_file.split("/").pop()
+          );
+          getLog(response?.data?.data?.recent_log_file.split("/").pop());
+        }
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }
