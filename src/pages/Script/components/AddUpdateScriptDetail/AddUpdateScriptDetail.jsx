@@ -10,6 +10,7 @@ import { auth, db } from "../../../../firebaseConfig";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   addScriptDetail,
+  downloadLog,
   getScriptDetail,
   updateScriptDetail,
 } from "../../../../apiCall";
@@ -38,7 +39,7 @@ const AddUpdateScriptDetail = () => {
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
   const [title, setTitle] = useState("Add Script");
-
+  const [logFilePath, setLogFilePath] = useState(null);
   const navigate = useNavigate();
   const { scriptId } = useParams();
 
@@ -118,6 +119,7 @@ const AddUpdateScriptDetail = () => {
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
         setValue("file", response?.data?.data?.file);
+        setLogFilePath(response?.data?.data?.recent_log_file.split("/").pop());
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }
@@ -126,6 +128,31 @@ const AddUpdateScriptDetail = () => {
       return response;
     } catch (error) {
       console.error("Error fetching data:", error); // Log any errors that occur
+    }
+  };
+
+  // downloadLogFile
+  const handleDownload = async () => {
+    try {
+      const response = await downloadLog(logFilePath);
+      
+      // Check if the response is valid
+      if (!response || !response.data) {
+        throw new Error("Failed to download file");
+      }
+
+      // Create a URL for the Blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = logFilePath; // Set the downloaded filename
+      document.body.appendChild(a); // Append the <a> element to the DOM
+      a.click(); // Trigger the download
+      a.remove(); // Remove the <a> element from the DOM
+      window.URL.revokeObjectURL(url); // Clean up the Blob URL
+
+    } catch (error) {
+      console.error("Error downloading file:", error);
     }
   };
 
@@ -177,7 +204,7 @@ const AddUpdateScriptDetail = () => {
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                     Developer Name<span className="text-danger">*</span>
+                      Developer Name<span className="text-danger">*</span>
                     </label>
                     <select
                       className="form-select"
@@ -186,7 +213,9 @@ const AddUpdateScriptDetail = () => {
                       })}
                     >
                       <option value="">Select a Developer</option>
-                      <option value="678ba1ae2fc1b3fd32e5a904">678ba1ae2fc1b3fd32e5a904</option>
+                      <option value="678ba1ae2fc1b3fd32e5a904">
+                        678ba1ae2fc1b3fd32e5a904
+                      </option>
                     </select>
                   </div>
                   <div className="mb-4 col-md-6">
@@ -251,15 +280,13 @@ const AddUpdateScriptDetail = () => {
                       })}
                     />
                     {errors.file && (
-                      <p className="text-danger">
-                        {errors.file.message}
-                      </p>
+                      <p className="text-danger">{errors.file.message}</p>
                     )}
                   </div>
 
                   <div className="mb-4 col-md-6">
                     <label className="form-label">Big Ref No</label>
-                    <input
+                    <textarea
                       type="number"
                       className="form-control"
                       placeholder="Enter address"
@@ -287,17 +314,23 @@ const AddUpdateScriptDetail = () => {
                       <option value="Other">Other</option>
                     </select>
                   </div>
-                  <div className="mb-4 col-md-6">
-                    <label className="form-label me-3">Recent Log</label>
-                    <button type="download" className="btn btn-primary px-4">
-                      Download Log
-                    </button>
-                    {/* {errors.BigRefNo && (
+                  {logFilePath && (
+                    <div className="mb-4 col-md-6">
+                      <label className="form-label me-3">Recent Log</label>
+                      <div
+                        type="download"
+                        onClick={() => handleDownload()}
+                        className="btn btn-primary px-4"
+                      >
+                        Download Log
+                      </div>
+                      {/* {errors.BigRefNo && (
                       <div className="error">
                         {errors.BigRefNo.message}
                       </div>
                     )} */}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

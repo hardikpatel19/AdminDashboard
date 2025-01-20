@@ -411,3 +411,10 @@ export const deleteGrantsDetail = (grantsId) => {
     method: "delete",
   });
 };
+export const downloadLog = (fileName) => {
+  return request({
+    url: `${scriptDomainName}${api.downloadLog}/${fileName}`,
+    method: "get",
+    responseType: "blob"
+  });
+};

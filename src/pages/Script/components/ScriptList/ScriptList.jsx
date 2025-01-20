@@ -53,7 +53,7 @@ const ScriptList = () => {
         console.log(response?.data?.data);
         // console.log(Math.ceil(response?.data?.data.length/ 10));
         setTotalRecords(response?.data?.data.count);
-        setTotalPages(Math.ceil(response?.data?.data.count/ 10));
+        setTotalPages(Math.ceil(response?.data?.data.count / 10));
         setScriptList(response?.data?.data?.data);
         setFilteredData(response?.data?.data?.data);
         setCurrentItems(response?.data?.data?.data);
@@ -142,7 +142,7 @@ const ScriptList = () => {
     }
     dispatch({ type: "SET_LOADING", status: false });
   };
-
+ 
   return (
     <div id="app-content">
       {/* Container fluid */}
