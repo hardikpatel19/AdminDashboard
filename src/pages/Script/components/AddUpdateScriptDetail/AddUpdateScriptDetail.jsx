@@ -42,6 +42,8 @@ const AddUpdateScriptDetail = () => {
   const [logFilePath, setLogFilePath] = useState(null);
   const navigate = useNavigate();
   const { scriptId } = useParams();
+  const [logContent, setLogContent] = useState("");
+  const [logResponse, setLogResponse] = useState("");
 
   const navigateToScriptWithId = (Id) => {
     if (searchFilter) {
@@ -120,6 +122,7 @@ const AddUpdateScriptDetail = () => {
         setValue("script_type", response?.data?.data?.script_type);
         setValue("file", response?.data?.data?.file);
         setLogFilePath(response?.data?.data?.recent_log_file.split("/").pop());
+        getLog(response?.data?.data?.recent_log_file.split("/").pop());
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }
@@ -128,31 +131,6 @@ const AddUpdateScriptDetail = () => {
       return response;
     } catch (error) {
       console.error("Error fetching data:", error); // Log any errors that occur
-    }
-  };
-
-  // downloadLogFile
-  const handleDownload = async () => {
-    try {
-      const response = await downloadLog(logFilePath);
-      
-      // Check if the response is valid
-      if (!response || !response.data) {
-        throw new Error("Failed to download file");
-      }
-
-      // Create a URL for the Blob
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = logFilePath; // Set the downloaded filename
-      document.body.appendChild(a); // Append the <a> element to the DOM
-      a.click(); // Trigger the download
-      a.remove(); // Remove the <a> element from the DOM
-      window.URL.revokeObjectURL(url); // Clean up the Blob URL
-
-    } catch (error) {
-      console.error("Error downloading file:", error);
     }
   };
 
@@ -174,6 +152,57 @@ const AddUpdateScriptDetail = () => {
 
   const [confirmationShow, setConfirmationShow] = useState(false);
   const handleConfirmationClose = () => setConfirmationShow(false);
+
+  const getLog = async (fileName) => {
+    try {
+      // Get the log file as a Blob
+      const response = await downloadLog(fileName);
+
+      if (!response || !response.data) {
+        throw new Error("Failed to download file");
+      }
+      setLogResponse(response);
+      // Use FileReader to convert Blob to text
+      const reader = new FileReader();
+      reader.onload = () => {
+        setLogContent(reader.result); // Set the file content to the state
+      };
+      reader.onerror = () => {
+        toast.error("Failed to read the file."); // Handle reading errors
+      };
+
+      // Read the Blob as text
+      reader.readAsText(response.data);
+    } catch (err) {
+      toast.error("Error loading the log file."); // Handle API errors
+      console.error(err);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
+  // downloadLogFile
+  const handleDownload = async () => {
+    try {
+      const response = await downloadLog(logFilePath);
+
+      // Check if the response is valid
+      if (!response || !response.data) {
+        throw new Error("Failed to download file");
+      }
+
+      // Create a URL for the Blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = logFilePath; // Set the downloaded filename
+      document.body.appendChild(a); // Append the <a> element to the DOM
+      a.click(); // Trigger the download
+      a.remove(); // Remove the <a> element from the DOM
+      window.URL.revokeObjectURL(url); // Clean up the Blob URL
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
 
   return (
     <div id="app-content">
@@ -209,7 +238,7 @@ const AddUpdateScriptDetail = () => {
                     <select
                       className="form-select"
                       {...register("developer_id", {
-                        required: "country is required",
+                        required: "Developer id is required",
                       })}
                     >
                       <option value="">Select a Developer</option>
@@ -315,21 +344,33 @@ const AddUpdateScriptDetail = () => {
                     </select>
                   </div>
                   {logFilePath && (
-                    <div className="mb-4 col-md-6">
-                      <label className="form-label me-3">Recent Log</label>
-                      <div
-                        type="download"
-                        onClick={() => handleDownload()}
-                        className="btn btn-primary px-4"
-                      >
-                        Download Log
+                    <>
+                      <div className="mb-4 col-md-12">
+                        <label className="form-label">Recent Log</label>
+                        <textarea
+                          type="number"
+                          rows={10}
+                          className="form-control"
+                          placeholder="Enter address"
+                          value={logContent}
+                        />
                       </div>
-                      {/* {errors.BigRefNo && (
+                      <div className="mb-4 col-md-6">
+                        {/* <label className="form-label me-3">Recent Log</label> */}
+                        <div
+                          type="download"
+                          onClick={() => handleDownload()}
+                          className="btn btn-primary px-4"
+                        >
+                          Download Log
+                        </div>
+                        {/* {errors.BigRefNo && (
                       <div className="error">
                         {errors.BigRefNo.message}
                       </div>
                     )} */}
-                    </div>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
