@@ -11,6 +11,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   addScriptDetail,
   downloadLog,
+  getDeveloper,
   getScriptDetail,
   updateScriptDetail,
 } from "../../../../apiCall";
@@ -36,6 +37,8 @@ const AddUpdateScriptDetail = () => {
   // const [tab] = useState("information");
   const [, dispatch] = useStateValue();
   const location = useLocation();
+  const [developerList, setDeveloperList] = useState();
+  
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
   const [title, setTitle] = useState("Add Script");
@@ -69,6 +72,7 @@ const AddUpdateScriptDetail = () => {
     defaultValues: {},
   });
 
+  
   // Form Submission
   const onSubmit = async (data) => {
     console.log(data);
@@ -131,11 +135,34 @@ const AddUpdateScriptDetail = () => {
     }
   };
 
+  const fetchDeveloperList = async (pageNumber) => {
+    try {
+      dispatch({ type: "SET_LOADING", status: true });
+
+      const response = await getDeveloper(pageNumber);
+      console.log(response);
+
+      if (response?.status === 200) {
+        console.log(response?.data?.data);
+        setDeveloperList(response?.data?.data?.data);
+      
+      } else {
+        toast.error(response?.response?.data?.message);
+      }
+
+    } catch (error) {
+      console.error("Error fetching data:", error); // Log any errors that occur
+      throw error;
+    }
+    dispatch({ type: "SET_LOADING", status: false });
+
+  };
+
   // downloadLogFile
   const handleDownload = async () => {
     try {
       const response = await downloadLog(logFilePath);
-      
+
       // Check if the response is valid
       if (!response || !response.data) {
         throw new Error("Failed to download file");
@@ -150,7 +177,6 @@ const AddUpdateScriptDetail = () => {
       a.click(); // Trigger the download
       a.remove(); // Remove the <a> element from the DOM
       window.URL.revokeObjectURL(url); // Clean up the Blob URL
-
     } catch (error) {
       console.error("Error downloading file:", error);
     }
@@ -163,7 +189,7 @@ const AddUpdateScriptDetail = () => {
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
-
+  
   useEffect(() => {
     if (scriptId) {
       setTitle("Update Script");
@@ -212,10 +238,13 @@ const AddUpdateScriptDetail = () => {
                         required: "country is required",
                       })}
                     >
-                      <option value="">Select a Developer</option>
-                      <option value="678ba1ae2fc1b3fd32e5a904">
-                        678ba1ae2fc1b3fd32e5a904
-                      </option>
+                      {developerList &&
+                        Array.isArray(developerList) &&
+                        developerList.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.developer_id}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="mb-4 col-md-6">
