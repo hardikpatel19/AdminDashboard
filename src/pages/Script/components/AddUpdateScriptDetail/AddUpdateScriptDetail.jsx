@@ -45,6 +45,8 @@ const AddUpdateScriptDetail = () => {
   const [logFilePath, setLogFilePath] = useState(null);
   const navigate = useNavigate();
   const { scriptId } = useParams();
+  const [logContent, setLogContent] = useState("");
+  const [logResponse, setLogResponse] = useState("");
 
   const navigateToScriptWithId = (Id) => {
     if (searchFilter) {
@@ -124,6 +126,7 @@ const AddUpdateScriptDetail = () => {
         setValue("script_type", response?.data?.data?.script_type);
         setValue("file", response?.data?.data?.file);
         setLogFilePath(response?.data?.data?.recent_log_file.split("/").pop());
+        getLog(response?.data?.data?.recent_log_file.split("/").pop());
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }
@@ -135,29 +138,52 @@ const AddUpdateScriptDetail = () => {
     }
   };
 
-  const fetchDeveloperList = async (pageNumber) => {
-    try {
-      dispatch({ type: "SET_LOADING", status: true });
-
-      const response = await getDeveloper(pageNumber);
-      console.log(response);
-
-      if (response?.status === 200) {
-        console.log(response?.data?.data);
-        setDeveloperList(response?.data?.data?.data);
-      
-      } else {
-        toast.error(response?.response?.data?.message);
-      }
-
-    } catch (error) {
-      console.error("Error fetching data:", error); // Log any errors that occur
-      throw error;
+  useQuery({
+    queryKey: ["script-detail"],
+    queryFn: fetchscriptDetail,
+    enabled: scriptId ? true : false,
+    onSuccess: (Re) => console.log(Re),
+    onError: (e) => console.error(e),
+  });
+  
+  useEffect(() => {
+    if (scriptId) {
+      setTitle("Update Script");
+    } else {
+      setTitle("Add New Script");
     }
-    dispatch({ type: "SET_LOADING", status: false });
+  }, [scriptId]);
 
+  const [confirmationShow, setConfirmationShow] = useState(false);
+  const handleConfirmationClose = () => setConfirmationShow(false);
+
+  const getLog = async (fileName) => {
+    try {
+      // Get the log file as a Blob
+      const response = await downloadLog(fileName);
+
+      if (!response || !response.data) {
+        throw new Error("Failed to download file");
+      }
+      setLogResponse(response);
+      // Use FileReader to convert Blob to text
+      const reader = new FileReader();
+      reader.onload = () => {
+        setLogContent(reader.result); // Set the file content to the state
+      };
+      reader.onerror = () => {
+        toast.error("Failed to read the file."); // Handle reading errors
+      };
+
+      // Read the Blob as text
+      reader.readAsText(response.data);
+    } catch (err) {
+      toast.error("Error loading the log file."); // Handle API errors
+      console.error(err);
+    } finally {
+      // setIsLoading(false);
+    }
   };
-
   // downloadLogFile
   const handleDownload = async () => {
     try {
@@ -181,25 +207,6 @@ const AddUpdateScriptDetail = () => {
       console.error("Error downloading file:", error);
     }
   };
-
-  useQuery({
-    queryKey: ["script-detail"],
-    queryFn: fetchscriptDetail,
-    enabled: scriptId ? true : false,
-    onSuccess: (Re) => console.log(Re),
-    onError: (e) => console.error(e),
-  });
-  
-  useEffect(() => {
-    if (scriptId) {
-      setTitle("Update Script");
-    } else {
-      setTitle("Add New Script");
-    }
-  }, [scriptId]);
-
-  const [confirmationShow, setConfirmationShow] = useState(false);
-  const handleConfirmationClose = () => setConfirmationShow(false);
 
   return (
     <div id="app-content">
@@ -235,7 +242,7 @@ const AddUpdateScriptDetail = () => {
                     <select
                       className="form-select"
                       {...register("developer_id", {
-                        required: "country is required",
+                        required: "Developer id is required",
                       })}
                     >
                       {developerList &&
@@ -344,21 +351,33 @@ const AddUpdateScriptDetail = () => {
                     </select>
                   </div>
                   {logFilePath && (
-                    <div className="mb-4 col-md-6">
-                      <label className="form-label me-3">Recent Log</label>
-                      <div
-                        type="download"
-                        onClick={() => handleDownload()}
-                        className="btn btn-primary px-4"
-                      >
-                        Download Log
+                    <>
+                      <div className="mb-4 col-md-12">
+                        <label className="form-label">Recent Log</label>
+                        <textarea
+                          type="number"
+                          rows={10}
+                          className="form-control"
+                          placeholder="Enter address"
+                          value={logContent}
+                        />
                       </div>
-                      {/* {errors.BigRefNo && (
+                      <div className="mb-4 col-md-6">
+                        {/* <label className="form-label me-3">Recent Log</label> */}
+                        <div
+                          type="download"
+                          onClick={() => handleDownload()}
+                          className="btn btn-primary px-4"
+                        >
+                          Download Log
+                        </div>
+                        {/* {errors.BigRefNo && (
                       <div className="error">
                         {errors.BigRefNo.message}
                       </div>
                     )} */}
-                    </div>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
