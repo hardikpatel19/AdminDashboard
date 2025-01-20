@@ -38,7 +38,9 @@ const AddUpdateScriptDetail = () => {
   const [, dispatch] = useStateValue();
   const location = useLocation();
   const [developerList, setDeveloperList] = useState();
-  
+    const [currentItems, setCurrentItems] = useState([]);
+      const [currentPage, setCurrentPage] = useState(1);
+    
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
   const [title, setTitle] = useState("Add Script");
@@ -207,7 +209,7 @@ const AddUpdateScriptDetail = () => {
       console.error("Error downloading file:", error);
     }
   };
-  const fetchScriptList = async (pageNumber) => {
+  const fetchDeveloperList = async (pageNumber) => {
       try {
         const response = await getDeveloper(pageNumber);
         console.log(response);
@@ -215,7 +217,9 @@ const AddUpdateScriptDetail = () => {
         if (response?.status === 200) {
           console.log(response?.data?.data);
           
-          setDeveloperList(response?.data?.data?.data);
+        setDeveloperList(response?.data?.data?.data);
+        // setCurrentItems(response?.data?.data?.data);
+
         } else {
           toast.error(response?.response?.data?.message);
         }
@@ -224,6 +228,16 @@ const AddUpdateScriptDetail = () => {
         throw error;
       }
     };
+   const { refetch } = useQuery({
+       queryKey: ["developer-list", currentPage],
+       queryFn: () => fetchDeveloperList(currentPage),
+       onSuccess: (Re) => {
+         console.log(Re);
+       },
+       onError: (e) => {
+         console.log(e);
+       },
+     });
 
   return (
     <div id="app-content">
@@ -262,12 +276,16 @@ const AddUpdateScriptDetail = () => {
                         required: "Developer id is required",
                       })}
                     >
+                      
                       {developerList &&
                         Array.isArray(developerList) &&
                         developerList.map((item) => (
+                          
                           <option key={item.id} value={item.id}>
+                            
                             {item.developer_id}
                           </option>
+                          
                         ))}
                     </select>
                   </div>
