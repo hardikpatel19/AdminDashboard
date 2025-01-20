@@ -3,6 +3,7 @@ import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
+import { useStateValue } from "../../../../StateProvider";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
 import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +17,7 @@ const ScriptList = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [scriptList, setScriptList] = useState();
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [, dispatch] = useStateValue();
   const [filteredData, setFilteredData] = useState([]);
   const [currentItems, setCurrentItems] = useState([]);
   const navigate = useNavigate();
@@ -130,6 +131,7 @@ const ScriptList = () => {
   }, [filteredData]);
 
   const deleteScript = async (scriptId) => {
+    dispatch({ type: "SET_LOADING", status: true });
     const response = await deleteScriptDetail(scriptId);
     console.log(response);
     if (response?.status === 200) {
@@ -138,6 +140,7 @@ const ScriptList = () => {
     } else {
       toast.error(response.response.data.message);
     }
+    dispatch({ type: "SET_LOADING", status: false });
   };
 
   return (

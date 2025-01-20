@@ -197,13 +197,15 @@ const AddUpdateAdminDetail = () => {
                     </div> 
 
                     <div className="mb-4 col-md-6">
-                      <label className="form-label">Status</label>
-                      <select className="form-select" {...register("status")}>
-                        <option value="">Select a status</option>
+                    <label className="form-label">
+                      Status<span className="text-danger">*</span>
+                    </label>
+                    <select className="form-select" {...register("status")}>
+                      <option value="">Select a status</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
-                      </select>
-                    </div>
+                    </select>
+                  </div>
                   </div>
                 </div>
               </div>

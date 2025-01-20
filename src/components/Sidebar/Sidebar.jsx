@@ -41,7 +41,19 @@ const Sidebar = ({ toggle }) => {
 
 
       {/* Script Section */}
-        <li className="border-b-2 mb-3">
+      <li className="nav-item mb-3 d-flex align-items-center ">
+          <FaFolderPlus size={18} className="" />
+          <Link
+                to="/script"
+                className={`nav-link has-arrow${
+                  pathname === "/script" ? "active" : ""
+                } `}
+                onClick={toggle}
+              >
+                Script
+              </Link>
+        </li>
+        {/* <li className="border-b-2 mb-3">
 
        <li className="nav-item  d-flex align-items-center ">
         <FaFolderPlus size={18} className="me-4" />
@@ -49,9 +61,9 @@ const Sidebar = ({ toggle }) => {
         style={{ cursor: 'pointer' }}
         onClick={() => toggleSection("script")}>Script</span>
       
-      </li>
+      </li> */}
       {/* Collapsible Content */}
-      {openSection === "script"&& (
+      {/* {openSection === "script"&& (
         <ul className="pl-6 mt-2">
           <li className="mb-2 nav-item">
             <Link to="/tender" className="text-blue-600 ">
@@ -75,7 +87,7 @@ const Sidebar = ({ toggle }) => {
           </li>
         </ul>
       )}
-    </li>
+    </li> */}
 
         {/* Developer */}
         <li className="nav-item mb-3 d-flex align-items-center">

@@ -204,20 +204,20 @@ export const getAdminDetail = (adminId) => {
 
 // add adminlist
 export const addAdminDetail = (data) => {
-  const payload = {
-    ...data,
-    status: data.status === "Active" ? true : false,
-  };
   return request({
     url: `${scriptDomainName}${api.adminDetail}`,
     method: "post",
-    data: JSON.stringify(payload), // Send JSON payload
+    data: JSON.stringify({
+      ...data,
+      status: data.status === "Active" ? true : false, // Convert "Active"/"Inactive" to boolean
+    }), // Directly prepare the payload inline
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
   });
 };
+
 
 // update adminlist
 export const updateAdminDetail = (data,adminId) => {

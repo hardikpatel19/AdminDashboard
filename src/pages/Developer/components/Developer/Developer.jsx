@@ -3,6 +3,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
+import { useStateValue } from "../../../../StateProvider";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
 import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +17,7 @@ const Developer = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [developerList, setDeveloperList] = useState();
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [, dispatch] = useStateValue();
   const [filteredData, setFilteredData] = useState([]);
   const [currentItems, setCurrentItems] = useState([]);
   const navigate = useNavigate();
@@ -125,6 +126,7 @@ const Developer = () => {
   }, [filteredData]);
 
   const deleteDeveloper = async (developerId) => {
+    dispatch({ type: "SET_LOADING", status: true });
     const response = await deleteDeveloperDetail(developerId);
     console.log(response);
     if (response?.status === 200) {
@@ -133,6 +135,7 @@ const Developer = () => {
     } else {
       toast.error(response.response.data.message);
     }
+    dispatch({ type: "SET_LOADING", status: false });
   };
   return (
     <div id="app-content">

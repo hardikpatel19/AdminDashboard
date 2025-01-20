@@ -3,6 +3,7 @@ import { MdOutlineDelete, MdOutlineVisibility } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegEdit } from "react-icons/fa";
+import { useStateValue } from "../../../../StateProvider";
 import { ConfirmationModal } from "../../../../components/Modals/ConfirmationModal";
 import { ITEMS_PER_PAGE } from "../../../../Constants";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ const Admin = () => {
     const [totalRecords, setTotalRecords] = useState(0);
     const [adminList, setAdminList] = useState();
     const [searchQuery, setSearchQuery] = useState("");
-  
+    const [, dispatch] = useStateValue();
     const [filteredData, setFilteredData] = useState([]);
     const [currentItems, setCurrentItems] = useState([]);
     const navigate = useNavigate();
@@ -131,6 +132,7 @@ const Admin = () => {
     }, [filteredData]);
   
     const deleteAdmin = async (adminId) => {
+    dispatch({ type: "SET_LOADING", status: true });
       const response = await deleteAdminDetail(adminId);
       console.log(response);
       if (response?.status === 200) {
@@ -139,6 +141,7 @@ const Admin = () => {
       } else {
         toast.error(response.response.data.message);
       }
+    dispatch({ type: "SET_LOADING", status: false });
     };
   
     return (
@@ -217,7 +220,7 @@ const Admin = () => {
                             className="form-control "
                             //   value={searchQuery}
                             onChange={(e) => {
-                              if (e.target.value === "") {
+                              if (e.target.value === "user_name") {
                                 handleSearch();
                               }
                             }}
