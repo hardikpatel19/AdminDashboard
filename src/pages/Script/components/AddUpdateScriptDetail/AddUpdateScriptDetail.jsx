@@ -287,7 +287,7 @@ const AddUpdateScriptDetail = () => {
                           
                           <option key={item.id} value={item.id}>
                             
-                            {item.developer_id}
+                            {item.name}
                           </option>
                           
                         ))}
