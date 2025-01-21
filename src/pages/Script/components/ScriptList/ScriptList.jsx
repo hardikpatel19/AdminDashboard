@@ -239,10 +239,11 @@ const ScriptList = () => {
                                 <td className="">{script?.country}</td>
                                 <td className="">{script?.development_date}</td>
                                 <td className="">{script?.schedule_time}</td>
-                                <td className="">{script?.bigref_no}</td>
+                                <td className="">{script?.developer_id}</td>
                                 <td>
                                   <div className="truncate">
-                                    {script?.developer_id}
+                                    {script?.bigref_no}
+                                    
                                   </div>
                                 </td>
                                 <td className="">{script?.status?"Active":"Inactive"}</td>

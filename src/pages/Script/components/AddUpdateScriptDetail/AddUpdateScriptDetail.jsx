@@ -40,6 +40,7 @@ const AddUpdateScriptDetail = () => {
   const [developerList, setDeveloperList] = useState();
   const [currentItems, setCurrentItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [recentLogsText, setRecentLogsText] = useState("");
 
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
@@ -72,10 +73,11 @@ const AddUpdateScriptDetail = () => {
     handleSubmit,
     setValue,
     formState: { errors },
+    watch
   } = useForm({
     defaultValues: {},
   });
-
+const watchFiled =watch();
   // Form Submission
   const onSubmit = async (data) => {
     console.log(data);
@@ -125,12 +127,14 @@ const AddUpdateScriptDetail = () => {
       if (response?.status === 200) {
         setValue("script_name", response?.data?.data?.script_name);
         setValue("developer_id", response?.data?.data?.developer_id);
-        setValue("development_date", response?.data?.data?.development_date);
+        setValue("development_date", response?.data?.data?.development_date.split("T")[0]);
+        setValue("schedule_time", response?.data?.data?.schedule_time.split("T")[1].slice(0, 5));
         setValue("country", response?.data?.data?.country);
-        setValue("script_status", response?.data?.data?.script_status);
+        setValue("script_status", response?.data?.data?.status);
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
         setValue("file", response?.data?.data?.file);
+        setRecentLogsText(response?.data?.data?.recent_logs);
         if (response?.data?.data?.recent_log_file) {
           setLogFilePath(
             response?.data?.data?.recent_log_file.split("/").pop()
@@ -195,7 +199,33 @@ const AddUpdateScriptDetail = () => {
     }
   };
   // downloadLogFile
+  const downloadLogFile = (logContent) => {
+    // Your text content for the .log file
+    
+
+    // Create a Blob with the log content and specify the MIME type
+    const blob = new Blob([logContent], { type: "text/plain" });
+
+    // Create a temporary URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Create an <a> element for the download
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${watchFiled.script_name}.log`; // Specify the file name
+
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Clean up the URL after the download
+    URL.revokeObjectURL(url);
+  };
+
   const handleDownload = async () => {
+    if(recentLogsText){
+      downloadLogFile(recentLogsText)
+      return
+    }
     try {
       const response = await downloadLog(logFilePath);
 
@@ -359,8 +389,8 @@ const AddUpdateScriptDetail = () => {
                       })}
                     >
                       <option value="">Select a status</option>
-                      <option value="Active" >Active</option>
-                      <option value="Inactive">Inactive</option>
+                      <option value={true} >Active</option>
+                      <option value={false}>Inactive</option>
                     </select>
                   </div>
                   <div className="mb-4">
@@ -412,7 +442,7 @@ const AddUpdateScriptDetail = () => {
                       <option value="Other">Other</option>
                     </select>
                   </div>
-                  {logFilePath && (
+                  {(logFilePath||(recentLogsText)) && (
                     <>
                       <div className="mb-4 col-md-12">
                         <label className="form-label">Recent Log</label>
@@ -421,7 +451,7 @@ const AddUpdateScriptDetail = () => {
                           rows={10}
                           className="form-control"
                           placeholder="Enter address"
-                          value={logContent}
+                          value={logContent?logContent:recentLogsText}
                         />
                       </div>
                       <div className="mb-4 col-md-6">
