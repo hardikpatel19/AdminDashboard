@@ -38,9 +38,9 @@ const AddUpdateScriptDetail = () => {
   const [, dispatch] = useStateValue();
   const location = useLocation();
   const [developerList, setDeveloperList] = useState();
-    const [currentItems, setCurrentItems] = useState([]);
-      const [currentPage, setCurrentPage] = useState(1);
-    
+  const [currentItems, setCurrentItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
   const [title, setTitle] = useState("Add Script");
@@ -76,7 +76,6 @@ const AddUpdateScriptDetail = () => {
     defaultValues: {},
   });
 
-  
   // Form Submission
   const onSubmit = async (data) => {
     console.log(data);
@@ -85,6 +84,11 @@ const AddUpdateScriptDetail = () => {
       dispatch({ type: "SET_LOADING", status: true });
       if (scriptId) {
         //  data._id = scriptId;
+        console.log(data)
+        if (!data.file){
+          delete data.file
+        }
+        delete data.bigref_no
         const response = await updateScriptDetail(data, scriptId);
         console.log(response);
         if (response?.status === 200) {
@@ -151,7 +155,7 @@ const AddUpdateScriptDetail = () => {
     onSuccess: (Re) => console.log(Re),
     onError: (e) => console.error(e),
   });
-  
+
   useEffect(() => {
     if (scriptId) {
       setTitle("Update Script");
@@ -214,34 +218,33 @@ const AddUpdateScriptDetail = () => {
     }
   };
   const fetchDeveloperList = async (pageNumber) => {
-      try {
-        const response = await getDeveloper(pageNumber);
-        console.log(response);
-  
-        if (response?.status === 200) {
-          console.log(response?.data?.data);
-          
+    try {
+      const response = await getDeveloper(pageNumber);
+      console.log(response);
+
+      if (response?.status === 200) {
+        console.log(response?.data?.data);
+
         setDeveloperList(response?.data?.data?.data);
         // setCurrentItems(response?.data?.data?.data);
-
-        } else {
-          toast.error(response?.response?.data?.message);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error); // Log any errors that occur
-        throw error;
+      } else {
+        toast.error(response?.response?.data?.message);
       }
-    };
-   const { refetch } = useQuery({
-       queryKey: ["developer-list", currentPage],
-       queryFn: () => fetchDeveloperList(currentPage),
-       onSuccess: (Re) => {
-         console.log(Re);
-       },
-       onError: (e) => {
-         console.log(e);
-       },
-     });
+    } catch (error) {
+      console.error("Error fetching data:", error); // Log any errors that occur
+      throw error;
+    }
+  };
+  const { refetch } = useQuery({
+    queryKey: ["developer-list", currentPage],
+    queryFn: () => fetchDeveloperList(currentPage),
+    onSuccess: (Re) => {
+      console.log(Re);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 
   return (
     <div id="app-content">
@@ -280,16 +283,14 @@ const AddUpdateScriptDetail = () => {
                         required: "Developer id is required",
                       })}
                     >
-                      
+                      <option value="">Select a Developer</option>
+
                       {developerList &&
                         Array.isArray(developerList) &&
                         developerList.map((item) => (
-                          
                           <option key={item.id} value={item.id}>
-                            
                             {item.name}
                           </option>
-                          
                         ))}
                     </select>
                   </div>
@@ -308,6 +309,24 @@ const AddUpdateScriptDetail = () => {
                     {errors.development_date && (
                       <div className="error">
                         {errors.development_date.message}
+                      </div> 
+                    )}
+                  </div>
+                  <div className="mb-4 col-md-6">
+                    <label className="form-label">
+                    Schedule Time<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      // placeholder="Select schedule tie" 
+                      {...register("schedule_time", {
+                        required: "schedule time is required",
+                      })}
+                    />
+                    {errors.schedule_time && (
+                      <div className="error">
+                        {errors.schedule_time.message}
                       </div>
                     )}
                   </div>
@@ -340,7 +359,7 @@ const AddUpdateScriptDetail = () => {
                       })}
                     >
                       <option value="">Select a status</option>
-                      <option value="Active">Active</option>
+                      <option value="Active" >Active</option>
                       <option value="Inactive">Inactive</option>
                     </select>
                   </div>
@@ -351,7 +370,9 @@ const AddUpdateScriptDetail = () => {
                       id="fileInput"
                       className="form-control"
                       {...register("file", {
-                        required: "Please upload a script file.", // Validation rule
+                        required: scriptId
+                          ? false
+                          : "Please upload a script file.", // Validation rule
                       })}
                     />
                     {errors.file && (
@@ -366,6 +387,8 @@ const AddUpdateScriptDetail = () => {
                       className="form-control"
                       placeholder="Enter address"
                       {...register("bigref_no")}
+                      value={"[]"}
+                      disabled
                     />
                     {errors.bigref_no && (
                       <div className="error">{errors.bigref_no.message}</div>

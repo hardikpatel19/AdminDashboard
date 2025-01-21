@@ -208,6 +208,7 @@ const ScriptList = () => {
                               <th>Script Name</th>
                               <th>Country</th>
                               <th>Development Date</th>
+                              <th>Schedule Time</th>
                               <th>Developer Name</th>
                               <th>Big Ref No</th>
                               <th>Status</th>
@@ -237,6 +238,7 @@ const ScriptList = () => {
                                 </td>
                                 <td className="">{script?.country}</td>
                                 <td className="">{script?.development_date}</td>
+                                <td className="">{script?.schedule_time}</td>
                                 <td className="">{script?.bigref_no}</td>
                                 <td>
                                   <div className="truncate">

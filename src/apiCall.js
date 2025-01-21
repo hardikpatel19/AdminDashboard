@@ -107,9 +107,9 @@ export const addScriptDetail = (data) => {
   const formData = new FormData();
 
   Object.entries(data).forEach(([key, value]) => {
-    const fileInput = document.querySelector('#fileInput');
+    const fileInput = document.querySelector("#fileInput");
     if (fileInput.files[0]) {
-      formData.append('file', fileInput.files[0]);
+      formData.append("file", fileInput.files[0]);
     }
     if (key === "file" && value instanceof File) {
       // If a single file is provided, append it
@@ -120,7 +120,11 @@ export const addScriptDetail = (data) => {
     } else if (key === "script_status") {
       // Convert "Active"/"Inactive" to "true"/"false"
       const booleanValue =
-        value === "Active" ? "true" : value === "Inactive" ? "false" : String(value);
+        value === "Active"
+          ? "true"
+          : value === "Inactive"
+          ? "false"
+          : String(value);
       formData.append(key, booleanValue);
     } else {
       // Append other fields as-is
@@ -138,8 +142,6 @@ export const addScriptDetail = (data) => {
   });
 };
 
-
-
 // update scriptlist
 export const updateScriptDetail = (data, scriptId) => {
   // Create a FormData object
@@ -147,16 +149,17 @@ export const updateScriptDetail = (data, scriptId) => {
 
   // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
-    const fileInput = document.querySelector('#fileInput');
+    const fileInput = document.querySelector("#fileInput");
     if (fileInput.files[0]) {
-      formData.append('file', fileInput.files[0]);
+      formData.append("file", fileInput.files[0]);
     }
     if (key === "file" && value instanceof File) {
       // Handle file input if provided
       formData.append(key, value, value.name);
     } else if (key === "script_status") {
       // Convert "Active"/"Inactive" to boolean
-      const booleanValue = value === "Active" ? true : value === "Inactive" ? false : value;
+      const booleanValue =
+        value === "Active" ? true : value === "Inactive" ? false : value;
       formData.append(key, booleanValue);
     } else if (typeof value === "boolean") {
       // Append boolean values directly
@@ -165,6 +168,7 @@ export const updateScriptDetail = (data, scriptId) => {
       formData.append(key, value);
     }
   });
+ 
 
   // Make the API call
   return request({
@@ -176,7 +180,6 @@ export const updateScriptDetail = (data, scriptId) => {
     },
   });
 };
-
 
 // delete scriptlist
 export const deleteScriptDetail = (scriptId) => {
@@ -218,9 +221,8 @@ export const addAdminDetail = (data) => {
   });
 };
 
-
 // update adminlist
-export const updateAdminDetail = (data,adminId) => {
+export const updateAdminDetail = (data, adminId) => {
   const payload = {
     ...data,
     status: data.status === "Active" ? true : false,
@@ -415,6 +417,6 @@ export const downloadLog = (fileName) => {
   return request({
     url: `${scriptDomainName}${api.downloadLog}/${fileName}`,
     method: "get",
-    responseType: "blob"
+    responseType: "blob",
   });
 };
