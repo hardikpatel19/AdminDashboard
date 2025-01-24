@@ -7,7 +7,7 @@ export const ITEMS_PER_PAGE = 10;
 export const ITEMS_PER_PAGE_MULTILINE = 10;
 export const MAX_FILE_SIZE = 100;
 export const DASHBOARD_NOTIFICATION_COUNT = 10;
-
+ 
 export const api = {
   login: "/auth/user-login",
   logout: "/logout",
