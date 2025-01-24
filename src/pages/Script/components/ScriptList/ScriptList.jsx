@@ -250,7 +250,7 @@ const ScriptList = () => {
                                 <td className="">{script?.script_type}</td>
 
                                 <td>
-                                  <div
+                                  {/* <div
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="viewOne"
                                     onClick={() => viewFile(script.id)}
@@ -262,7 +262,7 @@ const ScriptList = () => {
                                     <div id="viewOne" className="d-none">
                                       <span>View</span>
                                     </div>
-                                  </div>
+                                  </div> */}
                                   <div
                                     className="btn btn-ghost btn-icon btn-sm rounded-circle texttooltip"
                                     data-template="editOne"

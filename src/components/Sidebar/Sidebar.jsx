@@ -1,4 +1,4 @@
-import React , { useState }from "react";
+import React, { useState } from "react";
 import "./Sidebar.scss";
 import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaFolderPlus, FaCode } from "react-icons/fa";
@@ -15,147 +15,157 @@ const Sidebar = ({ toggle }) => {
   };
   return (
     <div className="app-menu">
-    <aside className="sidebar navbar-vertical navbar nav-dashboard" id="sidebar">
-    <div className="text-center mb-4">
-        <img
-          src="../assets/images/avatar/mainlogo.png"
-          alt="BidsInfoGlobal"
-          style={{ maxWidth: "260px",margintop:"-10px",marginLeft:"-40px" }}
-        />
-      </div>
-       {/* Navigation Links */}
-       <ul className="nav flex-column w-100">
-        {/* Dashboard */}
-        <li className="nav-item mb-3 d-flex align-items-center ">
-          <FaHome size={18} className="" />
-          <Link
-                to="/"
-                className={`nav-link has-arrow${
-                  pathname === "/" ? "active" : ""
-                } `}
-                onClick={toggle}
-              >
-                Dashboard
-              </Link>
-        </li>
+      <aside
+        className="sidebar navbar-vertical navbar nav-dashboard"
+        id="sidebar"
+      >
+        <div className="text-center mb-4">
+          <img
+            src="../assets/images/avatar/mainlogo.png"
+            alt="BidsInfoGlobal"
+            style={{
+              maxWidth: "260px",
+              margintop: "-10px",
+              marginLeft: "-40px",
+            }}
+          />
+        </div>
+        {/* Navigation Links */}
+        <ul className="nav flex-column w-100">
+          {/* Dashboard */}
+          <li className="nav-item mb-3 d-flex align-items-center ">
+            <FaHome size={18} className="" />
+            <Link
+              to="/"
+              className={`nav-link has-arrow${
+                pathname === "/" ? "active" : ""
+              } `}
+              onClick={toggle}
+            >
+              Dashboard
+            </Link>
+          </li>
 
-
-      {/* Script Section */}
-      {/* <li className="nav-item mb-3 d-flex align-items-center ">
-          <FaFolderPlus size={18} className="" />
-          <Link
-                to="/script"
-                className={`nav-link has-arrow${
-                  pathname === "/script" ? "active" : ""
-                } `}
-                onClick={toggle}
+          {/* Script Section */}
+          <li className="nav-item mb-3 d-flex align-items-center ">
+            <FaFolderPlus size={18} className="" />
+            <Link
+              to="/script"
+              className={`nav-link has-arrow${
+                pathname === "/script" ? "active" : ""
+              } `}
+              onClick={toggle}
+            >
+              Script
+            </Link>
+          </li>
+          {/* <li className="border-b-2 mb-3">
+            <li className="nav-item  d-flex align-items-center ">
+              <FaFolderPlus size={18} className="me-4" />
+              <span
+                className=" hover-pointer"
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSection("script")}
               >
                 Script
-              </Link>
-        </li> */}
-        <li className="border-b-2 mb-3">
+              </span>
+            </li>
+            Collapsible Content
+            {openSection === "script" && (
+              <ul className="pl-6 mt-2">
+                <li className="mb-2 nav-item">
+                  <Link to="/tender" className="text-blue-600 ">
+                    Tender
+                  </Link>
+                </li>
+                <li className="mb-2 nav-item">
+                  <Link to="/project" className="text-blue-600 ">
+                    Project
+                  </Link>
+                </li>
+                <li className="mb-2 nav-item">
+                  <Link to="/ca" className="text-blue-600 ">
+                    CA
+                  </Link>
+                </li>
+                <li className="mb-2 nav-item">
+                  <Link to="/grants" className="text-blue-600 ">
+                    Grants
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </li> */}
 
-       <li className="nav-item  d-flex align-items-center ">
-        <FaFolderPlus size={18} className="me-4" />
-        <span className=" hover-pointer"
-        style={{ cursor: 'pointer' }}
-        onClick={() => toggleSection("script")}>Script</span>
-      
-      </li>
-      {/* Collapsible Content */}
-      {openSection === "script"&& (
-        <ul className="pl-6 mt-2">
-          <li className="mb-2 nav-item">
-            <Link to="/tender" className="text-blue-600 ">
-              Tender
+          {/* Developer */}
+          <li className="nav-item mb-3 d-flex align-items-center">
+            <FaCode size={18} className="" />
+            <Link
+              to="/developer"
+              className={`nav-link has-arrow${
+                pathname === "/developer" ? "active" : ""
+              } `}
+              onClick={toggle}
+            >
+              Developer
             </Link>
           </li>
-          <li className="mb-2 nav-item">
-            <Link to="/project" className="text-blue-600 ">
-              Project
-            </Link>
+
+          {/* Data Section */}
+          <li className="border-b-2 mb-3">
+            <li className="nav-item  d-flex align-items-center ">
+              <FaFolderPlus size={18} className="me-4" />
+              <span
+                className=" hover-pointer"
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSection("data")}
+              >
+                Data
+              </span>
+            </li>
+            {/* Collapsible Content */}
+            {openSection === "data" && (
+              <ul className="pl-6 mt-2">
+                <li className="mb-2 nav-item">
+                  <Link to="/tenderData" className="text-blue-600 ">
+                    Tender
+                  </Link>
+                </li>
+                <li className="mb-2 nav-item">
+                  <Link to="/projectData" className="text-blue-600 ">
+                    Project
+                  </Link>
+                </li>
+                <li className="mb-2 nav-item">
+                  <Link to="/caData" className="text-blue-600 ">
+                    CA
+                  </Link>
+                </li>
+                <li className="mb-2 nav-item">
+                  <Link to="/grantsData" className="text-blue-600 ">
+                    Grants
+                  </Link>
+                </li>
+              </ul>
+            )}
           </li>
-          <li className="mb-2 nav-item">
-            <Link to="/ca" className="text-blue-600 ">
-              CA
-            </Link>
-          </li>
-          <li className="mb-2 nav-item">
-            <Link to="/grants" className="text-blue-600 ">
-              Grants
+
+          {/* AdminEmail */}
+          <li className="nav-item mb-3 d-flex align-items-center ">
+            <FaFolderPlus size={18} />
+            <Link
+              to="/admin"
+              className={`nav-link has-arrow${
+                pathname === "/admin" ? "active" : ""
+              } `}
+              onClick={toggle}
+            >
+              Admin
             </Link>
           </li>
         </ul>
-      )}
-    </li>
-
-        {/* Developer */}
-        <li className="nav-item mb-3 d-flex align-items-center">
-          <FaCode size={18} className="" />
-          <Link
-                to="/developer"
-                className={`nav-link has-arrow${
-                  pathname === "/developer" ? "active" : ""
-                } `}
-                onClick={toggle}
-              >
-                Developer
-              </Link>
-        </li>
-
-
-        {/* Data Section */}
-        <li className="border-b-2 mb-3">
-       <li className="nav-item  d-flex align-items-center ">
-
-        <FaFolderPlus size={18} className="me-4" />
-        <span className=" hover-pointer"
-        style={{ cursor: 'pointer' }}
-        onClick={() => toggleSection("data")}>Data</span>
-</li>
-      {/* Collapsible Content */}
-      {openSection === "data" && (
-        <ul className="pl-6 mt-2">
-          <li className="mb-2 nav-item">
-            <Link to="/tenderData" className="text-blue-600 ">
-              Tender
-            </Link>
-          </li>
-          <li className="mb-2 nav-item">
-            <Link to="/projectData" className="text-blue-600 ">
-              Project
-            </Link>
-          </li>
-          <li className="mb-2 nav-item">
-            <Link to="/caData" className="text-blue-600 ">
-              CA
-            </Link>
-          </li>
-          <li className="mb-2 nav-item">
-            <Link to="/grantsData" className="text-blue-600 ">
-              Grants
-            </Link>
-          </li>
-        </ul>
-      )}
-    </li>
-
-     {/* AdminEmail */}
-     <li className="nav-item mb-3 d-flex align-items-center ">
-     <FaFolderPlus size={18} />
-          <Link
-                to="/admin"
-                className={`nav-link has-arrow${
-                  pathname === "/admin" ? "active" : ""
-                } `}
-                onClick={toggle}
-              >
-                Admin
-              </Link>
-        </li>
-      </ul>
-</aside>
-</div>
+      </aside>
+    </div>
   );
 };
 
