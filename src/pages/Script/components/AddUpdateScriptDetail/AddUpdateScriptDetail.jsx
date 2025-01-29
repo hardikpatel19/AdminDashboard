@@ -73,11 +73,11 @@ const AddUpdateScriptDetail = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-    watch
+    watch,
   } = useForm({
     defaultValues: {},
   });
-const watchFiled =watch();
+  const watchFiled = watch();
   // Form Submission
   const onSubmit = async (data) => {
     console.log(data);
@@ -86,11 +86,11 @@ const watchFiled =watch();
       dispatch({ type: "SET_LOADING", status: true });
       if (scriptId) {
         //  data._id = scriptId;
-        console.log(data)
-        if (!data.file){
-          delete data.file
+        console.log(data);
+        if (!data.file) {
+          delete data.file;
         }
-        delete data.bigref_no
+        delete data.bigref_no;
         const response = await updateScriptDetail(data, scriptId);
         console.log(response);
         if (response?.status === 200) {
@@ -127,8 +127,14 @@ const watchFiled =watch();
       if (response?.status === 200) {
         setValue("script_name", response?.data?.data?.script_name);
         setValue("developer_id", response?.data?.data?.developer_id);
-        setValue("development_date", response?.data?.data?.development_date.split("T")[0]);
-        setValue("schedule_time", response?.data?.data?.schedule_time.split("T")[1].slice(0, 5));
+        setValue(
+          "development_date",
+          response?.data?.data?.development_date.split("T")[0]
+        );
+        setValue(
+          "schedule_time",
+          response?.data?.data?.schedule_time.split("T")[1].slice(0, 5)
+        );
         setValue("country", response?.data?.data?.country);
         setValue("script_status", response?.data?.data?.status);
         setValue("bigref_no", response?.data?.data?.bigref_no);
@@ -201,7 +207,6 @@ const watchFiled =watch();
   // downloadLogFile
   const downloadLogFile = (logContent) => {
     // Your text content for the .log file
-    
 
     // Create a Blob with the log content and specify the MIME type
     const blob = new Blob([logContent], { type: "text/plain" });
@@ -222,9 +227,9 @@ const watchFiled =watch();
   };
 
   const handleDownload = async () => {
-    if(recentLogsText){
-      downloadLogFile(recentLogsText)
-      return
+    if (recentLogsText) {
+      downloadLogFile(recentLogsText);
+      return;
     }
     try {
       const response = await downloadLog(logFilePath);
@@ -339,17 +344,17 @@ const watchFiled =watch();
                     {errors.development_date && (
                       <div className="error">
                         {errors.development_date.message}
-                      </div> 
+                      </div>
                     )}
                   </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                    Schedule Time<span className="text-danger">*</span>
+                      Schedule Time<span className="text-danger">*</span>
                     </label>
                     <input
                       type="time"
                       className="form-control"
-                      // placeholder="Select schedule tie" 
+                      // placeholder="Select schedule tie"
                       {...register("schedule_time", {
                         required: "schedule time is required",
                       })}
@@ -360,24 +365,79 @@ const watchFiled =watch();
                       </div>
                     )}
                   </div>
+                      <div className="mb-4 col-md-6">
+                        <label className="form-label">
+                          Country<span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-select"
+                          {...register("country", {
+                            required: "country is required",
+                          })}
+                        >
+                          <option value="">Select a country</option>
+                          <option value="USA">United States</option>
+                          <option value="Canada">Canada</option>
+                          <option value="UK">United Kingdom</option>
+                          <option value="India">India</option>
+                          <option value="Australia">Australia</option>
+                        </select>
+                      </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
-                      Country<span className="text-danger">*</span>
+                      Frequency<span className="text-danger">*</span>
                     </label>
                     <select
-                      className="form-select"
-                      {...register("country", {
-                        required: "country is required",
+                      className="form-control"
+                      {...register("frequency", {
+                        required: "Frequency is required",
                       })}
                     >
-                      <option value="">Select a country</option>
-                      <option value="USA">United States</option>
-                      <option value="Canada">Canada</option>
-                      <option value="UK">United Kingdom</option>
-                      <option value="India">India</option>
-                      <option value="Australia">Australia</option>
+                      <option value="">Select Frequency</option>
+                      <option value="one_time">One Time</option>
+                      <option value="daily">Daily</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="bi_weekly">Bi-Weekly</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="custom">Customized</option>
                     </select>
+                    {errors.frequency && (
+                      <div className="error">{errors.frequency.message}</div>
+                    )}
                   </div>
+
+                  {/* Conditional Custom Frequency Options */}
+                  {watch("frequency") === "custom" && (
+                    <div className="mb-4 col-md-6">
+                      <label className="form-label">Custom Schedule</label>
+                      <div className="d-flex flex-wrap">
+                        <label className="me-3">
+                          <input
+                            type="checkbox"
+                            {...register("custom_days")}
+                            value="twice_week"
+                          />
+                          Twice a Week
+                        </label>
+                        <label className="me-3">
+                          <input
+                            type="checkbox"
+                            {...register("custom_days")}
+                            value="thrice_week"
+                          />
+                          Thrice a Week
+                        </label>
+                        <label className="me-3">
+                          <input
+                            type="checkbox"
+                            {...register("custom_days")}
+                            value="once_week"
+                          />
+                          Once a Week
+                        </label>
+                      </div>
+                    </div>
+                  )}
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
                       Status<span className="text-danger">*</span>
@@ -389,7 +449,7 @@ const watchFiled =watch();
                       })}
                     >
                       <option value="">Select a status</option>
-                      <option value={true} >Active</option>
+                      <option value={true}>Active</option>
                       <option value={false}>Inactive</option>
                     </select>
                   </div>
@@ -442,7 +502,7 @@ const watchFiled =watch();
                       <option value="Other">Other</option>
                     </select>
                   </div>
-                  {(logFilePath||(recentLogsText)) && (
+                  {(logFilePath || recentLogsText) && (
                     <>
                       <div className="mb-4 col-md-12">
                         <label className="form-label">Recent Log</label>
@@ -451,7 +511,7 @@ const watchFiled =watch();
                           rows={10}
                           className="form-control"
                           placeholder="Enter address"
-                          value={logContent?logContent:recentLogsText}
+                          value={logContent ? logContent : recentLogsText}
                         />
                       </div>
                       <div className="mb-4 col-md-6">
