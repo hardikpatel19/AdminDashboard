@@ -11,7 +11,10 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   addScriptDetail,
   downloadLog,
+  getCountry,
+  getcountryDetail,
   getDeveloper,
+  getDeveloperDetail,
   getScriptDetail,
   updateScriptDetail,
 } from "../../../../apiCall";
@@ -38,16 +41,19 @@ const AddUpdateScriptDetail = () => {
   const [, dispatch] = useStateValue();
   const location = useLocation();
   const [developerList, setDeveloperList] = useState();
+  const [countryList, setCountryList] = useState();
   const [currentItems, setCurrentItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recentLogsText, setRecentLogsText] = useState("");
-
+  const [fileName, setFileName] = useState("");
   const searchParams = new URLSearchParams(location.search);
   const searchFilter = searchParams.get("search_filter");
   const [title, setTitle] = useState("Add Script");
   const [logFilePath, setLogFilePath] = useState(null);
   const navigate = useNavigate();
   const { scriptId } = useParams();
+  const { developerId } = useParams();
+  // const { countryId } = useParams();
   const [logContent, setLogContent] = useState("");
   const [logResponse, setLogResponse] = useState("");
 
@@ -67,6 +73,7 @@ const AddUpdateScriptDetail = () => {
     }
   };
 
+  
   // React Hook Form
   const {
     register,
@@ -123,7 +130,7 @@ const AddUpdateScriptDetail = () => {
       dispatch({ type: "SET_LOADING", status: true });
       const response = await getScriptDetail(scriptId);
       console.log(response);
-
+  
       if (response?.status === 200) {
         setValue("script_name", response?.data?.data?.script_name);
         setValue("developer_id", response?.data?.data?.developer_id);
@@ -139,7 +146,13 @@ const AddUpdateScriptDetail = () => {
         setValue("script_status", response?.data?.data?.status);
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
-        setValue("file", response?.data?.data?.file);
+        
+        // ✅ Extract and set file name from `script_file_path`
+        if (response?.data?.data?.script_file_path) {
+          const extractedFileName = response.data.data.script_file_path.split("/").pop();
+          setFileName(extractedFileName); // ✅ Set extracted file name in state
+        }
+  
         setRecentLogsText(response?.data?.data?.recent_logs);
         if (response?.data?.data?.recent_log_file) {
           setLogFilePath(
@@ -150,14 +163,13 @@ const AddUpdateScriptDetail = () => {
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }
-
+  
       dispatch({ type: "SET_LOADING", status: false });
       return response;
     } catch (error) {
-      console.error("Error fetching data:", error); // Log any errors that occur
+      console.error("Error fetching data:", error);
     }
   };
-
   useQuery({
     queryKey: ["script-detail"],
     queryFn: fetchscriptDetail,
@@ -261,7 +273,6 @@ const AddUpdateScriptDetail = () => {
         console.log(response?.data?.data);
 
         setDeveloperList(response?.data?.data?.data);
-        // setCurrentItems(response?.data?.data?.data);
       } else {
         toast.error(response?.response?.data?.message);
       }
@@ -270,6 +281,7 @@ const AddUpdateScriptDetail = () => {
       throw error;
     }
   };
+
   const { refetch } = useQuery({
     queryKey: ["developer-list", currentPage],
     queryFn: () => fetchDeveloperList(currentPage),
@@ -280,6 +292,89 @@ const AddUpdateScriptDetail = () => {
       console.log(e);
     },
   });
+
+  // Fetch Data for Developer Name Edit 
+  const fetchdeveloperDetail = async () => {
+    try {
+      dispatch({ type: "SET_LOADING", status: true });
+      const response = await getDeveloperDetail(developerId);
+      console.log(response);
+
+      if (response?.status === 200) {
+        setValue("developer_id", response?.data?.data?.developer_id);
+      } else if (response?.response) {
+        toast.error(response.response.data.message);
+      }
+      dispatch({ type: "SET_LOADING", status: false });
+      return response;
+    } catch (error) {
+      console.error("Error fetching data:", error); // Log any errors that occur
+    }
+  };
+
+  useQuery({
+    queryKey: ["developer-detail"],
+    queryFn: fetchdeveloperDetail,
+    enabled: developerId ? true : false,
+    onSuccess: (Re) => console.log(Re),
+    onError: (e) => console.error(e),
+  });
+
+
+  const fetchCountryList = async (pageNumber) => {
+    try {
+      const response = await getCountry(pageNumber);
+      console.log(response);
+
+      if (response?.status === 201) {
+        console.log(response?.data?.result?.result,"******************");
+
+        setCountryList(response?.data?.result?.result);
+      } else {
+        toast.error(response?.response?.data?.message);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error); // Log any errors that occur
+      throw error;
+    }
+  };
+     useQuery({
+    queryKey: ["country-list", currentPage],
+    queryFn: () => fetchCountryList(currentPage),
+    onSuccess: (Re) => {
+      console.log(Re);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  // Fetch Data for Developer Name Edit 
+  // const fetchcountryDetail = async () => {
+  //   try {
+  //     dispatch({ type: "SET_LOADING", status: true });
+  //     const response = await getcountryDetail(countryId);
+  //     console.log(response);
+
+  //     if (response?.status === 201) {
+  //       setValue("country", response?.data?.result.country);
+  //     } else if (response?.response) {
+  //       toast.error(response.response.data.message);
+  //     }
+  //     dispatch({ type: "SET_LOADING", status: false });
+  //     return response;
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error); // Log any errors that occur
+  //   }
+  // };
+
+  // useQuery({
+  //   queryKey: ["country-detail"],
+  //   queryFn: fetchcountryDetail,
+  //   enabled: countryId ? true : false,
+  //   onSuccess: (Re) => console.log(Re),
+  //   onError: (e) => console.error(e),
+  // });
 
   return (
     <div id="app-content">
@@ -365,24 +460,27 @@ const AddUpdateScriptDetail = () => {
                       </div>
                     )}
                   </div>
-                      <div className="mb-4 col-md-6">
-                        <label className="form-label">
-                          Country<span className="text-danger">*</span>
-                        </label>
-                        <select
-                          className="form-select"
-                          {...register("country", {
-                            required: "country is required",
-                          })}
-                        >
-                          <option value="">Select a country</option>
-                          <option value="USA">United States</option>
-                          <option value="Canada">Canada</option>
-                          <option value="UK">United Kingdom</option>
-                          <option value="India">India</option>
-                          <option value="Australia">Australia</option>
-                        </select>
-                      </div>
+                  <div className="mb-4 col-md-6">
+                    <label className="form-label">
+                      Country<span className="text-danger">*</span>
+                    </label>
+                    <select
+                      className="form-select"
+                      {...register("country", {
+                        required: "Country is required",
+                      })}
+                    >
+                      <option value="">Select a Country</option>
+
+                      {countryList &&
+                        Array.isArray(countryList) &&
+                        countryList.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
                   <div className="mb-4 col-md-6">
                     <label className="form-label">
                       Frequency<span className="text-danger">*</span>
@@ -454,21 +552,29 @@ const AddUpdateScriptDetail = () => {
                     </select>
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Script File</label>
-                    <input
-                      type="file"
-                      id="fileInput"
-                      className="form-control"
-                      {...register("file", {
-                        required: scriptId
-                          ? false
-                          : "Please upload a script file.", // Validation rule
-                      })}
-                    />
-                    {errors.file && (
-                      <p className="text-danger">{errors.file.message}</p>
-                    )}
-                  </div>
+  <label className="form-label">Script File</label>
+  <input
+    type="file"
+    id="fileInput"
+    className="form-control"
+    {...register("file", {
+      required: scriptId ? false : "Please upload a script file.",
+    })}
+    onChange={(e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setFileName(file.name); // ✅ Show newly selected file name
+        setValue("file", file); // ✅ Update React Hook Form
+      }
+    }}
+  />
+  {fileName && (
+    <p className="mt-2">
+      Selected File: <strong>{fileName}</strong>
+    </p>
+  )}
+  {errors.file && <p className="text-danger">{errors.file.message}</p>}
+</div>
 
                   <div className="mb-4 col-md-6">
                     <label className="form-label">Big Ref No</label>

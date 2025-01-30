@@ -27,4 +27,7 @@ export const api = {
   grants: "/grants/list",
   grantsDetail: "/grants",
   downloadLog: "/script/download-log",
+  country: "/masters/country-all",
+  countryDetail: "/masters/country",
+
 };

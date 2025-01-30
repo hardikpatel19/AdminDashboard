@@ -163,7 +163,7 @@ const ProjectData = () => {
               <div className="card mb-4">
                 <div className="card-header  ">
                   <div className="row ">
-                    <div className="col-md-12 mb-3 d-flex justify-content-start">
+                    <div className="col-md-12 mb-3 d-flex justify-content-end">
                       <div
                         className="btn btn-primary me-2"
                         onClick={() => navigate("/add/project")}

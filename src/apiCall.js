@@ -150,14 +150,12 @@ export const updateScriptDetail = (data, scriptId) => {
   // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
     const fileInput = document.querySelector("#fileInput");
-    if (fileInput.files[0]) {
-      formData.append("file", fileInput.files[0]);
-    }
-    if (key === "file" && value instanceof File) {
-      // Handle file input if provided
-      formData.append(key, value, value.name);
+
+    if (fileInput && fileInput.files[0] && key === "file") {
+      // Append the file if it's present
+      formData.append("file", fileInput.files[0], fileInput.files[0].name);
     } else if (key === "script_status") {
-      // Convert "Active"/"Inactive" to boolean
+      // Convert "Active"/"Inactive" to boolean if script status exists
       const booleanValue =
         value === "Active" ? true : value === "Inactive" ? false : value;
       formData.append(key, booleanValue);
@@ -165,10 +163,10 @@ export const updateScriptDetail = (data, scriptId) => {
       // Append boolean values directly
       formData.append(key, value);
     } else {
+      // For other values, append them normally
       formData.append(key, value);
     }
   });
- 
 
   // Make the API call
   return request({
@@ -181,11 +179,28 @@ export const updateScriptDetail = (data, scriptId) => {
   });
 };
 
+
 // delete scriptlist
 export const deleteScriptDetail = (scriptId) => {
   return request({
     url: `${scriptDomainName}${api.scriptDetail}/${scriptId}`,
     method: "delete",
+  });
+};
+
+// countrylist
+export const getCountry = (pageNumber) => {
+  return request({
+    url: `${domainName}${api.country}?pageNo=${pageNumber}&limit=10&sortBy=1&sortField=createdAt&by_tenders=1`,
+    method: "get",
+  });
+};
+
+// get countrylist
+export const getcountryDetail = (countryId) => {
+  return request({
+    url: `${domainName}${api.countryDetail}?_id=${countryId}`,
+    method: "get",
   });
 };
 
