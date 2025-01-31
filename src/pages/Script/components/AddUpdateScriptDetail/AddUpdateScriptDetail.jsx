@@ -130,7 +130,7 @@ const AddUpdateScriptDetail = () => {
       dispatch({ type: "SET_LOADING", status: true });
       const response = await getScriptDetail(scriptId);
       console.log(response);
-  
+
       if (response?.status === 200) {
         setValue("script_name", response?.data?.data?.script_name);
         setValue("developer_id", response?.data?.data?.developer_id);
@@ -146,13 +146,13 @@ const AddUpdateScriptDetail = () => {
         setValue("script_status", response?.data?.data?.status);
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
-        
+
         // ✅ Extract and set file name from `script_file_path`
         if (response?.data?.data?.script_file_path) {
           const extractedFileName = response.data.data.script_file_path.split("/").pop();
           setFileName(extractedFileName); // ✅ Set extracted file name in state
         }
-  
+
         setRecentLogsText(response?.data?.data?.recent_logs);
         if (response?.data?.data?.recent_log_file) {
           setLogFilePath(
@@ -163,7 +163,7 @@ const AddUpdateScriptDetail = () => {
       } else if (response?.response) {
         toast.error(response.response.data.message);
       }
-  
+
       dispatch({ type: "SET_LOADING", status: false });
       return response;
     } catch (error) {
@@ -293,7 +293,7 @@ const AddUpdateScriptDetail = () => {
     },
   });
 
-  // Fetch Data for Developer Name Edit 
+  // Fetch Data for Developer Name Edit
   const fetchdeveloperDetail = async () => {
     try {
       dispatch({ type: "SET_LOADING", status: true });
@@ -338,7 +338,7 @@ const AddUpdateScriptDetail = () => {
       throw error;
     }
   };
-     useQuery({
+  useQuery({
     queryKey: ["country-list", currentPage],
     queryFn: () => fetchCountryList(currentPage),
     onSuccess: (Re) => {
@@ -349,7 +349,7 @@ const AddUpdateScriptDetail = () => {
     },
   });
 
-  // Fetch Data for Developer Name Edit 
+  // Fetch Data for Developer Name Edit
   // const fetchcountryDetail = async () => {
   //   try {
   //     dispatch({ type: "SET_LOADING", status: true });
@@ -552,29 +552,29 @@ const AddUpdateScriptDetail = () => {
                     </select>
                   </div>
                   <div className="mb-4">
-  <label className="form-label">Script File</label>
-  <input
-    type="file"
-    id="fileInput"
-    className="form-control"
-    {...register("file", {
+                    <label className="form-label">Script File</label>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      className="form-control"
+                      {...register("file", {
       required: scriptId ? false : "Please upload a script file.",
-    })}
-    onChange={(e) => {
-      const file = e.target.files[0];
-      if (file) {
-        setFileName(file.name); // ✅ Show newly selected file name
-        setValue("file", file); // ✅ Update React Hook Form
-      }
-    }}
-  />
-  {fileName && (
-    <p className="mt-2">
-      Selected File: <strong>{fileName}</strong>
-    </p>
-  )}
+                      })}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setFileName(file.name); // ✅ Show newly selected file name
+                          setValue("file", file); // ✅ Update React Hook Form
+                        }
+                      }}
+                    />
+                    {fileName && (
+                      <p className="mt-2">
+                        Selected File: <strong>{fileName}</strong>
+                      </p>
+                    )}
   {errors.file && <p className="text-danger">{errors.file.message}</p>}
-</div>
+                  </div>
 
                   <div className="mb-4 col-md-6">
                     <label className="form-label">Big Ref No</label>

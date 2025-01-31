@@ -144,37 +144,34 @@ export const addScriptDetail = (data) => {
 
 // update scriptlist
 export const updateScriptDetail = (data, scriptId) => {
-  // Create a FormData object
   const formData = new FormData();
 
-  // Append all key-value pairs to FormData
   Object.entries(data).forEach(([key, value]) => {
-    const fileInput = document.querySelector("#fileInput");
-
-    if (fileInput && fileInput.files[0] && key === "file") {
-      // Append the file if it's present
-      formData.append("file", fileInput.files[0], fileInput.files[0].name);
+    if (key === "file" && value instanceof File) {
+      // Append file properly
+      formData.append("file", value, value.name);
     } else if (key === "script_status") {
-      // Convert "Active"/"Inactive" to boolean if script status exists
-      const booleanValue =
-        value === "Active" ? true : value === "Inactive" ? false : value;
-      formData.append(key, booleanValue);
+      // Convert "Active"/"Inactive" to boolean
+      formData.append(key, value === "Active");
     } else if (typeof value === "boolean") {
-      // Append boolean values directly
       formData.append(key, value);
     } else {
-      // For other values, append them normally
       formData.append(key, value);
     }
   });
 
-  // Make the API call
+  // Handle file input separately
+  const fileInput = document.querySelector("#fileInput");
+  if (fileInput && fileInput.files.length > 0) {
+    formData.append("file", fileInput.files[0], fileInput.files[0].name);
+  }
+
   return request({
-    url: `${scriptDomainName}${api.scriptDetail}/${scriptId}`, // Append script ID to the endpoint
-    method: "PUT", // HTTP PUT for updating data
-    data: formData, // Pass FormData as the payload
+    url: `${scriptDomainName}${api.scriptDetail}/${scriptId}`,
+    method: "PUT",
+    data: formData,
     headers: {
-      "Content-Type": "multipart/form-data", // Ensure the correct content type
+      "Content-Type": "multipart/form-data",
     },
   });
 };
