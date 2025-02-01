@@ -93,7 +93,7 @@ const AddUpdateScriptDetail = () => {
       if (scriptId) {
         //  data._id = scriptId;
         console.log(data);
-        if (!data.file) {
+        if (!data.file.length === 0) {
           delete data.file;
         }
         delete data.bigref_no;
@@ -131,6 +131,7 @@ const AddUpdateScriptDetail = () => {
       console.log(response);
 
       if (response?.status === 200) {
+        console.log(response?.data?.data?.developer_id);
         setValue("script_name", response?.data?.data?.script_name);
         setValue("developer_id", response?.data?.data?.developer_id);
         setValue(
@@ -321,33 +322,32 @@ const AddUpdateScriptDetail = () => {
     },
   });
 
-  // Fetch Data for Developer Name Edit
-  const fetchdeveloperDetail = async () => {
-    try {
-      dispatch({ type: "SET_LOADING", status: true });
-      const response = await getDeveloperDetail(developerId);
-      console.log(response, "#####***");
+  // // Fetch Data for Developer Name Edit
+  // const fetchdeveloperDetail = async () => {
+  //   try {
+  //     dispatch({ type: "SET_LOADING", status: true });
+  //     const response = await getDeveloperDetail(developerId);
+  //     console.log(response, "#####***");
 
-      if (response?.status === 200) {
-        setValue("developer_id", response?.data?.data?.developer_id);
-      } else if (response?.response) {
-        toast.error(response.response.data.message);
-      }
-      dispatch({ type: "SET_LOADING", status: false });
-      return response;
-    } catch (error) {
-      console.error("Error fetching data:", error); // Log any errors that occur
-    }
-  };
+  //     if (response?.status === 200) {
+  //       setValue("developer_id", response?.data?.data?.developer_id);
+  //     } else if (response?.response) {
+  //       toast.error(response.response.data.message);
+  //     }
+  //     dispatch({ type: "SET_LOADING", status: false });
+  //     return response;
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error); // Log any errors that occur
+  //   }
+  // };
 
-  useQuery({
-    queryKey: ["developer-detail"],
-    queryFn: fetchdeveloperDetail,
-    enabled: developerId ? true : false,
-    onSuccess: (Re) => console.log(Re),
-    onError: (e) => console.error(e),
-  });
-
+  // useQuery({
+  //   queryKey: ["developer-detail"],
+  //   queryFn: fetchdeveloperDetail,
+  //   enabled: developerId ? true : false,
+  //   onSuccess: (Re) => console.log(Re),
+  //   onError: (e) => console.error(e),
+  // });
 
   // Fetch Data for Developer Name Edit
   const fetchcountryDetail = async () => {
@@ -412,16 +412,17 @@ const AddUpdateScriptDetail = () => {
                       {...register("developer_id", {
                         required: "Developer id is required",
                       })}
+                      value={watchFiled?.developer_id || ""}
                     >
                       <option value="">Select a Developer</option>
 
                       {developerList &&
                         Array.isArray(developerList) &&
-                        developerList.map((item) => (
-                          <option key={item.id} value={item.id}>
+                        developerList.map((item) => {
+                         return <option  value={item.id} >
                             {item.name}
-                          </option>
-                        ))}
+                          </option>;
+                        })}
                     </select>
                   </div>
                   <div className="mb-4 col-md-6">
@@ -534,9 +535,9 @@ const AddUpdateScriptDetail = () => {
                       })}
                     >
                       <option value="">Select a status</option>
-                      <option value={true}>Active</option>
+                     <option value={true}>Active</option>
                       <option value={false}>Inactive</option>
-                    </select>
+                    </select> 
                   </div>
                   <div className="mb-4">
                     <label className="form-label">Script File</label>
@@ -545,8 +546,10 @@ const AddUpdateScriptDetail = () => {
                       id="fileInput"
                       className="form-control"
                       {...register("file", {
-                        required: scriptId ? false : "Please upload a script file.",
-                                        })}
+                        required: scriptId
+                          ? false
+                          : "Please upload a script file.",
+                      })}
                       onChange={(e) => {
                         if (e.target.files.length > 0) {
                           setValue("existing_file", e.target.files[0].name);

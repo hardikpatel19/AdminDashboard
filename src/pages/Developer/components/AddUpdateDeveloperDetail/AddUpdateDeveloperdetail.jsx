@@ -14,7 +14,7 @@ import {
 
 // Firebase Storage
 const storage = getStorage();
-
+const formatDate = (dateString) => dateString.split("T")[0]; 
 const uploadFileToStorage = async (file) => {
   if (!file) return null;
 
@@ -108,7 +108,7 @@ const AddUpdateDeveloperdetail = () => {
 
       if (response?.status === 200) {
         setValue("name", response?.data?.data?.name);
-        setValue("joining_date", response?.data?.data?.joining_date);
+        setValue("joining_date", formatDate(response?.data?.data?.joining_date));
         setValue("email", response?.data?.data?.email);
         setValue("phone_number", response?.data?.data?.phone_number);
         setValue("address", response?.data?.data?.address);
