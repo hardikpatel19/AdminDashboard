@@ -43,6 +43,7 @@ const Developer = () => {
   const fetchDeveloperList = async (pageNumber) => {
     try {
       console.log("dfsdf")
+    dispatch({ type: "SET_LOADING", status: true });
       const response = await getDeveloper(pageNumber);
       console.log(response,"***************");
 
@@ -56,6 +57,7 @@ const Developer = () => {
       } else {
         toast.error(response?.response?.data?.message);
       }
+    dispatch({ type: "SET_LOADING", status: false });
     } catch (error) {
       console.error("Error fetching data:", error); // Log any errors that occur
       throw error;

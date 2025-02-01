@@ -147,24 +147,17 @@ export const updateScriptDetail = (data, scriptId) => {
   const formData = new FormData();
 
   Object.entries(data).forEach(([key, value]) => {
-    if (key === "file" && value instanceof File) {
-      // Append file properly
-      formData.append("file", value, value.name);
+    if (key === "file") {
+      const fileInput = document.querySelector("#fileInput");
+      if (fileInput.files.length > 0) {
+        formData.append("file", fileInput.files[0]); // Append new file
+      }
     } else if (key === "script_status") {
-      // Convert "Active"/"Inactive" to boolean
-      formData.append(key, value === "Active");
-    } else if (typeof value === "boolean") {
-      formData.append(key, value);
+      formData.append(key, value === "Active" ? true : value === "Inactive" ? false : value);
     } else {
       formData.append(key, value);
     }
   });
-
-  // Handle file input separately
-  const fileInput = document.querySelector("#fileInput");
-  if (fileInput && fileInput.files.length > 0) {
-    formData.append("file", fileInput.files[0], fileInput.files[0].name);
-  }
 
   return request({
     url: `${scriptDomainName}${api.scriptDetail}/${scriptId}`,
@@ -177,6 +170,7 @@ export const updateScriptDetail = (data, scriptId) => {
 };
 
 
+
 // delete scriptlist
 export const deleteScriptDetail = (scriptId) => {
   return request({
@@ -186,9 +180,9 @@ export const deleteScriptDetail = (scriptId) => {
 };
 
 // countrylist
-export const getCountry = (pageNumber) => {
+export const getCountry = () => {
   return request({
-    url: `${domainName}${api.country}?pageNo=${pageNumber}&limit=10&sortBy=1&sortField=createdAt&by_tenders=1`,
+    url: `${domainName}${api.country}?pageNo=0&limit=200&sortBy=1&sortField=name&by_tenders=1`,
     method: "get",
   });
 };
@@ -198,6 +192,14 @@ export const getcountryDetail = (countryId) => {
   return request({
     url: `${domainName}${api.countryDetail}?_id=${countryId}`,
     method: "get",
+  });
+};
+
+export const updateCountryDetail = (data) => {
+  return request({
+    url: `${domainName}${api.countryDetail}`,
+    method: "put",
+    data: data,
   });
 };
 

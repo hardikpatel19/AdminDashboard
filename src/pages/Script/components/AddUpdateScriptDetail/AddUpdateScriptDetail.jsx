@@ -53,7 +53,7 @@ const AddUpdateScriptDetail = () => {
   const navigate = useNavigate();
   const { scriptId } = useParams();
   const { developerId } = useParams();
-  // const { countryId } = useParams();
+  const { countryId } = useParams();
   const [logContent, setLogContent] = useState("");
   const [logResponse, setLogResponse] = useState("");
 
@@ -73,7 +73,6 @@ const AddUpdateScriptDetail = () => {
     }
   };
 
-  
   // React Hook Form
   const {
     register,
@@ -147,11 +146,8 @@ const AddUpdateScriptDetail = () => {
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
 
-        // ✅ Extract and set file name from `script_file_path`
-        if (response?.data?.data?.script_file_path) {
-          const extractedFileName = response.data.data.script_file_path.split("/").pop();
-          setFileName(extractedFileName); // ✅ Set extracted file name in state
-        }
+        // Store existing file name instead of setting file input
+        setValue("existing_file", response?.data?.data?.file);
 
         setRecentLogsText(response?.data?.data?.recent_logs);
         if (response?.data?.data?.recent_log_file) {
@@ -170,6 +166,7 @@ const AddUpdateScriptDetail = () => {
       console.error("Error fetching data:", error);
     }
   };
+
   useQuery({
     queryKey: ["script-detail"],
     queryFn: fetchscriptDetail,
@@ -266,6 +263,7 @@ const AddUpdateScriptDetail = () => {
   };
   const fetchDeveloperList = async (pageNumber) => {
     try {
+      dispatch({ type: "SET_LOADING", status: true });
       const response = await getDeveloper(pageNumber);
       console.log(response);
 
@@ -276,6 +274,7 @@ const AddUpdateScriptDetail = () => {
       } else {
         toast.error(response?.response?.data?.message);
       }
+      dispatch({ type: "SET_LOADING", status: false });
     } catch (error) {
       console.error("Error fetching data:", error); // Log any errors that occur
       throw error;
@@ -292,13 +291,42 @@ const AddUpdateScriptDetail = () => {
       console.log(e);
     },
   });
+  const fetchCountryList = async (pageNumber) => {
+    try {
+      dispatch({ type: "SET_LOADING", status: true });
+      const response = await getCountry(pageNumber);
+      console.log(response);
+
+      if (response?.status === 201) {
+        console.log(response?.data?.result?.result, "******************");
+
+        setCountryList(response?.data?.result?.result);
+      } else {
+        toast.error(response?.response?.data?.message);
+      }
+      dispatch({ type: "SET_LOADING", status: false });
+    } catch (error) {
+      console.error("Error fetching data:", error); // Log any errors that occur
+      throw error;
+    }
+  };
+  useQuery({
+    queryKey: ["country-list", currentPage],
+    queryFn: () => fetchCountryList(currentPage),
+    onSuccess: (Re) => {
+      console.log(Re);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 
   // Fetch Data for Developer Name Edit
   const fetchdeveloperDetail = async () => {
     try {
       dispatch({ type: "SET_LOADING", status: true });
       const response = await getDeveloperDetail(developerId);
-      console.log(response);
+      console.log(response, "#####***");
 
       if (response?.status === 200) {
         setValue("developer_id", response?.data?.data?.developer_id);
@@ -321,60 +349,32 @@ const AddUpdateScriptDetail = () => {
   });
 
 
-  const fetchCountryList = async (pageNumber) => {
+  // Fetch Data for Developer Name Edit
+  const fetchcountryDetail = async () => {
     try {
-      const response = await getCountry(pageNumber);
+      dispatch({ type: "SET_LOADING", status: true });
+      const response = await getcountryDetail(countryId);
       console.log(response);
 
       if (response?.status === 201) {
-        console.log(response?.data?.result?.result,"******************");
-
-        setCountryList(response?.data?.result?.result);
-      } else {
-        toast.error(response?.response?.data?.message);
+        setValue("country", response?.data?.result?.result?.country);
+      } else if (response?.response) {
+        toast.error(response.response.data.message);
       }
+      dispatch({ type: "SET_LOADING", status: false });
+      return response;
     } catch (error) {
       console.error("Error fetching data:", error); // Log any errors that occur
-      throw error;
     }
   };
+
   useQuery({
-    queryKey: ["country-list", currentPage],
-    queryFn: () => fetchCountryList(currentPage),
-    onSuccess: (Re) => {
-      console.log(Re);
-    },
-    onError: (e) => {
-      console.log(e);
-    },
+    queryKey: ["country-detail"],
+    queryFn: fetchcountryDetail,
+    enabled: countryId ? true : false,
+    onSuccess: (Re) => console.log(Re),
+    onError: (e) => console.error(e),
   });
-
-  // Fetch Data for Developer Name Edit
-  // const fetchcountryDetail = async () => {
-  //   try {
-  //     dispatch({ type: "SET_LOADING", status: true });
-  //     const response = await getcountryDetail(countryId);
-  //     console.log(response);
-
-  //     if (response?.status === 201) {
-  //       setValue("country", response?.data?.result.country);
-  //     } else if (response?.response) {
-  //       toast.error(response.response.data.message);
-  //     }
-  //     dispatch({ type: "SET_LOADING", status: false });
-  //     return response;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error); // Log any errors that occur
-  //   }
-  // };
-
-  // useQuery({
-  //   queryKey: ["country-detail"],
-  //   queryFn: fetchcountryDetail,
-  //   enabled: countryId ? true : false,
-  //   onSuccess: (Re) => console.log(Re),
-  //   onError: (e) => console.error(e),
-  // });
 
   return (
     <div id="app-content">
@@ -475,7 +475,7 @@ const AddUpdateScriptDetail = () => {
                       {countryList &&
                         Array.isArray(countryList) &&
                         countryList.map((item) => (
-                          <option key={item.id} value={item.id}>
+                          <option key={item.code} value={item.code}>
                             {item.name}
                           </option>
                         ))}
@@ -486,7 +486,7 @@ const AddUpdateScriptDetail = () => {
                       Frequency<span className="text-danger">*</span>
                     </label>
                     <select
-                      className="form-control"
+                      className="form-select"
                       {...register("frequency", {
                         required: "Frequency is required",
                       })}
@@ -508,32 +508,19 @@ const AddUpdateScriptDetail = () => {
                   {watch("frequency") === "custom" && (
                     <div className="mb-4 col-md-6">
                       <label className="form-label">Custom Schedule</label>
-                      <div className="d-flex flex-wrap">
-                        <label className="me-3">
-                          <input
-                            type="checkbox"
-                            {...register("custom_days")}
-                            value="twice_week"
-                          />
-                          Twice a Week
-                        </label>
-                        <label className="me-3">
-                          <input
-                            type="checkbox"
-                            {...register("custom_days")}
-                            value="thrice_week"
-                          />
-                          Thrice a Week
-                        </label>
-                        <label className="me-3">
-                          <input
-                            type="checkbox"
-                            {...register("custom_days")}
-                            value="once_week"
-                          />
-                          Once a Week
-                        </label>
-                      </div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter your custom schedule (e.g., Twice a Week)"
+                        {...register("custom_schedule", {
+                          required: "Please enter a custom schedule.",
+                        })}
+                      />
+                      {errors.custom_schedule && (
+                        <p className="text-danger">
+                          {errors.custom_schedule.message}
+                        </p>
+                      )}
                     </div>
                   )}
                   <div className="mb-4 col-md-6">
@@ -558,22 +545,22 @@ const AddUpdateScriptDetail = () => {
                       id="fileInput"
                       className="form-control"
                       {...register("file", {
-      required: scriptId ? false : "Please upload a script file.",
-                      })}
+                        required: scriptId ? false : "Please upload a script file.",
+                                        })}
                       onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          setFileName(file.name); // ✅ Show newly selected file name
-                          setValue("file", file); // ✅ Update React Hook Form
+                        if (e.target.files.length > 0) {
+                          setValue("existing_file", e.target.files[0].name);
                         }
                       }}
                     />
-                    {fileName && (
+                    {watch("existing_file") && (
                       <p className="mt-2">
-                        Selected File: <strong>{fileName}</strong>
+                        Current File: <strong>{watch("existing_file")}</strong>
                       </p>
                     )}
-  {errors.file && <p className="text-danger">{errors.file.message}</p>}
+                    {errors.file && (
+                      <p className="text-danger">{errors.file.message}</p>
+                    )}
                   </div>
 
                   <div className="mb-4 col-md-6">

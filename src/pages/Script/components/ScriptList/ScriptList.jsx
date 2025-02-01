@@ -46,6 +46,7 @@ const ScriptList = () => {
   };
   const fetchScriptList = async (pageNumber) => {
     try {
+    dispatch({ type: "SET_LOADING", status: true });
       const response = await getScript(pageNumber);
       console.log(response);
 
@@ -60,6 +61,7 @@ const ScriptList = () => {
       } else {
         toast.error(response?.response?.data?.message);
       }
+    dispatch({ type: "SET_LOADING", status: false });
     } catch (error) {
       console.error("Error fetching data:", error); // Log any errors that occur
       throw error;

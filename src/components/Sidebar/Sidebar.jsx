@@ -114,9 +114,9 @@ const Sidebar = ({ toggle }) => {
           {/* Data Section */}
           <li className="border-b-2 mb-3">
             <li className="nav-item  d-flex align-items-center ">
-              <FaFolderPlus size={18} className="me-4" />
+              <FaFolderPlus size={18} className="" />
               <span
-                className=" hover-pointer"
+                className=" hover-pointer nav-link"
                 style={{ cursor: "pointer" }}
                 onClick={() => toggleSection("data")}
               >
