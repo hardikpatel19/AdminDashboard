@@ -146,9 +146,9 @@ const AddUpdateScriptDetail = () => {
         setValue("script_status", response?.data?.data?.status);
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
-
-        // Store existing file name instead of setting file input
-        setValue("existing_file", response?.data?.data?.file);
+        setFileName(response?.data?.data?.script_file_path.split("/").pop());
+        
+        
 
         setRecentLogsText(response?.data?.data?.recent_logs);
         if (response?.data?.data?.recent_log_file) {
@@ -376,6 +376,10 @@ const AddUpdateScriptDetail = () => {
     onError: (e) => console.error(e),
   });
 
+  useEffect(() => {
+    setValue("frequency", "one_time"); // Set default value when component mounts
+  }, []);
+
   return (
     <div id="app-content">
       <div className="app-content-area mb-10">
@@ -470,13 +474,14 @@ const AddUpdateScriptDetail = () => {
                       {...register("country", {
                         required: "Country is required",
                       })}
+                      value={watchFiled?.country || ""}
                     >
                       <option value="">Select a Country</option>
 
                       {countryList &&
                         Array.isArray(countryList) &&
                         countryList.map((item) => (
-                          <option key={item.code} value={item.code}>
+                          <option  value={item.code}>
                             {item.name}
                           </option>
                         ))}
@@ -491,6 +496,7 @@ const AddUpdateScriptDetail = () => {
                       {...register("frequency", {
                         required: "Frequency is required",
                       })}
+                      defaultValue="one_time" // Set default option
                     >
                       <option value="">Select Frequency</option>
                       <option value="one_time">One Time</option>
@@ -552,13 +558,13 @@ const AddUpdateScriptDetail = () => {
                       })}
                       onChange={(e) => {
                         if (e.target.files.length > 0) {
-                          setValue("existing_file", e.target.files[0].name);
+                          setFileName(e.target.files[0].name); // Set selected file name
                         }
                       }}
                     />
-                    {watch("existing_file") && (
+                    {fileName && (
                       <p className="mt-2">
-                        Current File: <strong>{watch("existing_file")}</strong>
+                        Current File: <strong>{fileName}</strong>
                       </p>
                     )}
                     {errors.file && (
