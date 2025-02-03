@@ -81,7 +81,7 @@ const AddUpdateScriptDetail = () => {
     formState: { errors },
     watch,
   } = useForm({
-    defaultValues: {},
+    defaultValues: {"interval_days":1},
   });
   const watchFiled = watch();
   // Form Submission
@@ -146,6 +146,8 @@ const AddUpdateScriptDetail = () => {
         setValue("script_status", response?.data?.data?.status);
         setValue("bigref_no", response?.data?.data?.bigref_no);
         setValue("script_type", response?.data?.data?.script_type);
+        setValue("frequency", response?.data?.data?.frequency);
+        setValue("interval_days", response?.data?.data?.interval_days? response?.data?.data?.interval_days:1);
         setFileName(response?.data?.data?.script_file_path.split("/").pop());
         
         
@@ -437,6 +439,7 @@ const AddUpdateScriptDetail = () => {
                       type="date"
                       className="form-control"
                       placeholder="Select development date"
+                      defaultValue={new Date().toISOString().split('T')[0]}
                       {...register("development_date", {
                         required: "Development Date is required",
                       })}
@@ -454,6 +457,7 @@ const AddUpdateScriptDetail = () => {
                     <input
                       type="time"
                       className="form-control"
+                      defaultValue={new Date().toTimeString().slice(0, 5)}
                       // placeholder="Select schedule tie"
                       {...register("schedule_time", {
                         required: "schedule time is required",
@@ -496,15 +500,16 @@ const AddUpdateScriptDetail = () => {
                       {...register("frequency", {
                         required: "Frequency is required",
                       })}
-                      defaultValue="one_time" // Set default option
+                      defaultValue="Daily" // Set default option
+                      value={watchFiled?.frequency || ""}
+
                     >
                       <option value="">Select Frequency</option>
-                      <option value="one_time">One Time</option>
-                      <option value="daily">Daily</option>
-                      <option value="weekly">Weekly</option>
-                      <option value="bi_weekly">Bi-Weekly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="custom">Customized</option>
+                      <option value="One Time">One Time</option>
+                      <option value="Daily">Daily</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Monthly">Monthly</option>
+                      <option value="Custom">Customized</option>
                     </select>
                     {errors.frequency && (
                       <div className="error">{errors.frequency.message}</div>
@@ -512,14 +517,16 @@ const AddUpdateScriptDetail = () => {
                   </div>
 
                   {/* Conditional Custom Frequency Options */}
-                  {watch("frequency") === "custom" && (
+                  {watch("frequency") === "Custom" && (
                     <div className="mb-4 col-md-6">
-                      <label className="form-label">Custom Schedule</label>
+                      <label className="form-label">Interval Days</label>
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
-                        placeholder="Enter your custom schedule (e.g., Twice a Week)"
-                        {...register("custom_schedule", {
+                        placeholder="Enter your custom schedule in Days."
+                        defaultValue={1}
+                        min={1}
+                        {...register("interval_days", {
                           required: "Please enter a custom schedule.",
                         })}
                       />
@@ -536,6 +543,7 @@ const AddUpdateScriptDetail = () => {
                     </label>
                     <select
                       className="form-select"
+                      defaultValue="true"
                       {...register("script_status", {
                         required: "Status is required",
                       })}
@@ -592,6 +600,7 @@ const AddUpdateScriptDetail = () => {
                     </label>
                     <select
                       className="form-select"
+                      defaultValue={"Tender"}
                       {...register("script_type", {
                         required: "Script Type is required",
                       })}

@@ -1,6 +1,6 @@
 import "./App.scss";
 import {
-  BrowserRouter,
+  HashRouter as Router,
   Navigate,
   // Router,
   Outlet,
@@ -61,7 +61,7 @@ function App() {
       id="main-wrapper"
       className={`${isToggled ? "main-wrapper toggled" : "main-wrapper"}`}
     >
-      <BrowserRouter>
+      <Router>
         {isLoading && <LoadingSpinner />}
         {/* <Toaster /> */}
         {/* Main application routes */}
@@ -140,7 +140,7 @@ function App() {
           {/* Redirect unknown paths to home */}
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>
-      </BrowserRouter>
+      </Router>
       <ToastContainer position="top-center" />
     </div>
   );

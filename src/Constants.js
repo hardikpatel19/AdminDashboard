@@ -1,7 +1,7 @@
 export const domainName = "https://api.bidsinfoglobal.com";
 // export const scriptDomainName = "http://127.0.0.1:8000";
 export const scriptDomainName = "https://api.script.bidsinfoglobal.com";
-// export const scriptDomainName = "http://82.112.234.182:4444";
+// export const scriptDomainName = "http://82.112.234.182:5656";
 //
 
 export const ITEMS_PER_PAGE = 10;
